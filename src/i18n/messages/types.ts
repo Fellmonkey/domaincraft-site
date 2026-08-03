@@ -1,7 +1,11 @@
 export interface NavMessages {
+  products: string;
   features: string;
   howItWorks: string;
   bridges: string;
+  skills: string;
+  changelog: string;
+  blog: string;
   ai: string;
   studio: string;
   docs: string;
@@ -18,6 +22,8 @@ export interface HeroMessages {
   primaryCta: string;
   secondaryCta: string;
   installLabel: string;
+  downloadCta: string;
+  platforms: string;
   copied: string;
   terminalTitle: string;
   domainTab: string;
@@ -136,6 +142,7 @@ export interface CtaMessages {
   primaryCta: string;
   secondaryCta: string;
   code: string;
+  goNote: string;
   copied: string;
 }
 

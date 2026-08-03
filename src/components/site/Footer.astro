@@ -22,14 +22,17 @@ const columns = [
 ];
 
 function footerHref(key: string, isRoot: boolean): string {
+  const prefix = isRoot ? '' : '/ru';
   if (key === 'github') return 'https://github.com/DomainCraft/DomainCraft';
-  if (key === 'docs') return `${isRoot ? '' : '/ru'}/docs`;
+  if (key === 'docs') return `${prefix}/docs/getting-started/quickstart`;
   if (key === 'generate') return isRoot ? '#install' : '/ru/#install';
-  if (key === 'features') return isRoot ? '#features' : '/ru/#features';
-  if (key === 'bridges') return isRoot ? '#bridges' : '/ru/#bridges';
-  if (key === 'ai') return isRoot ? '#ai' : '/ru/#ai';
-  if (key === 'studio') return isRoot ? '/studio' : '/ru/studio';
-  return key === 'roadmap' ? `${isRoot ? '' : '/ru'}/#roadmap` : `${isRoot ? '' : '/ru'}/#`;
+  if (key === 'bridges') return `${prefix}/bridges`;
+  if (key === 'skills') return `${prefix}/skills`;
+  if (key === 'studio') return `${prefix}/studio`;
+  if (key === 'changelog') return `${prefix}/changelog`;
+  if (key === 'blog') return `${prefix}/blog`;
+  if (key === 'roadmap') return `${prefix}/#roadmap`;
+  return `${prefix}/#`;
 }
 ---
 

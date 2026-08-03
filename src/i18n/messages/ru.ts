@@ -4,9 +4,13 @@ export const ru: Messages = {
   langName: 'Русский',
 
   nav: {
+    products: 'Продукты',
     features: 'Возможности',
     howItWorks: 'Как работает',
     bridges: 'Мосты',
+    skills: 'Скиллы',
+    changelog: 'Changelog',
+    blog: 'Блог',
     ai: 'AI-native',
     studio: 'Studio',
     docs: 'Документация',
@@ -24,6 +28,8 @@ export const ru: Messages = {
     primaryCta: 'Начать генерацию',
     secondaryCta: 'Открыть Studio',
     installLabel: 'Установка за 60 секунд',
+    downloadCta: 'Скачать бинарник',
+    platforms: 'Windows · macOS · Linux · ARM64',
     copied: 'Скопировано в буфер',
     terminalTitle: 'domaincraft generate',
     domainTab: 'domain.yaml',
@@ -217,10 +223,12 @@ export const ru: Messages = {
     titleStart: 'Хватит писать',
     titleHighlight: 'бойлерплейт',
     titleEnd: '. Начинайте выводить свой домен.',
-    subtitle: 'Бесплатно и под MIT. Установите одной командой и сгенерируйте первый бэкенд уже сегодня.',
-    primaryCta: 'Начать генерацию',
+    subtitle:
+      'Бесплатно и под MIT. Go не нужен — скачайте бинарник и сгенерируйте первый бэкенд уже сегодня.',
+    primaryCta: 'Скачать бинарник',
     secondaryCta: 'Читать документацию',
     code: 'go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest',
+    goNote: 'или установить через Go',
     copied: 'Скопировано'
   },
 
@@ -228,24 +236,22 @@ export const ru: Messages = {
     tagline: 'Домен-ориентированная генерация кода для любого языка.',
     product: 'Продукт',
     productLinks: {
-      features: 'Возможности',
       bridges: 'Мосты',
+      skills: 'Скиллы',
       studio: 'Studio',
-      ai: 'AI-native',
-      roadmap: 'Роадмап'
+      changelog: 'Changelog',
+      blog: 'Блог'
     },
     resources: 'Ресурсы',
     resourcesLinks: {
       docs: 'Документация',
       generate: 'Быстрый старт',
-      github: 'GitHub',
-      contribute: 'Вклад'
+      github: 'GitHub'
     },
     community: 'Сообщество',
     communityLinks: {
       discord: 'Discord',
-      twitter: 'Twitter / X',
-      blog: 'Блог'
+      twitter: 'Twitter / X'
     },
     rights: '© {year} DomainCraft. Лицензия MIT.',
     languageLabel: 'Язык'

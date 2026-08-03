@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getMessages } from '../../i18n';
+
+const messages = getMessages('ru');
+
+const skills = [
+  {
+    name: 'domaincraft-core',
+    description:
+      'Контракт доменной модели для ИИ-агентов. Загружается при моделировании домена, написании или правке domain.yaml и при добавлении бизнес-логики в сгенерированные сущности — заранее объясняет контракт и границы допустимого.'
+  },
+  {
+    name: 'domaincraft-csharp',
+    description:
+      'Работа с кодом, сгенерированным мостом csharp-restful — ASP.NET Core REST API (EF Core + PostgreSQL + JWT). Бизнес-логика в сгенерированных сервисах, работа с *.g.cs и кастомными partial. Всегда загружается вместе с domaincraft-core.'
+  }
+];
+
+const title = 'Скиллы — DomainCraft';
+const description =
+  'Готовые скиллы для агентов, чтобы Cursor, Claude Code и Copilot могли моделировать, валидировать и расширять проект DomainCraft из коробки.';
+---
+
+<Layout lang="ru" title={title} description={description} messages={messages} alternatePath="/skills" alternateLabel="English">
+  <PageHero
+    title="Скиллы"
+    lede="Специальные скиллы позволяют ИИ-ассистентам корректно работать с проектом DomainCraft — моделировать домен, валидировать domain.yaml и расширять сгенерированный код, не нарушая контракт."
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-5 sm:grid-cols-2">
+      {
+        skills.map((s) => (
+          <article key={s.name} class="rounded-xl border border-border bg-card p-6">
+            <h2 class="font-mono text-base font-semibold">{s.name}</h2>
+            <p class="mt-3 text-sm text-muted-foreground">{s.description}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mt-10 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
+      Скиллы подгружаются вашим агентом по требованию. Чтобы установить их, следуйте руководству по скиллам для
+      вашего ассистента — Cursor, Claude Code или Copilot.
+    </p>
+  </div>
+</Layout>

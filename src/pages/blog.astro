@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getMessages } from '../i18n';
+
+const messages = getMessages('en');
+
+const title = 'Blog — DomainCraft';
+const description = 'Stories, guides and deep dives from the DomainCraft team.';
+---
+
+<Layout lang="en" title={title} description={description} messages={messages} alternatePath="/ru/blog" alternateLabel="Русский">
+  <PageHero
+    title="Blog"
+    lede="Stories, guides and deep dives — from domain-driven code generation to how bridges are built."
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border bg-card px-6 py-16 text-center">
+      <p class="text-base font-medium">The first post is in the works</p>
+      <p class="max-w-md text-sm text-muted-foreground">
+        We write about the domain model, the compiler pipeline and the bridge ecosystem. Subscribe or watch the repo
+        to catch it.
+      </p>
+      <a
+        href="https://github.com/DomainCraft/DomainCraft"
+        target="_blank"
+        rel="noreferrer"
+        class="inline-flex items-center gap-1 text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8"
+      >
+        Follow on GitHub →
+      </a>
+    </div>
+  </div>
+</Layout>

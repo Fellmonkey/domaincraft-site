@@ -2,6 +2,7 @@
 import type { Messages } from '../../i18n/messages/types';
 import ThemeToggle from '../ThemeToggle';
 import LocaleSwitcher from '../LocaleSwitcher';
+import ProductsDropdown from '../ProductsDropdown';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
 
@@ -23,12 +24,18 @@ const options = [
   { code: 'ru', label: 'Русский', href: lang === 'ru' ? currentHref : '/ru/' }
 ];
 
+const prefix = isRoot ? '' : '/ru';
+
+const productItems = [
+  { label: messages.nav.bridges, href: `${prefix}/bridges` },
+  { label: messages.nav.studio, href: `${prefix}/studio` },
+  { label: messages.nav.skills, href: `${prefix}/skills` }
+];
+
 const navLinks = [
-  { label: messages.nav.features, href: isRoot ? '#features' : '/ru/#features' },
-  { label: messages.nav.howItWorks, href: isRoot ? '#how-it-works' : '/ru/#how-it-works' },
-  { label: messages.nav.bridges, href: isRoot ? '#bridges' : '/ru/#bridges' },
-  { label: messages.nav.ai, href: isRoot ? '#ai' : '/ru/#ai' },
-  { label: messages.nav.studio, href: isRoot ? '/studio' : '/ru/studio' }
+  { label: messages.nav.docs, href: `${prefix}/docs` },
+  { label: messages.nav.blog, href: `${prefix}/blog` },
+  { label: messages.nav.changelog, href: `${prefix}/changelog` },
 ];
 ---
 
@@ -43,6 +50,7 @@ const navLinks = [
     </a>
 
     <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+      <ProductsDropdown client:load label={messages.nav.products} items={productItems} />
       {
         navLinks.map((l) => (
           <a

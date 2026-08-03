@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getMessages } from '../../i18n';
+
+const messages = getMessages('ru');
+
+const bridges = [
+  {
+    id: 'csharp-restful',
+    language: 'C#',
+    status: 'ready',
+    description: 'ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture'
+  },
+  {
+    id: 'admin-alpine',
+    language: 'HTML',
+    status: 'ready',
+    description: 'Админ-панель на Alpine.js + 0build UIkit'
+  }
+];
+
+const title = 'Мосты — DomainCraft';
+const description =
+  'Подключаемые темплейт-паки, которые переводят ваш домен на целевой язык. Что доступно и как добавить свой.';
+---
+
+<Layout lang="ru" title={title} description={description} messages={messages} alternatePath="/bridges" alternateLabel="English">
+  <PageHero
+    title="Мосты"
+    lede="Каждый мост — это подключаемый набор шаблонов. Ядро не знает ни одного языка — оно отдаёт IR и ничем вас не ограничивает."
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-5 sm:grid-cols-2">
+      {
+        bridges.map((b) => (
+          <article key={b.id} class="rounded-xl border border-border bg-card p-6">
+            <div class="flex items-center justify-between gap-3">
+              <h2 class="font-mono text-base font-semibold">{b.id}</h2>
+              <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">{b.status}</span>
+            </div>
+            <p class="mt-1 font-mono text-xs text-muted-foreground">{b.language}</p>
+            <p class="mt-3 text-sm text-muted-foreground">{b.description}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-2">
+      <div>
+        <h2 class="text-lg font-semibold">Использовать мост</h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Укажите ID моста, локальный путь или GitHub-шорткат. Известные мосты CLI клонирует по требованию в
+          <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">~/.domaincraft/bridges/</code>.
+        </p>
+        <pre class="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-4 font-mono text-[13px] leading-relaxed">{`# По ID моста
+domaincraft generate --domain domain.yaml --bridge csharp-restful
+
+# По локальному пути
+domaincraft generate --domain domain.yaml --bridge ../DomainCraftCsharp
+
+# С админ-панелью (по умолчанию admin-alpine)
+domaincraft generate --domain domain.yaml --bridge csharp-restful --admin`}</pre>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold">Добавить свой</h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Мост — это просто шаблоны и манифест, Go-код не нужен. Добавьте запись в реестр ядра и напишите
+          <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">bridge.yaml</code> вместе с шаблонами.
+        </p>
+        <a
+          href="/ru/docs/guides/writing-a-bridge"
+          class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8"
+        >
+          Руководство по написанию моста →
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>

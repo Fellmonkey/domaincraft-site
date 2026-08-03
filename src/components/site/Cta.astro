@@ -9,7 +9,8 @@ interface Props {
 }
 
 const { lang, messages } = Astro.props;
-const docsHref = lang === 'en' ? '/docs' : '/ru/docs';
+const releasesHref = 'https://github.com/DomainCraft/DomainCraft/releases';
+const docsHref = lang === 'en' ? '/docs/getting-started/quickstart' : '/ru/docs/getting-started/quickstart';
 ---
 
 <section id="install" class="relative scroll-mt-24 overflow-hidden border-t border-border">
@@ -20,18 +21,19 @@ const docsHref = lang === 'en' ? '/docs' : '/ru/docs';
     </h2>
     <p class="mx-auto mt-4 max-w-xl text-pretty text-lg text-muted-foreground">{messages.subtitle}</p>
 
-    <div class="mx-auto mt-8 flex w-fit max-w-full items-center gap-2 rounded-lg border border-border bg-card py-2.5 pl-4 pr-2">
-      <code class="truncate font-mono text-xs text-muted-foreground sm:text-sm">{messages.code}</code>
-      <CopyButton client:load value={messages.code} label="" copiedLabel={messages.copied} className="shrink-0" />
-    </div>
-
     <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-      <a href="#install">
+      <a href={releasesHref} target="_blank" rel="noreferrer">
         <Button size="lg">{messages.primaryCta}</Button>
       </a>
       <a href={docsHref}>
         <Button size="lg" variant="outline">{messages.secondaryCta}</Button>
       </a>
+    </div>
+
+    <p class="mt-8 text-xs text-muted-foreground">{messages.goNote}</p>
+    <div class="mx-auto mt-3 flex w-fit max-w-full items-center gap-2 rounded-lg border border-border bg-card py-2.5 pl-4 pr-2">
+      <code class="truncate font-mono text-xs text-muted-foreground sm:text-sm">{messages.code}</code>
+      <CopyButton client:load value={messages.code} label="" copiedLabel={messages.copied} className="shrink-0" />
     </div>
   </div>
 </section>

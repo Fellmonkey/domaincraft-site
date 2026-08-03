@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getMessages } from '../i18n';
+
+const messages = getMessages('en');
+
+const bridges = [
+  {
+    id: 'csharp-restful',
+    language: 'C#',
+    status: 'ready',
+    description: 'ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture'
+  },
+  {
+    id: 'admin-alpine',
+    language: 'HTML',
+    status: 'ready',
+    description: 'Admin panel with Alpine.js + 0build UIkit'
+  }
+];
+
+const title = 'Bridges — DomainCraft';
+const description =
+  'The pluggable template packs that translate your domain into a target language. See what is available and how to add your own.';
+---
+
+<Layout lang="en" title={title} description={description} messages={messages} alternatePath="/ru/bridges" alternateLabel="Русский">
+  <PageHero
+    title="Bridges"
+    lede="Each bridge is a pluggable template pack. The core never knows a language — it ships the IR and constrains nothing."
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-5 sm:grid-cols-2">
+      {
+        bridges.map((b) => (
+          <article key={b.id} class="rounded-xl border border-border bg-card p-6">
+            <div class="flex items-center justify-between gap-3">
+              <h2 class="font-mono text-base font-semibold">{b.id}</h2>
+              <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">{b.status}</span>
+            </div>
+            <p class="mt-1 font-mono text-xs text-muted-foreground">{b.language}</p>
+            <p class="mt-3 text-sm text-muted-foreground">{b.description}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-2">
+      <div>
+        <h2 class="text-lg font-semibold">Use a bridge</h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Resolve by registry ID, local path or GitHub shorthand. The CLI clones known bridges on demand into
+          <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">~/.domaincraft/bridges/</code>.
+        </p>
+        <pre class="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-4 font-mono text-[13px] leading-relaxed">{`# By registry ID
+domaincraft generate --domain domain.yaml --bridge csharp-restful
+
+# By local path
+domaincraft generate --domain domain.yaml --bridge ../DomainCraftCsharp
+
+# With an admin panel (default admin-alpine)
+domaincraft generate --domain domain.yaml --bridge csharp-restful --admin`}</pre>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold">Add your own</h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          A bridge is just templates and a manifest — no Go code required. Append an entry to the core registry and
+          write a <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">bridge.yaml</code> plus your templates.
+        </p>
+        <a
+          href="/docs/guides/writing-a-bridge"
+          class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8"
+        >
+          Read the writing-a-bridge guide →
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>

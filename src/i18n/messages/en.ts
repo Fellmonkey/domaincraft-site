@@ -4,9 +4,13 @@ export const en: Messages = {
   langName: 'English',
 
   nav: {
+    products: 'Products',
     features: 'Features',
     howItWorks: 'How it works',
     bridges: 'Bridges',
+    skills: 'Skills',
+    changelog: 'Changelog',
+    blog: 'Blog',
     ai: 'AI-native',
     studio: 'Studio',
     docs: 'Docs',
@@ -24,6 +28,8 @@ export const en: Messages = {
     primaryCta: 'Start generating',
     secondaryCta: 'Open the Studio',
     installLabel: 'Install in 60 seconds',
+    downloadCta: 'Download binary',
+    platforms: 'Windows · macOS · Linux · ARM64',
     copied: 'Copied to clipboard',
     terminalTitle: 'domaincraft generate',
     domainTab: 'domain.yaml',
@@ -217,10 +223,12 @@ export const en: Messages = {
     titleStart: 'Stop writing',
     titleHighlight: 'boilerplate',
     titleEnd: '. Start shipping your domain.',
-    subtitle: 'Free and MIT-licensed. Install in one command and generate your first backend today.',
-    primaryCta: 'Start generating',
+    subtitle:
+      'Free and MIT-licensed. No Go required — download a binary and generate your first backend today.',
+    primaryCta: 'Download binary',
     secondaryCta: 'Read the docs',
     code: 'go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest',
+    goNote: 'or install with Go',
     copied: 'Copied'
   },
 
@@ -228,24 +236,22 @@ export const en: Messages = {
     tagline: 'Domain-driven code generation for any language.',
     product: 'Product',
     productLinks: {
-      features: 'Features',
       bridges: 'Bridges',
+      skills: 'Skills',
       studio: 'Studio',
-      ai: 'AI-native',
-      roadmap: 'Roadmap'
+      changelog: 'Changelog',
+      blog: 'Blog'
     },
     resources: 'Resources',
     resourcesLinks: {
       docs: 'Documentation',
       generate: 'Quick start',
-      github: 'GitHub',
-      contribute: 'Contribute'
+      github: 'GitHub'
     },
     community: 'Community',
     communityLinks: {
       discord: 'Discord',
-      twitter: 'Twitter / X',
-      blog: 'Blog'
+      twitter: 'Twitter / X'
     },
     rights: '© {year} DomainCraft. MIT Licensed.',
     languageLabel: 'Language'
