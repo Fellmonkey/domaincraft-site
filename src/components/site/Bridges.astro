@@ -1,0 +1,52 @@
+---
+import type { BridgesMessages } from '../../i18n/messages/types';
+import SectionHeading from './SectionHeading.astro';
+import { Badge } from '../../components/ui/badge';
+import { Button } from '../../components/ui/button';
+
+interface Props {
+  lang: string;
+  messages: BridgesMessages;
+}
+
+const { lang, messages } = Astro.props;
+const prefix = lang === 'en' ? '' : '/ru';
+const statusLabel = (s: string) =>
+  s === 'ready' ? (lang === 'en' ? 'Ready' : 'Готов') : s === 'beta' ? 'Beta' : lang === 'en' ? 'Planned' : 'В планах';
+---
+
+<section id="bridges" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6">
+  <SectionHeading
+    eyebrow={messages.eyebrow}
+    titleStart={messages.titleStart}
+    titleHighlight={messages.titleHighlight}
+    titleEnd={messages.titleEnd}
+    subtitle={messages.subtitle}
+  />
+
+  <div class="mt-14 grid gap-5 sm:grid-cols-3">
+    {
+      messages.cards.map((bridge) => (
+        <article key={bridge.name} class="rounded-xl border border-border bg-card p-6">
+          <div class="mb-3 flex items-center justify-between gap-2">
+            <h3 class="font-mono text-base font-semibold">{bridge.name}</h3>
+            <Badge variant={bridge.status === 'ready' ? 'default' : 'outline'}>
+              {statusLabel(bridge.status)}
+            </Badge>
+          </div>
+          <p class="text-sm text-muted-foreground">{bridge.description}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="mt-10 flex flex-col items-center justify-between gap-4 rounded-xl border border-dashed border-border bg-muted/30 px-6 py-8 sm:flex-row">
+    <div>
+      <h3 class="mb-1 text-lg font-semibold">{messages.buildYourOwn}</h3>
+      <p class="max-w-xl text-sm text-muted-foreground">{messages.buildYourOwnDesc}</p>
+    </div>
+    <a href={`${prefix}/docs`}>
+      <Button variant="outline">{lang === 'en' ? 'Write a bridge' : 'Написать мост'}</Button>
+    </a>
+  </div>
+</section>

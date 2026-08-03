@@ -1,0 +1,50 @@
+---
+import type { OssMessages } from '../../i18n/messages/types';
+import SectionHeading from './SectionHeading.astro';
+import { Button } from '../../components/ui/button';
+import OssGlyph from './OssGlyph.astro';
+
+interface Props {
+  lang: string;
+  messages: OssMessages;
+}
+
+const { lang, messages } = Astro.props;
+const prefix = lang === 'en' ? '' : '/ru';
+
+const items = [
+  { title: messages.license, desc: 'Read, fork, self-host. No account, no gate.', icon: 'license' },
+  { title: messages.contribute, desc: messages.contributeDesc, icon: 'contribute', href: `https://github.com/DomainCraft/DomainCraft/blob/main/CONTRIBUTING.md` },
+  { title: messages.roadmap, desc: messages.roadmapDesc, icon: 'roadmap', href: `${prefix}/#roadmap` },
+  { title: messages.star, desc: messages.starDesc, icon: 'star', href: 'https://github.com/DomainCraft/DomainCraft' }
+];
+---
+
+<section id="roadmap" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6">
+  <SectionHeading
+    eyebrow={messages.eyebrow}
+    titleStart={messages.titleStart}
+    titleHighlight={messages.titleHighlight}
+    titleEnd={messages.titleEnd}
+    subtitle={messages.subtitle}
+  />
+
+  <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      items.map((item) => (
+        <article key={item.title} class="flex flex-col rounded-xl border border-border bg-card p-6">
+          <span class="mb-4 grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
+            <OssGlyph name={item.icon} />
+          </span>
+          <h3 class="mb-1 text-base font-semibold">{item.title}</h3>
+          <p class="text-sm text-muted-foreground">{item.desc}</p>
+          {item.href && (
+            <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noreferrer' : undefined} class="mt-auto pt-4">
+              <Button variant="ghost" size="sm" class="px-0">{lang === 'en' ? 'Learn more' : 'Подробнее'} →</Button>
+            </a>
+          )}
+        </article>
+      ))
+    }
+  </div>
+</section>

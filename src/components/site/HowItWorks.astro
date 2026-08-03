@@ -1,0 +1,51 @@
+---
+import type { HowItWorksMessages } from '../../i18n/messages/types';
+import SectionHeading from './SectionHeading.astro';
+import StepGlyph from './StepGlyph.astro';
+import Arrow from './Arrow.astro';
+
+interface Props {
+  messages: HowItWorksMessages;
+}
+
+const { messages } = Astro.props;
+---
+
+<section id="how-it-works" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6">
+  <SectionHeading
+    eyebrow={messages.eyebrow}
+    titleStart={messages.titleStart}
+    titleHighlight={messages.titleHighlight}
+    titleEnd={messages.titleEnd}
+    subtitle={messages.subtitle}
+  />
+
+  <ol class="mt-14 grid gap-6 sm:grid-cols-3">
+    {
+      messages.steps.map((step, i) => (
+        <li key={step.title} class="relative rounded-xl border border-border bg-card p-6">
+          <div class="mb-4 flex items-center justify-between">
+            <StepGlyph index={i} />
+            <span class="font-mono text-sm text-muted-foreground">0{i + 1}</span>
+          </div>
+          <h3 class="mb-2 text-base font-semibold">{step.title}</h3>
+          <p class="text-sm text-muted-foreground">{step.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="mt-10 flex items-center justify-center gap-3 font-mono text-xs text-muted-foreground">
+    <span>domain.yaml</span>
+    <Arrow />
+    <span>Parser</span>
+    <Arrow />
+    <span>Validator</span>
+    <Arrow />
+    <span>IR</span>
+    <Arrow />
+    <span>Renderer</span>
+    <Arrow />
+    <span>code</span>
+  </div>
+</section>

@@ -1,0 +1,37 @@
+---
+import type { CtaMessages } from '../../i18n/messages/types';
+import CopyButton from '../CopyButton';
+import { Button } from '../../components/ui/button';
+
+interface Props {
+  lang: string;
+  messages: CtaMessages;
+}
+
+const { lang, messages } = Astro.props;
+const docsHref = lang === 'en' ? '/docs' : '/ru/docs';
+---
+
+<section id="install" class="relative scroll-mt-24 overflow-hidden border-t border-border">
+  <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_bottom,rgba(249,115,22,0.16),transparent_60%)]" aria-hidden="true" />
+  <div class="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
+    <h2 class="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+      {messages.titleStart} <span class="text-primary">{messages.titleHighlight}</span>{messages.titleEnd}
+    </h2>
+    <p class="mx-auto mt-4 max-w-xl text-pretty text-lg text-muted-foreground">{messages.subtitle}</p>
+
+    <div class="mx-auto mt-8 flex w-fit max-w-full items-center gap-2 rounded-lg border border-border bg-card py-2.5 pl-4 pr-2">
+      <code class="truncate font-mono text-xs text-muted-foreground sm:text-sm">{messages.code}</code>
+      <CopyButton client:load value={messages.code} label="" copiedLabel={messages.copied} className="shrink-0" />
+    </div>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a href="#install">
+        <Button size="lg">{messages.primaryCta}</Button>
+      </a>
+      <a href={docsHref}>
+        <Button size="lg" variant="outline">{messages.secondaryCta}</Button>
+      </a>
+    </div>
+  </div>
+</section>

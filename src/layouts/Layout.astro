@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import themeInit from '../scripts/theme-init.ts?raw';
+import type { Messages } from '../i18n/messages/types';
+import Header from '../components/site/Header.astro';
+import Footer from '../components/site/Footer.astro';
+
+interface Props {
+  lang: string;
+  title: string;
+  description: string;
+  messages: Messages;
+  alternatePath?: string;
+  alternateLabel?: string;
+}
+
+const {
+  lang,
+  title,
+  description,
+  messages,
+  alternatePath = '/',
+  alternateLabel = 'English'
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://domaincraft.dev/').href;
+const alternate = new URL(alternatePath, Astro.site ?? 'https://domaincraft.dev/').href;
+const alternateLang = lang === 'en' ? 'ru' : 'en';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={lang === 'en' ? canonical : alternate} />
+    <link rel="alternate" hreflang="ru" href={lang === 'ru' ? canonical : alternate} />
+    <link rel="alternate" hreflang="x-default" href={lang === 'en' ? canonical : alternate} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <script is:inline set:html={themeInit}></script>
+    <title>{title}</title>
+  </head>
+  <body class="min-h-dvh bg-background font-sans antialiased selection:bg-primary selection:text-primary-foreground">
+    <Header
+      lang={lang}
+      messages={messages}
+      alternateHref={alternatePath}
+      alternateLabel={alternateLabel}
+      alternateLang={alternateLang}
+    />
+    <main>
+      <slot />
+    </main>
+    <Footer lang={lang} messages={messages} alternateHref={alternatePath} alternateLabel={alternateLabel} alternateLang={alternateLang} />
+  </body>
+</html>

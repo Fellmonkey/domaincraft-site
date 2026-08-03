@@ -1,0 +1,20 @@
+---
+import CopyButton from './CopyButton';
+
+interface Props {
+  lang: string;
+  code: string;
+  copyLabel: string;
+  copiedLabel: string;
+}
+
+const { lang, code, copyLabel, copiedLabel } = Astro.props;
+---
+
+<div class="overflow-hidden rounded-xl border border-border bg-card">
+  <div class="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-2">
+    <span class="font-mono text-xs text-muted-foreground">{lang}</span>
+    <CopyButton client:load value={code} label={copyLabel} copiedLabel={copiedLabel} />
+  </div>
+  <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground/90">{code}</pre>
+</div>

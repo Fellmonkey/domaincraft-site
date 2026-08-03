@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HomePage from '../../components/HomePage.astro';
+import { getMessages } from '../../i18n';
+
+const messages = getMessages('ru');
+
+const title = 'DomainCraft — опишите домен один раз в YAML, получите код для любого языка';
+const description =
+  'DomainCraft — это генератор кода на основе домена. Определите домен в одном domain.yaml и получите готовый бэкенд — CRUD, авторизация, права, миграции, админка — на любом языке, с безопасной регенерацией.';
+---
+
+<Layout
+  lang="ru"
+  title={title}
+  description={description}
+  messages={messages}
+  alternatePath="/"
+  alternateLabel="English"
+>
+  <HomePage lang="ru" messages={messages} />
+</Layout>

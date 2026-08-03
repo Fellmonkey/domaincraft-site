@@ -1,0 +1,39 @@
+---
+import type { FeaturesMessages } from '../../i18n/messages/types';
+import SectionHeading from './SectionHeading.astro';
+import FeatureGlyph from './FeatureGlyph.astro';
+
+interface Props {
+  messages: FeaturesMessages;
+}
+
+const { messages } = Astro.props;
+
+const glyphs = [
+  'shield', 'key', 'refresh', 'blocks', 'layout', 'infra'
+];
+---
+
+<section id="features" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6">
+  <SectionHeading
+    eyebrow={messages.eyebrow}
+    titleStart={messages.titleStart}
+    titleHighlight={messages.titleHighlight}
+    titleEnd={messages.titleEnd}
+    subtitle={messages.subtitle}
+  />
+
+  <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      messages.cards.map((card, i) => (
+        <article key={card.title} class="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/40">
+          <span class="mb-4 grid size-11 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+            <FeatureGlyph name={glyphs[i % glyphs.length]} />
+          </span>
+          <h3 class="mb-2 text-base font-semibold">{card.title}</h3>
+          <p class="text-sm text-muted-foreground">{card.description}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

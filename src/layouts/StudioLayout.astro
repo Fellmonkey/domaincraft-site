@@ -1,0 +1,41 @@
+---
+interface Props {
+  lang: 'en' | 'ru';
+  backLabel: string;
+  title: string;
+  description: string;
+}
+
+const { lang, backLabel, title, description } = Astro.props;
+const isEn = lang === 'en';
+const studioUrl = 'https://domaincraft.github.io/domaincraft-studio/';
+---
+
+<!doctype html>
+<html lang={lang} class="h-full dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/styles/studio.css" />
+  </head>
+  <body class="h-full">
+    <div class="flex h-dvh flex-col bg-background">
+      <header class="flex h-12 shrink-0 items-center gap-3 border-b border-border px-4">
+        <a href={isEn ? '/' : '/ru/'} class="text-sm text-muted-foreground transition-colors hover:text-foreground">
+          ← {backLabel}
+        </a>
+        <span class="font-mono text-xs text-muted-foreground">DomainCraft Studio</span>
+      </header>
+      <iframe
+        src={studioUrl}
+        title={title}
+        class="h-full w-full flex-1 border-0"
+        loading="eager"
+        allow="clipboard-write"
+      />
+    </div>
+  </body>
+</html>
