@@ -22,16 +22,25 @@ No Go toolchain required. Download the prebuilt binary for your platform from Gi
 
 ## 2. Create a project
 
-The interactive wizard scaffolds a starter project and a `domain.yaml` for you:
+Create a `domain.yaml` by hand or in the visual editor ([DomainCraft Studio](/studio)). A minimal starter looks like:
 
-```bash
-domaincraft new
-```
+```yaml
+project:
+  name: MyShop
+  version: 1.0.0
 
-It asks for the project name, bridge, database, auth and API style. Use `--non-interactive` for CI and pass the answers as flags:
+database: postgresql
+auth:
+  type: jwt
+api_style: rest
 
-```bash
-domaincraft new --non-interactive --name MyShop --bridge csharp-restful --database postgresql --auth jwt
+entities:
+  User:
+    fields:
+      id: uuid [primary]
+      email: string [required, unique, email]
+      name: string [required]
+      password: string [required, hidden]
 ```
 
 ## 3. Define your domain

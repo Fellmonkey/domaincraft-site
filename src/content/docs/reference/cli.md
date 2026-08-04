@@ -1,19 +1,19 @@
 ---
 title: CLI reference
-description: Every domaincraft command and flag — new, generate, validate, bridges, and their options.
+description: Every domaincraft command and flag — generate, validate, bridges, and their options.
 section: reference
 order: 2
-updated: "2026-08-03"
+updated: "2026-08-04"
 ---
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `domaincraft new` / `init` | Interactive project wizard (name, bridge, database, auth, API style). `--non-interactive` for CI. |
 | `domaincraft generate` | Generate code. Interactive bridge selection if `--bridge` omitted. |
 | `domaincraft validate` | Validate `domain.yaml`. |
 | `domaincraft bridges` | List known bridges with cache status. |
+| `domaincraft --version` | Print the CLI version. |
 
 ## Global flags
 
@@ -32,10 +32,6 @@ updated: "2026-08-03"
 |------|-------------|
 | `--prune` | Automatically delete/rename orphaned files detected by the migration engine, without prompting (CI-friendly). |
 | `--migrate` | After generation, run the bridge's declared database-migration commands (`migrations:` in `bridge.yaml`) against a real database. |
-
-## `new` flags
-
-`--name`, `--version`, `--database`, `--auth`, `--api-style`.
 
 ## Bridge resolution order
 
