@@ -1,15 +1,13 @@
 ---
 import type { AiMessages } from '../../i18n/messages/types';
-import SectionHeading from './SectionHeading.astro';
 import CopyButton from '../CopyButton';
 import { Badge } from '../../components/ui/badge';
 
 interface Props {
-  lang: string;
   messages: AiMessages;
 }
 
-const { lang, messages } = Astro.props;
+const { messages } = Astro.props;
 
 const prompt =
 `You are modeling an online store with DomainCraft.
@@ -35,7 +33,7 @@ permissions:
   <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.08),transparent_60%)]" aria-hidden="true" />
   <div class="mx-auto max-w-6xl px-4 py-24 sm:px-6">
     <div class="mx-auto mb-12 max-w-3xl text-center">
-      <Badge variant="outline" class="mb-3 font-mono text-xs">{messages.eyebrow} · {messages.label}</Badge>
+      <Badge variant="outline" className="mb-3 font-mono text-xs">{messages.eyebrow} · {messages.label}</Badge>
       <h2 class="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
         {messages.titleStart} <span class="text-primary">{messages.titleHighlight}</span>{messages.titleEnd}
       </h2>
@@ -45,7 +43,7 @@ permissions:
     <div class="grid items-start gap-8 lg:grid-cols-2">
       <div class="space-y-4">
         {messages.cards.map((card, i) => (
-          <article key={card.title} class="flex gap-4 rounded-xl border border-border bg-card p-5">
+          <article class="flex gap-4 rounded-xl border border-border bg-card p-5">
             <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 font-mono text-sm font-semibold text-primary">
               {String(i + 1).padStart(2, '0')}
             </span>

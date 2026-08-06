@@ -37,11 +37,11 @@ const editBase = 'https://github.com/DomainCraft/DomainCraftSite/blob/main/src/c
         <div class="space-y-4 border-t border-border p-4">
           {
             groups.map((group) => (
-              <div key={group.label}>
+              <div>
                 <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{group.label}</p>
                 <ul class="space-y-0.5">
                   {group.items.map((item) => (
-                    <li key={item.slug}>
+                    <li>
                       <a
                         href={`${docsRoot}/${item.slug}`}
                         class={`block rounded-md px-2 py-1.5 text-sm ${
@@ -62,11 +62,11 @@ const editBase = 'https://github.com/DomainCraft/DomainCraftSite/blob/main/src/c
       <div class="hidden space-y-6 lg:block">
         {
           groups.map((group) => (
-            <div key={group.label}>
+            <div>
               <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{group.label}</p>
               <ul class="space-y-0.5">
                 {group.items.map((item) => (
-                  <li key={item.slug}>
+                  <li>
                     <a
                       href={`${docsRoot}/${item.slug}`}
                       aria-current={item.slug === currentSlug ? 'page' : undefined}

@@ -5,11 +5,10 @@ import StudioMock from './StudioMock.astro';
 import { Button } from '../../components/ui/button';
 
 interface Props {
-  lang: string;
   messages: StudioMessages;
 }
 
-const { lang, messages } = Astro.props;
+const { messages } = Astro.props;
 const studioUrl = 'https://domaincraft.github.io/domaincraft-studio/';
 ---
 
@@ -26,7 +25,7 @@ const studioUrl = 'https://domaincraft.github.io/domaincraft-studio/';
       />
       <ul class="space-y-3">
         {messages.bullets.map((b) => (
-          <li key={b} class="flex items-center gap-3 text-sm text-muted-foreground">
+          <li class="flex items-center gap-3 text-sm text-muted-foreground">
             <span class="grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 font-mono text-xs text-primary">✓</span>
             {b}
           </li>

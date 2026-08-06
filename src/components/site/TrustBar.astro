@@ -15,7 +15,7 @@ const { messages } = Astro.props;
     </p>
     <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
       {messages.items.map((item) => (
-        <li key={item} class="font-mono text-sm text-muted-foreground">{item}</li>
+        <li class="font-mono text-sm text-muted-foreground">{item}</li>
       ))}
     </ul>
   </div>

@@ -27,7 +27,7 @@ const statusLabel = (s: string) =>
   <div class="mt-14 grid gap-5 sm:grid-cols-3">
     {
       messages.cards.map((bridge) => (
-        <article key={bridge.name} class="rounded-xl border border-border bg-card p-6">
+        <article class="rounded-xl border border-border bg-card p-6">
           <div class="mb-3 flex items-center justify-between gap-2">
             <h3 class="font-mono text-base font-semibold">{bridge.name}</h3>
             <Badge variant={bridge.status === 'ready' ? 'default' : 'outline'}>

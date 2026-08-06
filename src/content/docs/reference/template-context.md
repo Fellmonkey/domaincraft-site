@@ -23,7 +23,7 @@ Bridge templates receive a `RenderContext`:
 
 Key `IRField` fields: name, databaseType, navigationName, isPrimary, isNullable, isUnique, isHidden, isRelation, isMany, relationTarget, defaultValue, defaultIsFunc, validations.
 
-`IRRelation` fields: fieldName, targetEntity, navigationName, inverseNavName, onDeleteBehavior, isNullable, isMany, relationType.
+`IRRelation` fields: fieldName, targetEntity, navigationName, inverseNavName, onDeleteBehavior, isNullable, isMany, relationType, pairFieldName, pairNavigationName.
 
 `IRAuthConfig`: type, entity, roles, endpoints (`.HasLogin()`, `.HasRegister()`, `.HasMe()`).
 

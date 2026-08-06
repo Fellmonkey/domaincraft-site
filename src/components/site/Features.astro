@@ -26,7 +26,7 @@ const glyphs = [
   <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
     {
       messages.cards.map((card, i) => (
-        <article key={card.title} class="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/40">
+        <article class="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/40">
           <span class="mb-4 grid size-11 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
             <FeatureGlyph name={glyphs[i % glyphs.length]} />
           </span>

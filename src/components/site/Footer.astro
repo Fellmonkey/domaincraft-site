@@ -11,7 +11,6 @@ interface Props {
 
 const { lang, messages } = Astro.props;
 const isRoot = lang === 'en';
-const prefix = isRoot ? '' : '/ru';
 const year = new Date().getFullYear();
 const rights = messages.footer.rights.replace('{year}', String(year));
 

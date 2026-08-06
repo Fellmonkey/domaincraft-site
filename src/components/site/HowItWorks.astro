@@ -23,7 +23,7 @@ const { messages } = Astro.props;
   <ol class="mt-14 grid gap-6 sm:grid-cols-3">
     {
       messages.steps.map((step, i) => (
-        <li key={step.title} class="relative rounded-xl border border-border bg-card p-6">
+        <li class="relative rounded-xl border border-border bg-card p-6">
           <div class="mb-4 flex items-center justify-between">
             <StepGlyph index={i} />
             <span class="font-mono text-sm text-muted-foreground">0{i + 1}</span>

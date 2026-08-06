@@ -39,8 +39,9 @@ Base traits:
 - `primary` — primary key.
 - `optional` — NULL in the database.
 - `unique` — unique index.
-- `hidden` — not returned in API JSON responses (ideal for passwords).
-- `required` — the inverse of `optional`.
+- `hidden` — excluded from API responses.
+- `readonly` — in responses, excluded from create/update/patch (server-owned).
+- `required` — NOT NULL in the database.
 
 String validations: `min:X`, `max:X`, `email`, `url`, `ipv4`, `regex:"^[A-Z]+$"`.
 

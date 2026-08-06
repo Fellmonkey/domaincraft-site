@@ -32,7 +32,7 @@ const items = [
   <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
     {
       items.map((item) => (
-        <article key={item.title} class="flex flex-col rounded-xl border border-border bg-card p-6">
+        <article class="flex flex-col rounded-xl border border-border bg-card p-6">
           <span class="mb-4 grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
             <OssGlyph name={item.icon} />
           </span>
@@ -40,7 +40,7 @@ const items = [
           <p class="text-sm text-muted-foreground">{item.desc}</p>
           {item.href && (
             <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noreferrer' : undefined} class="mt-auto pt-4">
-              <Button variant="ghost" size="sm" class="px-0">{lang === 'en' ? 'Learn more' : 'Подробнее'} →</Button>
+              <Button variant="ghost" size="sm" className="px-0">{lang === 'en' ? 'Learn more' : 'Подробнее'} →</Button>
             </a>
           )}
         </article>
