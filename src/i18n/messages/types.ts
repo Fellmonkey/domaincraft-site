@@ -162,14 +162,15 @@ export interface FooterMessages {
   languageLabel: string;
 }
 
+export interface AnnouncementBarMessages {
+  community: string;
+  brand: string;
+}
+
 export interface BlogMessages {
   toc: string;
   readingTime: string;
   backToPosts: string;
-  communityTitle: string;
-  communityBody: string;
-  brandTitle: string;
-  brandBody: string;
 }
 
 export interface Messages {
@@ -187,4 +188,5 @@ export interface Messages {
   cta: CtaMessages;
   footer: FooterMessages;
   blog: BlogMessages;
+  announcementBar: AnnouncementBarMessages;
 }

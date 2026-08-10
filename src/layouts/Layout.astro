@@ -4,6 +4,7 @@ import themeInit from '../scripts/theme-init.ts?raw';
 import type { Messages } from '../i18n/messages/types';
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
+import AnnouncementBar from '../components/site/AnnouncementBar.astro';
 
 interface Props {
   lang: string;
@@ -67,6 +68,7 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
     <title>{title}</title>
   </head>
   <body class="min-h-dvh bg-background font-sans antialiased selection:bg-primary selection:text-primary-foreground">
+    <AnnouncementBar messages={messages.announcementBar} />
     <Header
       lang={lang}
       messages={messages}
