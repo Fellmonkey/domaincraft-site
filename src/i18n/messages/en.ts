@@ -256,5 +256,17 @@ export const en: Messages = {
     },
     rights: '© {year} DomainCraft. MIT Licensed.',
     languageLabel: 'Language'
+  },
+
+  blog: {
+    toc: 'On this page',
+    readingTime: 'min read',
+    backToPosts: '← All posts',
+    communityTitle: 'Community shapes the bridges',
+    communityBody:
+      'Every bridge is a template package maintained by the community. The more effort goes into a bridge, the more powerful the tool becomes — so a good bridge is the best contribution you can make.',
+    brandTitle: 'About the name',
+    brandBody:
+      '“DomainCraft” is a working title. The final brand is still undecided — the tool and the community matter more than the name.'
   }
 };

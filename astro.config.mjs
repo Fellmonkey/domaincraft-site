@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 import { fileURLToPath } from 'node:url';
@@ -9,7 +10,16 @@ import { fileURLToPath } from 'node:url';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://domaincraft.dev',
-  integrations: [react()],
+  integrations: [
+    react(),
+    sitemap({
+      // /studio и /ru/studio — полноэкранные iframe-страницы без индексируемого контента
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        return path !== '/studio/' && path !== '/ru/studio/';
+      }
+    })
+  ],
   server: {
     host: '127.0.0.1',
     port: 4444

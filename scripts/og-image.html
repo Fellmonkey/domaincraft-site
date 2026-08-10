@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0a0a0a;
+    color: #fafafa;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 72px 80px;
+    overflow: hidden;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .squares {
+    display: grid;
+    grid-template-columns: repeat(2, 22px);
+    grid-template-rows: repeat(2, 22px);
+    gap: 4px;
+  }
+  .squares span {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    background: #f97316;
+  }
+  .squares span:nth-child(2) { opacity: 0.85; }
+  .squares span:nth-child(3) { opacity: 0.7; }
+  .squares span:nth-child(4) { opacity: 0.55; }
+  h1 {
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+  }
+  .accent { color: #f97316; }
+  .sub {
+    font-size: 28px;
+    color: #a1a1aa;
+    max-width: 900px;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+  <div class="brand">
+    <div class="squares"><span></span><span></span><span></span><span></span></div>
+    DomainCraft
+  </div>
+  <div>
+    <h1>Describe your domain once.<br />Get a <span class="accent">working backend</span>.</h1>
+    <p class="sub">Domain-driven code generation — domain.yaml in, production source code out.</p>
+  </div>
+</body>
+</html>

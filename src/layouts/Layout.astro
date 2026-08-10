@@ -12,6 +12,9 @@ interface Props {
   messages: Messages;
   alternatePath?: string;
   alternateLabel?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 const {
@@ -20,12 +23,18 @@ const {
   description,
   messages,
   alternatePath = '/',
-  alternateLabel = 'English'
+  alternateLabel = 'English',
+  ogType = 'website',
+  publishedTime,
+  modifiedTime
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://domaincraft.dev/').href;
-const alternate = new URL(alternatePath, Astro.site ?? 'https://domaincraft.dev/').href;
+const site = Astro.site ?? new URL('https://domaincraft.dev/');
+const canonical = new URL(Astro.url.pathname, site).href;
+const alternate = new URL(alternatePath, site).href;
 const alternateLang = lang === 'en' ? 'ru' : 'en';
+const ogImage = new URL('/og-image.png', site).href;
+const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
 ---
 
 <!doctype html>
@@ -41,13 +50,19 @@ const alternateLang = lang === 'en' ? 'ru' : 'en';
     <link rel="alternate" hreflang="ru" href={lang === 'ru' ? canonical : alternate} />
     <link rel="alternate" hreflang="x-default" href={lang === 'en' ? canonical : alternate} />
     <meta name="theme-color" content="#0a0a0a" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="DomainCraft" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <script is:inline set:html={themeInit}></script>
     <title>{title}</title>
   </head>
