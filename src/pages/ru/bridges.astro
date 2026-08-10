@@ -47,6 +47,11 @@ const description =
       }
     </div>
 
+    <p class="mt-5 text-sm text-muted-foreground">
+      В планах: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">java-spring</code> (Spring Boot) и{' '}
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">typescript</code> (Express / Prisma).
+    </p>
+
     <div class="mt-12 grid gap-10 lg:grid-cols-2">
       <div>
         <h2 class="text-lg font-semibold">Использовать мост</h2>
@@ -58,7 +63,7 @@ const description =
 domaincraft generate --domain domain.yaml --bridge csharp-restful
 
 # По локальному пути
-domaincraft generate --domain domain.yaml --bridge ../DomainCraftCsharp
+domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp
 
 # С админ-панелью (по умолчанию admin-alpine)
 domaincraft generate --domain domain.yaml --bridge csharp-restful --admin`}</pre>

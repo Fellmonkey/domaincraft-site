@@ -13,11 +13,11 @@ updated: "2026-08-03"
 Global settings in the YAML root:
 
 - `project.name` — project name.
-- `project.database` — SQL/NoSQL mode: `postgresql`, `mysql`, `mssql`, `mongodb`. Determines which types are available (e.g. `jsonb` exists in PostgreSQL).
-- `project.api_style` — how controllers are generated: `rest` (others are planned).
+- `database` — target database: `postgresql`, `mysql`, `sqlite`, `mssql`, `mongodb`. The core validates all of them, but the ready `csharp-restful` bridge targets PostgreSQL (EF Core + Npgsql).
+- `api_style` — how controllers are generated: `rest`. The core validates `graphql` and `grpc` too, but the ready `csharp-restful` bridge generates REST only.
 - `project.infrastructure` — declarative infrastructure (see the Infrastructure guide).
 - `auth` — authorization mode: `jwt` or `none` (see the Authentication guide).
-- `project.multi_tenancy` — SaaS mode, e.g. `mode: column`; adds `tenantId` to non-global entities and filters queries by `WHERE tenant_id = @currentTenant`.
+- `project.multi_tenancy` — SaaS mode, e.g. `mode: column`. The core validates the mode; **bridges decide how (or whether) to implement it** — the `csharp-restful` bridge currently does not generate tenant isolation, so a `tenantId` column must be declared explicitly if you need one (the compliance suite does exactly that).
 
 ## Data types
 
@@ -53,7 +53,7 @@ Defaults: `default:false`, `default:"Unknown"`, `default:now()` (database-level)
 
 - **Many-to-One / One-to-Many** — written on the child: `userId: relation(User)`. Creates an `Orders[]` list on `User`.
 - **One-to-One** — a `[unique]` relation: `profileId: relation(Profile) [unique]`.
-- **Many-to-Many** — `tags: relation(Tag) [many]`. The core creates the hidden join table (`ArticleTags`), composite keys and add/remove tag API methods.
+- **Many-to-Many** — `tags: relation(Tag) [many]`. The core reconciles the two declarations into one `[many]` relation; EF Core (the C# bridge) creates the hidden join table via `HasMany/WithMany` and exposes the collection as a navigation, eager-loaded via `Include`.
 - **`on_delete`** — `cascade`, `set_null` (only on optional fields), `restrict`, `no_action`.
 
 ## Features
@@ -70,7 +70,7 @@ permissions:
   delete: [Admin]
 ```
 
-Directives: role names (RBAC), `*` (public), `@Owner` and `@Tenant` (ABAC). Custom conditions are not implemented; unknown permission keys are a parse error.
+Directives: role names (RBAC), `*` (public), `@Owner` (ABAC). Custom conditions are not implemented; unknown permission keys are a parse error.
 
 ## Indexes
 
@@ -91,7 +91,7 @@ seed:
   - { id: 2, name: "Customer" }
 ```
 
-The bridge generates seeder scripts/classes executed on first run.
+The bridge generates a seeder class that applies the rows idempotently at application startup (and on a daily recurring job) — the exact mechanism is bridge-specific.
 
 ## Full example
 
@@ -118,5 +118,5 @@ Document:
 
 ## Planned
 
-- `@Tenant` token — ABAC data isolation; the GUI does not yet expose it in the permission matrix.
+- `@Tenant` token — ABAC data isolation. In the spec, but **not implemented**: neither the core nor the `csharp-restful` bridge interprets it (the core only validates any `@...` token as an ownership-style token).
 - Custom permission conditions (`condition(...)`) — described in the spec, **not** implemented.

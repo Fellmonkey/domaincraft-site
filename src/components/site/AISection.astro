@@ -1,6 +1,6 @@
 ---
 import type { AiMessages } from '../../i18n/messages/types';
-import CopyButton from '../CopyButton';
+import AiSession from '../AiSession';
 import { Badge } from '../../components/ui/badge';
 
 interface Props {
@@ -8,25 +8,6 @@ interface Props {
 }
 
 const { messages } = Astro.props;
-
-const prompt =
-`You are modeling an online store with DomainCraft.
-Define two entities, Product and Category, with:
-- relations, audit + soft_delete features
-- permissions: public read, Admin create/delete, @Owner update
-Output only a valid domain.yaml. I'll run domaincraft generate.`;
-
-const resultYaml = `product: Product
-features: [audit, soft_delete]
-fields:
-  id: uuid [primary]
-  title: string [required, min:3]
-  price: decimal [required, gte:0]
-permissions:
-  read: ["*"]
-  create: [Admin]
-  update: ["@Owner", Admin]
-→ 42 files · C# ASP.NET Core · Docker · tests`;
 ---
 
 <section id="ai" class="relative overflow-hidden scroll-mt-24 border-y border-border bg-muted/30">
@@ -40,7 +21,7 @@ permissions:
       <p class="mt-4 text-pretty text-lg text-muted-foreground">{messages.subtitle}</p>
     </div>
 
-    <div class="grid items-start gap-8 lg:grid-cols-2">
+    <div class="grid items-start gap-10 lg:grid-cols-2">
       <div class="space-y-4">
         {messages.cards.map((card, i) => (
           <article class="flex gap-4 rounded-xl border border-border bg-card p-5">
@@ -55,22 +36,20 @@ permissions:
         ))}
       </div>
 
-      <div class="space-y-4">
-        <div class="rounded-xl border border-border bg-card">
-          <div class="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
-            <span class="font-mono text-xs text-muted-foreground">{messages.promptLabel}</span>
-            <CopyButton client:load value={prompt} label={messages.copyPrompt} copiedLabel={messages.copied} />
-          </div>
-          <p class="p-4 font-mono text-[13px] leading-relaxed text-foreground/90">{prompt}</p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card">
-          <div class="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
-            <span class="font-mono text-xs text-muted-foreground">{messages.resultLabel}</span>
-          </div>
-          <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground/90">{resultYaml}</pre>
-        </div>
-      </div>
+      <AiSession
+        client:load
+        messages={{
+          sessionTitle: messages.sessionTitle,
+          copyPrompt: messages.copyPrompt,
+          copied: messages.copied,
+          stepYouAgent: messages.stepYouAgent,
+          stepYaml: messages.stepYaml,
+          stepGenerate: messages.stepGenerate,
+          stepHooks: messages.stepHooks,
+          stepDeploy: messages.stepDeploy,
+          stepDeployResult: messages.stepDeployResult
+        }}
+      />
     </div>
   </div>
 </section>

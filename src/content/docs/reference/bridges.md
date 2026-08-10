@@ -17,8 +17,8 @@ Bridges are how DomainCraft targets a language or framework. The registry is har
 
 ## Bridge directories
 
-- `DomainCraftCsharp` — the `csharp-restful` bridge (templates only, no Go code).
-- `DomainCraftAdmin` — the `admin-alpine` admin panel bridge (Alpine.js + 0build UIkit) with list/form/login/register pages.
+- `domaincraft-bridge-csharp` — the `csharp-restful` bridge (templates only, no Go code).
+- `domaincraft-bridge-admin` — the `admin-alpine` admin panel bridge (Alpine.js + 0build UIkit) with list/form/login/register pages.
 
 ## Generate with a bridge
 
@@ -27,7 +27,7 @@ Bridges are how DomainCraft targets a language or framework. The registry is har
 domaincraft generate --domain domain.yaml --bridge csharp-restful
 
 # By local path
-domaincraft generate --domain domain.yaml --bridge ../DomainCraftCsharp
+domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp
 
 # By GitHub shorthand
 domaincraft generate --domain domain.yaml --bridge DomainCraft/domaincraft-bridge-csharp

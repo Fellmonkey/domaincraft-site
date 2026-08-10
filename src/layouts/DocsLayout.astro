@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import Prose from '../components/Prose.astro';
 import { getMessages } from '../i18n';
 
 interface DocItem {
@@ -26,7 +27,7 @@ interface Props {
 
 const { lang, title, description, docsRoot, groups, currentSlug, sectionLabel, prev, next } = Astro.props;
 const messages = getMessages(lang);
-const editBase = 'https://github.com/DomainCraft/DomainCraftSite/blob/main/src/content/docs';
+const editBase = 'https://github.com/DomainCraft/domaincraft-site/blob/main/src/content/docs';
 ---
 
 <Layout lang={lang} title={title} description={description} messages={messages}>
@@ -99,8 +100,10 @@ const editBase = 'https://github.com/DomainCraft/DomainCraftSite/blob/main/src/c
       <h1 class="mt-1 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
       <p class="mt-3 text-balance text-muted-foreground">{description}</p>
 
-      <div class="doc-content mt-8 border-t border-border pt-8">
-        <slot />
+      <div class="mt-8 border-t border-border pt-8">
+        <Prose>
+          <slot />
+        </Prose>
       </div>
 
       <div class="mt-12 flex items-center justify-between gap-4 border-t border-border pt-6 text-sm">
@@ -118,142 +121,23 @@ const editBase = 'https://github.com/DomainCraft/DomainCraftSite/blob/main/src/c
 </Layout>
 
 <style is:global>
-  .doc-content {
-    line-height: 1.75;
-    font-size: 0.9375rem;
-  }  .doc-content h2 {
-    margin-top: 2.5rem;
-    margin-bottom: 0.75rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-  .doc-content h3 {
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.0625rem;
-    font-weight: 600;
-  }
-  .doc-content p {
-    margin-bottom: 1rem;
-    color: var(--muted-foreground);
-  }
-  .doc-content ul,
-  .doc-content ol {
-    margin-bottom: 1rem;
-    padding-left: 1.25rem;
-    color: var(--muted-foreground);
-  }
-  .doc-content ul {
-    list-style: disc;
-  }
-  .doc-content ol {
-    list-style: decimal;
-  }
-  .doc-content li {
-    margin-bottom: 0.375rem;
-  }
-  .doc-content li > ul,
-  .doc-content li > ol {
-    margin-top: 0.375rem;
-    margin-bottom: 0;
-  }
-  .doc-content a {
-    color: var(--primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .doc-content a:hover {
-    text-decoration-thickness: 2px;
-  }
-  .doc-content strong {
-    color: var(--foreground);
-    font-weight: 600;
-  }
-  .doc-content code {
-    font-family: var(--font-mono);
-    font-size: 0.8125em;
-    background: var(--muted);
-    border-radius: 0.375rem;
-    padding: 0.125rem 0.375rem;
-  }
-  .doc-content pre {
-    margin-bottom: 1.25rem;
-    overflow-x: auto;
-    border-radius: 0.75rem;
-    border: 1px solid var(--border);
-    background: var(--card);
-    padding: 1rem;
-    font-size: 0.8125rem;
-    line-height: 1.7;
-  }
-  .doc-content pre code {
-    background: transparent;
-    padding: 0;
-    font-size: inherit;
-  }
-  .doc-content table {
-    margin-bottom: 1.25rem;
-    width: 100%;
-    display: block;
-    overflow-x: auto;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-  .doc-content th {
-    text-align: left;
-    font-weight: 600;
-    color: var(--foreground);
-    border-bottom: 1px solid var(--border);
-    padding: 0.5rem 0.75rem;
-  }
-  .doc-content td {
-    border-bottom: 1px solid var(--border);
-    padding: 0.5rem 0.75rem;
-    color: var(--muted-foreground);
-  }
-  .doc-content tr:last-child td {
-    border-bottom: none;
-  }
-  .doc-content blockquote {
-    border-left: 3px solid var(--primary);
-    padding-left: 1rem;
-    margin-bottom: 1rem;
-    color: var(--muted-foreground);
-    font-style: italic;
-  }
-  .doc-content hr {
-    border-color: var(--border);
-    margin: 2rem 0;
-  }
-
-  /* Scrollbars */
-  .docs-sidebar,
-  .doc-content pre,
-  .doc-content table {
+  /* Scrollbars (docs sidebar only; prose scrollbars live in Prose.astro) */
+  .docs-sidebar {
     scrollbar-width: thin;
     scrollbar-color: color-mix(in oklch, var(--muted-foreground) 35%, transparent) transparent;
   }
-  .docs-sidebar::-webkit-scrollbar,
-  .doc-content pre::-webkit-scrollbar,
-  .doc-content table::-webkit-scrollbar {
+  .docs-sidebar::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  .docs-sidebar::-webkit-scrollbar-track,
-  .doc-content pre::-webkit-scrollbar-track,
-  .doc-content table::-webkit-scrollbar-track {
+  .docs-sidebar::-webkit-scrollbar-track {
     background: transparent;
   }
-  .docs-sidebar::-webkit-scrollbar-thumb,
-  .doc-content pre::-webkit-scrollbar-thumb,
-  .doc-content table::-webkit-scrollbar-thumb {
+  .docs-sidebar::-webkit-scrollbar-thumb {
     background: color-mix(in oklch, var(--muted-foreground) 35%, transparent);
     border-radius: 9999px;
   }
-  .docs-sidebar::-webkit-scrollbar-thumb:hover,
-  .doc-content pre::-webkit-scrollbar-thumb:hover,
-  .doc-content table::-webkit-scrollbar-thumb:hover {
+  .docs-sidebar::-webkit-scrollbar-thumb:hover {
     background: color-mix(in oklch, var(--muted-foreground) 55%, transparent);
   }
 </style>

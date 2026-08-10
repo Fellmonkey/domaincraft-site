@@ -24,7 +24,7 @@ export const en: Messages = {
     titleHighlight: 'production backend',
     titleEnd: 'in any language.',
     subtitle:
-      'DomainCraft turns a single domain.yaml into fully working code — CRUD, auth, permissions, migrations, admin. Deterministic, reviewed by you, regenerated safely.',
+      'DomainCraft turns a single domain.yaml into fully working code — CRUD, auth, permissions, migrations, admin. Deterministic output, compiles clean, safe to regenerate.', 
     primaryCta: 'Start generating',
     secondaryCta: 'Open the Studio',
     installLabel: 'Install in 60 seconds',
@@ -36,12 +36,12 @@ export const en: Messages = {
     codeTab: 'ProductService.cs',
     treeTab: 'generated/',
     running: 'Generating C# ASP.NET Core solution…',
-    ready: '✓ 42 files generated · compiles clean'
+    ready: '✓ Solution generated · compiles clean'
   },
 
   trust: {
-    title: 'Open source · MIT licensed · zero vendor lock-in',
-    items: ['Go core', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'Dapr', 'MIT']
+    title: 'The stack it ships with',
+    items: ['Go core', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'Dapr', 'Docker']
   },
 
   problem: {
@@ -113,7 +113,7 @@ export const en: Messages = {
       },
       {
         title: 'Pluggable bridges',
-        description: 'Language-agnostic core. The C# bridge is ready; Java and TypeScript are on the roadmap.'
+        description: 'Bridges are plain templates and a manifest — no Go code required. Add a language in an afternoon.'
       },
       {
         title: 'Admin panel from one flag',
@@ -129,37 +129,42 @@ export const en: Messages = {
   ai: {
     eyebrow: 'AI-native',
     label: 'Built for AI development',
-    titleStart: 'The perfect',
-    titleHighlight: 'output format for AI',
+    titleStart: 'The whole AI loop,',
+    titleHighlight: 'one session',
     titleEnd: '.',
     subtitle:
-      'Let the AI write the intent, not the boilerplate. DomainCraft turns a small, reviewable domain.yaml into 100% deterministic, compile-ready code — faster, cheaper and hallucination-free.',
+      'The agent describes the domain, DomainCraft generates 40+ production files, the agent drops business logic into hooks — then docker compose up runs it. Zero forgotten wiring, nothing hand-built.',
     cards: [
       {
-        title: 'Save tokens',
+        title: 'Describe the domain',
         description:
-          'An agent writes 40 lines of YAML instead of 5,000 of CRUD, controllers and migrations. Tokens go to intent, not plumbing.'
+          'One file is the whole spec — entities, relations, permissions, features. Everything else the generator derives from it.'
       },
       {
-        title: '100% deterministic accuracy',
+        title: 'Generate the backend',
         description:
-          'A generator can’t forget a DI registration or drop a migration. Identical model in, identical code out — every time.'
+          'domaincraft generate emits a full ASP.NET Core solution — controllers, DTOs, repositories, migrations, tests, Docker — deterministic on every run.'
       },
       {
-        title: 'Iterate without fear',
+        title: 'Drop in business logic',
         description:
-          'Change domain.yaml, regenerate, and only the generated layer updates — your custom code and business hooks survive.'
+          'The agent implements hooks in Services/<Entity>Service.cs (overwrite: false) — the exact files the generator never touches.'
       },
       {
-        title: 'Agent-ready',
+        title: 'Run and iterate',
         description:
-          'Ships dedicated skills so Cursor, Claude Code and Copilot can model, validate and extend your domain out of the box.'
+          'docker compose up boots API + Postgres. Change the model and regenerate — tables are renamed for you, your data survives.'
       }
     ],
-    promptLabel: 'agent prompt →',
+    sessionTitle: 'One session, end to end',
     copyPrompt: 'Copy prompt',
     copied: 'Copied',
-    resultLabel: '← generated from your domain'
+    stepYouAgent: 'You → agent',
+    stepYaml: 'Agent → domain.yaml',
+    stepGenerate: '$ domaincraft generate',
+    stepHooks: 'Agent → business hooks',
+    stepDeploy: '$ docker compose up',
+    stepDeployResult: 'API :8080 · Postgres · health ready'
   },
 
   studio: {
@@ -204,17 +209,18 @@ export const en: Messages = {
   },
 
   oss: {
-    eyebrow: 'Open source',
-    titleStart: 'Built in the open,',
-    titleHighlight: 'owned by you',
+    eyebrow: 'Community',
+    titleStart: 'Open source,',
+    titleHighlight: 'MIT, free forever',
     titleEnd: '.',
     subtitle:
-      'DomainCraft is MIT-licensed and free. Read the source, run it yourself, fork it — no account, no lock-in, ever.',
+      'Read the source, run it yourself, fork it — no account, no gate, no lock-in, ever.',
     license: 'MIT Licensed',
+    licenseDesc: 'Permissive license — keep your generated code, no strings attached.',
     contribute: 'Contribute',
     contributeDesc: 'Clear contributing guides and a strict, tested core.',
     roadmap: 'Public roadmap',
-    roadmapDesc: 'Java & TypeScript bridges, more databases, more API styles.',
+    roadmapDesc: 'More databases, more API styles, more addons — tracked publicly on the repo.',
     star: 'Star on GitHub',
     starDesc: 'Momentum signals real adoption. A star helps other developers find DomainCraft.'
   },
@@ -224,7 +230,7 @@ export const en: Messages = {
     titleHighlight: 'boilerplate',
     titleEnd: '. Start shipping your domain.',
     subtitle:
-      'Free and MIT-licensed. No Go required — download a binary and generate your first backend today.',
+      'No Go required — download a binary and generate your first backend today.',
     primaryCta: 'Download binary',
     secondaryCta: 'Read the docs',
     code: 'go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest',
@@ -247,11 +253,6 @@ export const en: Messages = {
       docs: 'Documentation',
       generate: 'Quick start',
       github: 'GitHub'
-    },
-    community: 'Community',
-    communityLinks: {
-      discord: 'Discord',
-      twitter: 'Twitter / X'
     },
     rights: '© {year} DomainCraft. MIT Licensed.',
     languageLabel: 'Language'

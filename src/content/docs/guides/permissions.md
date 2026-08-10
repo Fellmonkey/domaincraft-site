@@ -1,6 +1,6 @@
 ---
 title: Permissions (RBAC + ABAC)
-description: Row-level security via permissions blocks — global roles, public access, owner and tenant tokens.
+description: Row-level security via permissions blocks — global roles, public access and the @Owner token.
 section: guides
 order: 3
 updated: "2026-08-03"
@@ -22,10 +22,11 @@ Each of `read`, `create`, `update`, `delete` is a list of directives:
 - **Public access** — `read: [*]`. Marks the endpoint public; no auth required.
 - **RBAC (global roles)** — a role name such as `Admin` or `Manager`. Generates a role-claim check in the token.
 - **ABAC owner** — `update: ["@Owner"]`. The core looks up the relation between the entity and the users table (e.g. `userId`, `authorId`) and generates: "only the user whose ID matches the foreign key in this row may edit it."
-- **ABAC tenant** — `read: ["@Tenant"]`. Data isolation for SaaS: a user sees only rows of their organization. `@Tenant` is part of the spec; the GUI currently does not expose it in the permission matrix quick-add roles.
+
+> **`@Tenant`** (row isolation per organization) is **in the spec but not implemented** — neither the core nor the `csharp-restful` bridge interprets it today (the core only validates any `@...` token as an ownership-style token). Do not rely on it for generated code yet.
 
 ## Rules
 
 - Roles (other than the reserved `*` and `@` tokens) must be declared in `auth.roles`.
 - Unknown permission keys are a parse error — custom conditions such as `condition(...)` are **not** implemented and must not be used.
-- The bridge emits `PermissionPolicies.cs`, `IPermissionService` / `PermissionService` and the `OwnerResolver` when `when: hasPermissions` / `hasOwnerTokens` match.
+- The bridge emits `IPermissionService` / `PermissionService` and the `OwnerResolver` when `when: hasPermissions` / `hasOwnerTokens` match, and registers one authorization policy per entity operation (`Policy = "<Entity><Op>"`) when `hasPermissions` matches.

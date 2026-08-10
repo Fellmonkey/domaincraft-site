@@ -85,10 +85,15 @@ export interface AiMessages {
   titleEnd: string;
   subtitle: string;
   cards: FeatureCard[];
-  promptLabel: string;
+  sessionTitle: string;
   copyPrompt: string;
   copied: string;
-  resultLabel: string;
+  stepYouAgent: string;
+  stepYaml: string;
+  stepGenerate: string;
+  stepHooks: string;
+  stepDeploy: string;
+  stepDeployResult: string;
 }
 
 export interface StudioMessages {
@@ -126,6 +131,7 @@ export interface OssMessages {
   titleEnd: string;
   subtitle: string;
   license: string;
+  licenseDesc: string;
   contribute: string;
   contributeDesc: string;
   roadmap: string;
@@ -152,8 +158,6 @@ export interface FooterMessages {
   productLinks: Record<string, string>;
   resources: string;
   resourcesLinks: Record<string, string>;
-  community: string;
-  communityLinks: Record<string, string>;
   rights: string;
   languageLabel: string;
 }

@@ -14,8 +14,8 @@ Bridges mark a template `overwrite: false` to scaffold a file once; the renderer
 
 The reference C# bridge implements the pattern with C# partial classes. Per entity it generates:
 
-- `src/Application/Generated/<Entity>Service.g.cs` — **always overwritten** `partial class` with CRUD plus `partial void OnBeforeCreate / OnBeforeUpdate / OnBeforeDelete` hooks.
-- `src/Application/Services/<Entity>Service.cs` — `overwrite: false` partial where the developer implements the hooks.
+- `src/Application/Generated/<Entity>Service.g.cs` — **always overwritten** `partial class` with CRUD and the full hook surface: async before/after hooks (`OnBeforeCreateAsync`, `OnAfterUpdateAsync`, ...) and full-flow override hooks (`On*OverrideAsync`). All of them return `HookResult` — `Success()` to continue, `Handled()` to take over persistence (e.g. route to a queue instead of the DB), or `Fail("reason")` to abort cleanly (mapped to HTTP 400).
+- `src/Application/Services/<Entity>Service.cs` — `overwrite: false` partial where the developer overrides the async hooks.
 - `I<Entity>Service` interface and DI registration `I<Entity>Service → <Entity>Service` (the merged partial class).
 
 ```text
@@ -23,7 +23,7 @@ Generated/<Entity>Service.g.cs   (rewritten every generate)
         │  partial class <Entity>Service : I<Entity>Service
         ▼
 Services/<Entity>Service.cs      (created once, developer-owned partial)
-        │  partial void OnBeforeCreate(...) { /* your logic */ }
+        │  override Task<HookResult> OnBeforeCreateAsync(...) { /* your logic */ }
         ▼
 DI:  I<Entity>Service → <Entity>Service    (merged partial)
 ```

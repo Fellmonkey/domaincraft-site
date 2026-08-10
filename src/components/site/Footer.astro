@@ -16,8 +16,7 @@ const rights = messages.footer.rights.replace('{year}', String(year));
 
 const columns = [
   { title: messages.footer.product, links: Object.entries(messages.footer.productLinks) },
-  { title: messages.footer.resources, links: Object.entries(messages.footer.resourcesLinks) },
-  { title: messages.footer.community, links: Object.entries(messages.footer.communityLinks) }
+  { title: messages.footer.resources, links: Object.entries(messages.footer.resourcesLinks) }
 ];
 
 function footerHref(key: string, isRoot: boolean): string {
@@ -36,7 +35,7 @@ function footerHref(key: string, isRoot: boolean): string {
 ---
 
 <footer class="border-t border-border">
-  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr]">
     <div class="space-y-4">
       <a href={isRoot ? '/' : '/ru/'} class="flex items-center gap-2">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">

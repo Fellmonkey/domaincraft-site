@@ -1,70 +1,66 @@
 export const domainYaml = `project:
   name: MyShop
-  database: postgresql
+database: postgresql
 
 auth:
   type: jwt
   entity: User
+  roles: [Admin, User]
 
 entities:
+  User:
+    fields:
+      id: uuid [primary]
+      email: string [email, unique]
+      password: string [hidden]
   Product:
     features: [audit, soft_delete]
     fields:
       id: uuid [primary]
-      title: string [required, min:3, max:200]
+      title: string [required, min:3]
       price: decimal [required, gte:0]
-      categoryId: relation(Category) [optional, on_delete:set_null]
+    permissions:
+      read: ["*"]
+      create: [Admin]`;
+
+export const aiDomainYaml = `entities:
+  Product:
+    features: [audit, soft_delete]
+    fields:
+      id: uuid [primary]
+      title: string [required, min:3]
+      price: decimal [required, gte:0]
+      categoryId: relation(Category) [optional]
     permissions:
       read: ["*"]
       create: [Admin]
-      update: ["@Owner", Admin]
-      delete: [Admin]
-    seed:
-      - { title: "Bluetooth Speaker", price: "49.99" }
-
+      update: ["@Owner"]
   Category:
     fields:
       id: uuid [primary]
-      name: string [required, unique]
-      products: relation(Product) [many]
-`;
+      name: string [required, unique]`;
 
-export const generatedService = `// src/Application/Generated/ProductService.g.cs
+export const generatedService = `// src/Application/Services/ProductService.cs — your file
 public partial class ProductService
 {
-    private readonly IProductRepository _repo;
-
-    public ProductService(IProductRepository repo)
-        => _repo = repo;
-
-    public async Task<ProductDto> GetByIdAsync(Guid id)
+    // Runs before a Product is saved. Fail("reason") aborts.
+    protected override async Task<HookResult> OnBeforeCreateAsync(
+        Product entity, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id);
-        return ToDto(entity);
+        if (entity.Price <= 0)
+            return HookResult.Fail("Price must be positive");
+        return HookResult.Success();
     }
-
-    public async Task CreateAsync(UpsertProductCommand cmd)
-    {
-        var entity = new Product { Title = cmd.Title, Price = cmd.Price };
-        await _repo.AddAsync(entity);
-        OnBeforeCreate(entity);
-        await _repo.SaveChangesAsync();
-        OnAfterCreate(entity);
-    }
-
-    partial void OnBeforeCreate(Product entity);
-    partial void OnAfterCreate(Product entity);
 }
 `;
 
 export const projectTree = `MyShop/
 ├── src/
 │   ├── Domain/          # entities, enums, DTOs
-│   ├── Application/     # services, repos, hooks
+│   ├── Application/     # services + YOUR hooks
 │   ├── Infrastructure/  # EF Core, seeders, Dapr
 │   └── WebApi/          # controllers, auth, Docker
-├── tests/
-│   └── ApiTests.cs
+├── tests/               # xUnit + Testcontainers PG
+├── admin/               # generated admin panel
 ├── MyShop.sln
-├── Dockerfile
 └── docker-compose.yml`;

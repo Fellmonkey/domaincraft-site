@@ -24,7 +24,7 @@ export const ru: Messages = {
     titleHighlight: 'готовый бэкенд',
     titleEnd: 'на любом языке.',
     subtitle:
-      'DomainCraft превращает один domain.yaml в полностью рабочий код — CRUD, авторизация, права, миграции, админка. Детерминированно, под вашим контролем, безопасно перегенерируемо.',
+      'DomainCraft превращает один domain.yaml в полностью рабочий код — CRUD, авторизация, права, миграции, админка. Детерминированный вывод, чистая компиляция, безопасная регенерация.',
     primaryCta: 'Начать генерацию',
     secondaryCta: 'Открыть Studio',
     installLabel: 'Установка за 60 секунд',
@@ -36,12 +36,12 @@ export const ru: Messages = {
     codeTab: 'ProductService.cs',
     treeTab: 'generated/',
     running: 'Генерация C# ASP.NET Core решения…',
-    ready: '✓ 42 файла сгенерировано · компилируется чисто'
+    ready: '✓ Решение сгенерировано · компилируется чисто'
   },
 
   trust: {
-    title: 'Open source · лицензия MIT · без привязки к вендорам',
-    items: ['Ядро Go', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'Dapr', 'MIT']
+    title: 'Стек, который поставляется с коробки',
+    items: ['Ядро Go', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'Dapr', 'Docker']
   },
 
   problem: {
@@ -113,7 +113,7 @@ export const ru: Messages = {
       },
       {
         title: 'Подключаемые мосты',
-        description: 'Язык-агностичное ядро. Мост C# готов; Java и TypeScript в планах.'
+        description: 'Мост — это обычные шаблоны и манифест, без Go-кода. Новый язык — за один вечер.'
       },
       {
         title: 'Админка одним флагом',
@@ -129,37 +129,42 @@ export const ru: Messages = {
   ai: {
     eyebrow: 'AI-native',
     label: 'Создан для ИИ-разработки',
-    titleStart: 'Идеальный',
-    titleHighlight: 'формат вывода для ИИ',
+    titleStart: 'Весь ИИ-цикл,',
+    titleHighlight: 'одной сессией',
     titleEnd: '.',
     subtitle:
-      'Пусть ИИ пишет намерение, а не бойлерплейт. DomainCraft превращает небольшой проверяемый domain.yaml в 100% детерминированный код, готовый к компиляции — быстрее, дешевле и без галлюцинаций.',
+      'Агент описывает домен, DomainCraft генерирует 40+ файлов продакшн-кода, агент вписывает бизнес-логику в хуки — и docker compose up всё запускает. Ничего не забыто, ничего не вручную.',
     cards: [
       {
-        title: 'Экономия токенов',
+        title: 'Опишите домен',
         description:
-          'Агент пишет 40 строк YAML вместо 5 000 строк CRUD, контроллеров и миграций. Токены уходят на намерение, а не на каркас.'
+          'Один файл — весь спецификатор: сущности, связи, права, фичи. Всё остальное генератор выводит из него.'
       },
       {
-        title: '100% детерминированная точность',
+        title: 'Генерация бэкенда',
         description:
-          'Генератор не «забудет» регистрацию в DI и не потеряет миграцию. Тот же вход, тот же выход — каждый раз.'
+          'domaincraft generate выдаёт полное ASP.NET Core решение — контроллеры, DTO, репозитории, миграции, тесты, Docker — детерминированно при каждом запуске.'
       },
       {
-        title: 'Итерации без страха',
+        title: 'Бизнес-логика в хуки',
         description:
-          'Изменили domain.yaml, перегенерировали — обновится только генерируемый слой, а ваши хуки и кастомный код сохранятся.'
+          'Агент реализует хуки в Services/<Entity>Service.cs (overwrite: false) — ровно в тех файлах, которых генератор никогда не касается.'
       },
       {
-        title: 'Готов для агентов',
+        title: 'Запуск и итерации',
         description:
-          'Поставляется со скиллами, так что Cursor, Claude Code и Copilot моделируют, валидируют и расширяют ваш домен из коробки.'
+          'docker compose up поднимает API + Postgres. Изменили модель и перегенерировали — таблицы переименуются за вас, данные сохранятся.'
       }
     ],
-    promptLabel: 'промпт агента →',
+    sessionTitle: 'Одна сессия, от начала до конца',
     copyPrompt: 'Скопировать промпт',
     copied: 'Скопировано',
-    resultLabel: '← сгенерировано из вашего домена'
+    stepYouAgent: 'Вы → агент',
+    stepYaml: 'Агент → domain.yaml',
+    stepGenerate: '$ domaincraft generate',
+    stepHooks: 'Агент → бизнес-хуки',
+    stepDeploy: '$ docker compose up',
+    stepDeployResult: 'API :8080 · Postgres · health ready'
   },
 
   studio: {
@@ -204,17 +209,18 @@ export const ru: Messages = {
   },
 
   oss: {
-    eyebrow: 'Open source',
-    titleStart: 'Открыто,',
-    titleHighlight: 'в вашей собственности',
+    eyebrow: 'Сообщество',
+    titleStart: 'Открытый код,',
+    titleHighlight: 'MIT, бесплатно навсегда',
     titleEnd: '.',
     subtitle:
-      'DomainCraft распространяется по лицензии MIT и бесплатен. Читайте исходники, запускайте, форкайте — без аккаунта и без привязки.',
+      'Читайте исходники, запускайте, форкайте — без аккаунта, без ограничений, без привязки.',
     license: 'Лицензия MIT',
+    licenseDesc: 'Разрешительная лицензия — ваш сгенерированный код остаётся вашим, без условий.',
     contribute: 'Внести вклад',
     contributeDesc: 'Понятные гайды и строгое протестированное ядро.',
     roadmap: 'Публичный роадмап',
-    roadmapDesc: 'Мосты Java и TypeScript, больше БД, больше стилей API.',
+    roadmapDesc: 'Больше БД, больше стилей API, больше аддонов — открытый трекинг в репозитории.',
     star: 'Звезда на GitHub',
     starDesc: 'Звёзды — сигнал реальной востребованности. Помогите другим разработчикам найти DomainCraft.'
   },
@@ -224,7 +230,7 @@ export const ru: Messages = {
     titleHighlight: 'бойлерплейт',
     titleEnd: '. Начинайте выводить свой домен.',
     subtitle:
-      'Бесплатно и под MIT. Go не нужен — скачайте бинарник и сгенерируйте первый бэкенд уже сегодня.',
+      'Go не нужен — скачайте бинарник и сгенерируйте первый бэкенд уже сегодня.',
     primaryCta: 'Скачать бинарник',
     secondaryCta: 'Читать документацию',
     code: 'go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest',
@@ -247,11 +253,6 @@ export const ru: Messages = {
       docs: 'Документация',
       generate: 'Быстрый старт',
       github: 'GitHub'
-    },
-    community: 'Сообщество',
-    communityLinks: {
-      discord: 'Discord',
-      twitter: 'Twitter / X'
     },
     rights: '© {year} DomainCraft. Лицензия MIT.',
     languageLabel: 'Язык'

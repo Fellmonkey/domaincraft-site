@@ -75,15 +75,17 @@ export default function TerminalDemo({ messages }: { messages: TerminalMessages 
           <TabsTrigger value="tree">{messages.treeTab}</TabsTrigger>
         </TabsList>
         <div className="p-4 pt-3">
-          <TabsContent value="domain" className="m-0">
-            <CodePane code={domainYaml} />
-          </TabsContent>
-          <TabsContent value="code" className="m-0">
-            <CodePane code={generatedService} />
-          </TabsContent>
-          <TabsContent value="tree" className="m-0">
-            <CodePane code={projectTree} />
-          </TabsContent>
+          <div className="flex h-[34rem] flex-col">
+            <TabsContent value="domain" className="m-0 flex flex-1">
+              <CodePane code={domainYaml} />
+            </TabsContent>
+            <TabsContent value="code" className="m-0 flex flex-1">
+              <CodePane code={generatedService} />
+            </TabsContent>
+            <TabsContent value="tree" className="m-0 flex flex-1">
+              <CodePane code={projectTree} />
+            </TabsContent>
+          </div>
         </div>
       </Tabs>
     </div>
@@ -92,7 +94,7 @@ export default function TerminalDemo({ messages }: { messages: TerminalMessages 
 
 function CodePane({ code }: { code: string }) {
   return (
-    <pre className="overflow-x-auto rounded-lg border border-border bg-background/60 p-4 font-mono text-[13px] leading-relaxed text-foreground/90">
+    <pre className="w-full overflow-hidden rounded-lg border border-border bg-background/60 p-4 font-mono text-[13px] leading-relaxed whitespace-pre-wrap break-words text-foreground/90">
       <code>{code}</code>
     </pre>
   );

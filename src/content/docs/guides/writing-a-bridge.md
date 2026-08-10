@@ -65,9 +65,10 @@ templates:
 
 ### `when` conditions
 
-- `hasSeed`, `hasEnums`, `hasPermissions`, `hasOwnerTokens`, `hasAuth`
+- `hasSeed`, `hasEnums`, `hasPermissions`, `hasOwnerTokens`, `hasAuth`, `hasSchemaRenames`
 - `hasAddon:dapr` / `notHasAddon:dapr`
 - `when: hasAuth` only renders when auth is enabled.
+- `when: hasSchemaRenames` only renders when an entity or field declares an `old_name` hint — used to emit data-preserving `RenameTable`/`RenameColumn` migrations.
 
 ### `overwrite: false`
 

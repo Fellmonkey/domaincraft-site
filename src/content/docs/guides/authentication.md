@@ -1,6 +1,6 @@
 ---
 title: Authentication
-description: Configure JWT authentication — the auth block, the auth entity, roles and the login/register/me endpoints.
+description: Configure JWT authentication — the auth block, the auth entity, roles and the login/register/me/setup endpoints.
 section: guides
 order: 1
 updated: "2026-08-03"
@@ -17,7 +17,32 @@ auth:
     login: true
     register: true
     me: true
+    setup: true
 ```
+
+## Endpoints
+
+| Endpoint | Auth | Purpose |
+|----------|------|---------|
+| `POST /api/<auth>/login` | Anonymous | Email + password → JWT |
+| `POST /api/<auth>/register` | Anonymous | Create a user with the **default role** — never Admin |
+| `GET /api/<auth>/me` | Bearer token | Current user profile (password hash scrubbed) |
+| `POST /api/<auth>/setup` | Anonymous | Bootstrap the **first user** with the `Admin` role (or the first declared role) — succeeds only while no user exists yet, then permanently `409 Setup already complete` |
+
+### The `/setup` endpoint
+
+`setup` is the safe production bootstrap path. Because `register` is anonymous, it must never silently escalate a caller to Admin — new users always get the schema default role. To create your first administrator, call `/setup` while the database is empty:
+
+```bash
+curl -X POST http://localhost:9000/api/user/setup \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"YourPass123!"}'
+# 201 Created
+```
+
+The generated user is assigned the `Admin` role — or the first role declared in `auth.roles` if `Admin` isn't listed. The port above is the Docker `project.deploy.port`; under local `dotnet run` use the `ASPNETCORE_URLS` port instead.
+
+The endpoint is `[AllowAnonymous]` but only works until the first account exists; afterwards it returns `409` and is effectively disabled, so it is safe to ship enabled. It is also what the DomainCraft compliance suite uses to seed its test admin.
 
 ## Validation rules
 

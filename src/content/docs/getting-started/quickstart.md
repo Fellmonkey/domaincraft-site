@@ -50,11 +50,13 @@ Edit `domain.yaml`. This is all you write — the generator produces everything 
 ```yaml
 project:
   name: MyShop
-  database: postgresql
+
+database: postgresql
 
 auth:
   type: jwt
   entity: User
+  roles: [Admin, User]   # roles referenced in permissions must be declared here
 
 entities:
   Product:

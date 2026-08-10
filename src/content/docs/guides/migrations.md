@@ -26,15 +26,19 @@ entities:
     fields: ...
 ```
 
-The CLI offers to rename the entity's custom files (`ProductService.cs` → `ItemService.cs`), replacing both singular and plural forms in the path. Renames made in the GUI set `old_name` automatically.
+The CLI offers to rename the entity's custom files (`ProductService.cs` → `ItemService.cs`), replacing both singular and plural forms in the path. Because the DB table name is derived from the entity plural name (`products` → `items`), the C# bridge also ships the exact `migrationBuilder.RenameTable(...)` statement so the renamed entity keeps its rows instead of EF dropping the old table. Renames made in the GUI set `old_name` automatically.
 
 ## Field type changes
 
 After generation the CLI prints a smart "manual refactoring" report listing changed fields (`Product.id: uuid -> int`) and the custom files that may need manual fixes.
 
+## Field renames
+
+Fields can carry an `old_name` hint (same syntax as entities): `name: string [required, max:200, old_name:title]`. The migration engine detects it, prints a data-preservation report, and the C# bridge ships the exact `migrationBuilder.RenameColumn(...)` statements for every renamed column in `src/Infrastructure/Persistence/Migrations/SchemaRenames.cs`. Call `SchemaRenames.Apply(migrationBuilder)` at the top of the `Up()` method of the migration you write — the file also lists any `RenameTable` for renamed entities. EF Core cannot infer a rename from the model snapshot and would otherwise **drop** the old table/column and **add** a new one, destroying the data. The file regenerates on every run while a rename is pending, so new renames added later are picked up automatically.
+
 ## `--prune`
 
-Applies all cleanup automatically without prompting (CI-friendly). Without it, non-interactive runs only print warnings and keep the previous snapshot on disk, so a later `--prune` run can still find and clean the orphans. Once cleanup is applied (or the diff is empty), the snapshot is updated.
+Applies all cleanup automatically without prompting (CI-friendly): it deletes/renames orphaned files **and rewrites renamed identifiers inside developer-owned files** (entity, field and project-namespace references across Pascal/camel/UPPER/plural forms), so `ProductService.cs` becomes `ItemService.cs` and its content stops referencing `Product`. When the diff detected schema changes (renamed/deleted entities, field renames or type changes), `--prune` **also runs the bridge's migration commands** — best-effort: if they fail (no dotnet SDK or unreachable database) it warns and continues, because in a docker workflow the API container applies pending migrations at startup (`Database:SchemaMode=migrate` → `MigrateAsync`). Without `--prune`, non-interactive runs only print warnings and keep the previous snapshot on disk, so a later `--prune` run can still find and clean the orphans. Once cleanup is applied (or the diff is empty), the snapshot is updated.
 
 ## `--migrate`
 
