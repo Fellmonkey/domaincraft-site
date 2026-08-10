@@ -1,8 +1,8 @@
 ---
 import type { StudioMessages } from '../../i18n/messages/types';
 import SectionHeading from './SectionHeading.astro';
-import StudioMock from './StudioMock.astro';
 import { Button } from '../../components/ui/button';
+import { withBase } from '../../lib/paths';
 
 interface Props {
   messages: StudioMessages;
@@ -57,9 +57,14 @@ const studioUrl = 'https://domaincraft.github.io/domaincraft-studio/';
         <span class="font-mono text-xs text-muted-foreground">domaincraft-studio</span>
         <span class="ml-auto font-mono text-xs text-primary transition-transform group-hover:translate-x-0.5">↗</span>
       </div>
-      <div class="aspect-[4/3] bg-[linear-gradient(to_right,hsl(var(--border)/0.6)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.6)_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] p-6">
-        <StudioMock />
-      </div>
+        <img
+          src={withBase('/studio.webp')}
+          width="1600"
+          height="905"
+          alt=""
+          loading="lazy"
+          class="aspect-video w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+        />
     </a>
   </div>
 </section>
