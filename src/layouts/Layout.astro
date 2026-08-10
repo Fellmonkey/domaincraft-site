@@ -30,7 +30,7 @@ const {
   modifiedTime
 } = Astro.props;
 
-const site = Astro.site ?? new URL('https://domaincraft.dev/');
+const site = Astro.site ?? new URL('https://domaincraft.github.io/domaincraft-site/');
 const canonical = new URL(Astro.url.pathname, site).href;
 const alternate = new URL(alternatePath, site).href;
 const alternateLang = lang === 'en' ? 'ru' : 'en';
