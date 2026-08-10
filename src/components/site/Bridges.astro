@@ -3,6 +3,7 @@ import type { BridgesMessages } from '../../i18n/messages/types';
 import SectionHeading from './SectionHeading.astro';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
+import { withBase } from '../../lib/paths';
 
 interface Props {
   lang: string;
@@ -45,7 +46,7 @@ const statusLabel = (s: string) =>
       <h3 class="mb-1 text-lg font-semibold">{messages.buildYourOwn}</h3>
       <p class="max-w-xl text-sm text-muted-foreground">{messages.buildYourOwnDesc}</p>
     </div>
-    <a href={`${prefix}/docs/guides/writing-a-bridge`}>
+    <a href={withBase(`${prefix}/docs/guides/writing-a-bridge`)}>
       <Button variant="outline">{lang === 'en' ? 'Write a bridge' : 'Написать мост'}</Button>
     </a>
   </div>

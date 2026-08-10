@@ -6,6 +6,7 @@ import ReadingProgress from '../../../components/blog/ReadingProgress';
 import BlogToc from '../../../components/blog/BlogToc';
 import { extractTocHeadings } from '../../../lib/blog';
 import { getMessages } from '../../../i18n';
+import { withBase } from '../../../lib/paths';
 
 interface Props {
   entry: CollectionEntry<'blog'>;
@@ -70,7 +71,7 @@ const tocHeadings = extractTocHeadings(entry.body ?? '');
         </div>
 
         <div class="mt-12 border-t border-border pt-8">
-          <a href="/ru/blog" class="text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8">
+          <a href={withBase('/ru/blog')} class="text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8">
             {messages.blog.backToPosts}
           </a>
         </div>

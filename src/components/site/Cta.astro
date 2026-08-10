@@ -2,6 +2,7 @@
 import type { CtaMessages } from '../../i18n/messages/types';
 import CopyButton from '../CopyButton';
 import { Button } from '../../components/ui/button';
+import { withBase } from '../../lib/paths';
 
 interface Props {
   lang: string;
@@ -10,7 +11,7 @@ interface Props {
 
 const { lang, messages } = Astro.props;
 const releasesHref = 'https://github.com/DomainCraft/DomainCraft/releases';
-const docsHref = lang === 'en' ? '/docs/getting-started/quickstart' : '/ru/docs/getting-started/quickstart';
+const docsHref = withBase(lang === 'en' ? '/docs/getting-started/quickstart' : '/ru/docs/getting-started/quickstart');
 ---
 
 <section id="install" class="relative scroll-mt-24 overflow-hidden border-t border-border">

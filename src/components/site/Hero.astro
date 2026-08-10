@@ -3,6 +3,7 @@ import type { HeroMessages } from '../../i18n/messages/types';
 import TerminalDemo from '../TerminalDemo';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
+import { withBase } from '../../lib/paths';
 
 interface Props {
   lang: string;
@@ -11,8 +12,8 @@ interface Props {
 
 const { lang, messages } = Astro.props;
 const releasesHref = 'https://github.com/DomainCraft/DomainCraft/releases';
-const studioHref = lang === 'en' ? '/studio' : '/ru/studio';
-const generateHref = lang === 'en' ? '#install' : '/ru/#install';
+const studioHref = withBase(lang === 'en' ? '/studio' : '/ru/studio');
+const generateHref = lang === 'en' ? '#install' : withBase('/ru/#install');
 ---
 
 <section class="relative overflow-hidden">

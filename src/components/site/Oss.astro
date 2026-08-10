@@ -3,6 +3,7 @@ import type { OssMessages } from '../../i18n/messages/types';
 import SectionHeading from './SectionHeading.astro';
 import { Button } from '../../components/ui/button';
 import OssGlyph from './OssGlyph.astro';
+import { withBase } from '../../lib/paths';
 
 interface Props {
   lang: string;
@@ -15,7 +16,7 @@ const prefix = lang === 'en' ? '' : '/ru';
 const items = [
   { title: messages.license, desc: messages.licenseDesc, icon: 'license' },
   { title: messages.contribute, desc: messages.contributeDesc, icon: 'contribute', href: `https://github.com/DomainCraft/DomainCraft/blob/main/CONTRIBUTING.md` },
-  { title: messages.roadmap, desc: messages.roadmapDesc, icon: 'roadmap', href: `${prefix}/#roadmap` },
+  { title: messages.roadmap, desc: messages.roadmapDesc, icon: 'roadmap', href: withBase(`${prefix}/#roadmap`) },
   { title: messages.star, desc: messages.starDesc, icon: 'star', href: 'https://github.com/DomainCraft/DomainCraft' }
 ];
 ---

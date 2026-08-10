@@ -5,6 +5,7 @@ import LocaleSwitcher from '../LocaleSwitcher';
 import ProductsDropdown from '../ProductsDropdown';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
+import { withBase } from '../../lib/paths';
 
 interface Props {
   lang: string;
@@ -18,30 +19,32 @@ const { lang, messages } = Astro.props;
 
 const isRoot = lang === 'en';
 const currentLabel = lang === 'en' ? 'English' : 'Русский';
-const currentHref = lang === 'en' ? '/' : '/ru/';
+const root = withBase('/');
+const ruRoot = withBase('/ru/');
+const currentHref = lang === 'en' ? root : ruRoot;
 const options = [
-  { code: 'en', label: 'English', href: lang === 'en' ? currentHref : '/' },
-  { code: 'ru', label: 'Русский', href: lang === 'ru' ? currentHref : '/ru/' }
+  { code: 'en', label: 'English', href: lang === 'en' ? currentHref : root },
+  { code: 'ru', label: 'Русский', href: lang === 'ru' ? currentHref : ruRoot }
 ];
 
 const prefix = isRoot ? '' : '/ru';
 
 const productItems = [
-  { label: messages.nav.bridges, href: `${prefix}/bridges` },
-  { label: messages.nav.studio, href: `${prefix}/studio` },
-  { label: messages.nav.skills, href: `${prefix}/skills` }
+  { label: messages.nav.bridges, href: withBase(`${prefix}/bridges`) },
+  { label: messages.nav.studio, href: withBase(`${prefix}/studio`) },
+  { label: messages.nav.skills, href: withBase(`${prefix}/skills`) }
 ];
 
 const navLinks = [
-  { label: messages.nav.docs, href: `${prefix}/docs` },
-  { label: messages.nav.blog, href: `${prefix}/blog` },
-  { label: messages.nav.changelog, href: `${prefix}/changelog` },
+  { label: messages.nav.docs, href: withBase(`${prefix}/docs`) },
+  { label: messages.nav.blog, href: withBase(`${prefix}/blog`) },
+  { label: messages.nav.changelog, href: withBase(`${prefix}/changelog`) },
 ];
 ---
 
 <header class="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
   <div class="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-    <a href={lang === 'en' ? '/' : '/ru/'} class="flex shrink-0 items-center gap-2 font-semibold" aria-label="DomainCraft">
+    <a href={withBase(lang === 'en' ? '/' : '/ru/')} class="flex shrink-0 items-center gap-2 font-semibold" aria-label="DomainCraft">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" fill="var(--color-primary)" />
       </svg>

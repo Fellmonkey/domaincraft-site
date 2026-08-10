@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import { getMessages } from '../i18n';
+import { withBase } from '../lib/paths';
 
 const messages = getMessages('en');
 
@@ -75,7 +76,7 @@ domaincraft generate --domain domain.yaml --bridge csharp-restful --admin`}</pre
           write a <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">bridge.yaml</code> plus your templates.
         </p>
         <a
-          href="/docs/guides/writing-a-bridge"
+          href={withBase('/docs/guides/writing-a-bridge')}
           class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8"
         >
           Read the writing-a-bridge guide →

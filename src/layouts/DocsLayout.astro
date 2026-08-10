@@ -2,6 +2,7 @@
 import Layout from './Layout.astro';
 import Prose from '../components/Prose.astro';
 import { getMessages } from '../i18n';
+import { withBase } from '../lib/paths';
 
 interface DocItem {
   slug: string;
@@ -28,6 +29,7 @@ interface Props {
 const { lang, title, description, docsRoot, groups, currentSlug, sectionLabel, prev, next } = Astro.props;
 const messages = getMessages(lang);
 const editBase = 'https://github.com/DomainCraft/domaincraft-site/blob/main/src/content/docs';
+const root = withBase(docsRoot);
 ---
 
 <Layout lang={lang} title={title} description={description} messages={messages}>
@@ -44,7 +46,7 @@ const editBase = 'https://github.com/DomainCraft/domaincraft-site/blob/main/src/
                   {group.items.map((item) => (
                     <li>
                       <a
-                        href={`${docsRoot}/${item.slug}`}
+                        href={`${root}/${item.slug}`}
                         class={`block rounded-md px-2 py-1.5 text-sm ${
                           item.slug === currentSlug ? 'font-medium text-primary' : 'text-muted-foreground'
                         }`}
@@ -69,7 +71,7 @@ const editBase = 'https://github.com/DomainCraft/domaincraft-site/blob/main/src/
                 {group.items.map((item) => (
                   <li>
                     <a
-                      href={`${docsRoot}/${item.slug}`}
+                      href={`${root}/${item.slug}`}
                       aria-current={item.slug === currentSlug ? 'page' : undefined}
                       class={`block rounded-md px-2 py-1.5 text-sm transition-colors ${
                         item.slug === currentSlug
@@ -107,8 +109,8 @@ const editBase = 'https://github.com/DomainCraft/domaincraft-site/blob/main/src/
       </div>
 
       <div class="mt-12 flex items-center justify-between gap-4 border-t border-border pt-6 text-sm">
-        {prev ? <a href={`${docsRoot}/${prev.slug}`} class="text-muted-foreground transition-colors hover:text-foreground">← {prev.title}</a> : <span />}
-        {next ? <a href={`${docsRoot}/${next.slug}`} class="ml-auto text-right text-muted-foreground transition-colors hover:text-foreground">{next.title} →</a> : <span />}
+        {prev ? <a href={`${root}/${prev.slug}`} class="text-muted-foreground transition-colors hover:text-foreground">← {prev.title}</a> : <span />}
+        {next ? <a href={`${root}/${next.slug}`} class="ml-auto text-right text-muted-foreground transition-colors hover:text-foreground">{next.title} →</a> : <span />}
       </div>
 
       <p class="mt-8 text-xs text-muted-foreground">

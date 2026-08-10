@@ -22,7 +22,8 @@ No Go toolchain required. Download the prebuilt binary for your platform from Gi
 
 ## 2. Create a project
 
-Create a `domain.yaml` by hand or in the visual editor ([DomainCraft Studio](/studio)). A minimal starter looks like:
+<!-- Студия — отдельный деплой, поэтому ссылка ведёт на её собственный URL, а не на /studio: относительные пути не работают на двух глубинах доков, а /studio без base-префикса ломается на GitHub Pages. -->
+Create a `domain.yaml` by hand or in the visual editor ([DomainCraft Studio](https://domaincraft.github.io/domaincraft-studio/)). A minimal starter looks like:
 
 ```yaml
 project:

@@ -5,6 +5,7 @@ import type { Messages } from '../i18n/messages/types';
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
 import AnnouncementBar from '../components/site/AnnouncementBar.astro';
+import { withBase } from '../lib/paths';
 
 interface Props {
   lang: string;
@@ -32,9 +33,10 @@ const {
 
 const site = Astro.site ?? new URL('https://domaincraft.github.io/domaincraft-site/');
 const canonical = new URL(Astro.url.pathname, site).href;
-const alternate = new URL(alternatePath, site).href;
+const altPath = withBase(alternatePath);
+const alternate = new URL(altPath, site).href;
 const alternateLang = lang === 'en' ? 'ru' : 'en';
-const ogImage = new URL('/og-image.png', site).href;
+const ogImage = new URL(withBase('/og-image.png'), site).href;
 const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
 ---
 
@@ -45,7 +47,7 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="en" href={lang === 'en' ? canonical : alternate} />
     <link rel="alternate" hreflang="ru" href={lang === 'ru' ? canonical : alternate} />
@@ -72,13 +74,13 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
     <Header
       lang={lang}
       messages={messages}
-      alternateHref={alternatePath}
+      alternateHref={altPath}
       alternateLabel={alternateLabel}
       alternateLang={alternateLang}
     />
     <main>
       <slot />
     </main>
-    <Footer lang={lang} messages={messages} alternateHref={alternatePath} alternateLabel={alternateLabel} alternateLang={alternateLang} />
+    <Footer lang={lang} messages={messages} alternateHref={altPath} alternateLabel={alternateLabel} alternateLang={alternateLang} />
   </body>
 </html>
