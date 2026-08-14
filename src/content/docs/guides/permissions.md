@@ -29,4 +29,4 @@ Each of `read`, `create`, `update`, `delete` is a list of directives:
 
 - Roles (other than the reserved `*` and `@` tokens) must be declared in `auth.roles`.
 - Unknown permission keys are a parse error — custom conditions such as `condition(...)` are **not** implemented and must not be used.
-- The bridge emits `IPermissionService` / `PermissionService` and the `OwnerResolver` when `when: hasPermissions` / `hasOwnerTokens` match, and registers one authorization policy per entity operation (`Policy = "<Entity><Op>"`) when `hasPermissions` matches.
+- The `csharp-restful` bridge always generates `IPermissionService` / `PermissionService` and `IOwnerResolver` / `OwnerResolver`, and registers one authorization policy per entity operation (`Policy = "<Entity><Op>"`).

@@ -19,7 +19,7 @@ project:
     storage: s3        # object storage: local, s3, azure-blob, gcs
 ```
 
-This section generates nothing by itself — it tells the bridge which services are available, so the business description of the domain stays pure. Templates read it via `.Project.HasInfraQueue()` / `.HasInfraCache()` / `.HasInfraStorage()`.
+This section generates nothing by itself — it tells the bridge which services are available, so the business description of the domain stays pure. Templates read it via `.Project.Infrastructure.Queue` / `.Cache` / `.Secrets` / `.Storage`.
 
 ## The Dapr addon
 

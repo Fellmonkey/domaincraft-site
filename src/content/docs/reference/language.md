@@ -13,7 +13,7 @@ updated: "2026-08-03"
 Global settings in the YAML root:
 
 - `project.name` — project name.
-- `database` — target database: `postgresql`, `mysql`, `sqlite`, `mssql`, `mongodb`. The core validates all of them, but the ready `csharp-restful` bridge targets PostgreSQL (EF Core + Npgsql).
+- `database` — target database: `postgresql`, `mysql`, `sqlite`, `mssql`, `mongodb`, `appwrite`. The core validates all of them; the ready `csharp-restful` bridge targets PostgreSQL (EF Core + Npgsql), and `appwrite` targets Appwrite TablesDB via the `appwrite` bridge.
 - `api_style` — how controllers are generated: `rest`. The core validates `graphql` and `grpc` too, but the ready `csharp-restful` bridge generates REST only.
 - `project.infrastructure` — declarative infrastructure (see the Infrastructure guide).
 - `auth` — authorization mode: `jwt` or `none` (see the Authentication guide).

@@ -65,10 +65,11 @@ templates:
 
 ### `when` conditions
 
-- `hasSeed`, `hasEnums`, `hasPermissions`, `hasOwnerTokens`, `hasAuth`, `hasSchemaRenames`
+- `hasSeed`, `hasEnums`, `hasOwnerTokens`, `hasAuth`, `hasMigration`, `hasMockData`
 - `hasAddon:dapr` / `notHasAddon:dapr`
 - `when: hasAuth` only renders when auth is enabled.
-- `when: hasSchemaRenames` only renders when an entity or field declares an `old_name` hint — used to emit data-preserving `RenameTable`/`RenameColumn` migrations.
+- `when: hasMigration` only renders when the core computed a non-empty schema-migration plan (e.g. `RenameTable`/`RenameColumn` for `old_name` hints).
+- `when: hasMockData` only renders when the core generated deterministic mock data.
 
 ### `overwrite: false`
 
@@ -76,7 +77,7 @@ Creates a file **only once**; the developer owns it afterwards. The renderer ski
 
 ### Template context
 
-Templates receive a `RenderContext` with `.Project`, `.Entity`, `.Bridge`, `.Packages`. Entity methods: `.HasFeature("audit")`, `.HasAudit()`, `.HasSoftDelete()`, `.NonRelationFields()`, `.RelationFields()`. Field methods: `.IsArray()`, `.HasValidation(name)`, `.ValidationValue(name)`. Use `{{ .Entity.Name }}`, `{{ pluralize .Entity.Name }}`, `{{ fkName .Name | pascalcase }}` directly.
+Templates receive a `RenderContext` with `.Project`, `.Entity`, `.Bridge`, `.Packages`. Entity methods: `.HasFeature("audit")`, `.HasAudit()`, `.HasSoftDelete()`, `.NonRelationFields()`, `.RelationFields()`. Field methods: `.IsArray()`, `.IsEnum()`, `.EnumTypeName()`, `.IsFeatureField()`, `.IsPatchable()`, `.IsUuid()`, `.IsText()`, `.IsInteger()`, `.IsFloat()`, `.IsNumeric()`, `.IsBoolean()`, `.IsDate()`, `.IsDateTime()`, `.IsJson()`, `.HasValidation(name)`, `.ValidationValue(name)`. Use `{{ .Entity.Name }}`, `{{ pluralize .Entity.Name }}`, `{{ fkName .Name | pascalcase }}` directly.
 
 ## type_mappings.yaml
 
@@ -97,13 +98,28 @@ behaviors:
 array_format: "List<%s>"
 nullable_format: "?"
 enum_nullable: true
+
+# Literal syntax — how to write a value/default of each IR type.
+# Keys match IR database types; "enum" is reserved for user-declared enums.
+literals:
+  uuid:    { parse: "Guid.Parse(%s)", default: "Guid.NewGuid()" }
+  decimal: { suffix: "m", default: "0m" }
+  enum:    { parse: "Enum.Parse<%s>(%s)", member: "%s.%s", zero: "(%s)0" }
+
+# Array literal delimiters — %s is the bridge's array type.
+array:
+  open: "new %s { "
+  close: " }"
+  empty: "new %s()"
 ```
 
-These power the `languageType`, `isValueType`, `deleteBehaviorName` and (admin) `inputType` template functions.
+These power the `languageType`, `isValueType`, `deleteBehaviorName`, `inputType` (admin),
+`literalValue`, `literalDefault`, `literalMember` and `arrayLiteralOpen`/`arrayLiteralClose`
+template functions.
 
 ## Constraints
 
 - Templates must use `{{-` / `-}}` whitespace trimming for clean output.
 - All map iteration that affects output must be sorted — Go maps are randomized; two runs on the same `domain.yaml` must produce identical output.
-- Feature fields (`createdAt`, `updatedAt`, ...) are auto-injected — filter them with `isFeatureField`.
+- Feature fields (`createdAt`, `updatedAt`, ...) are auto-injected — filter them with `.IsFeatureField`.
 - For JSX/TSX bridges, remove inline `style={{ }}` and set `delimiters: ["<<", ">>"]` to avoid conflicts with Go template delimiters.

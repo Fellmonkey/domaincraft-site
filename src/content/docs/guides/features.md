@@ -17,7 +17,7 @@ entities:
       ...
 ```
 
-Feature fields are auto-injected by the core — templates must filter them with `isFeatureField` to avoid duplicates.
+Feature fields are auto-injected by the core — templates must filter them with `.IsFeatureField` to avoid duplicates.
 
 ## `audit`
 
