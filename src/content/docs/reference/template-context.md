@@ -10,7 +10,7 @@ Bridge templates receive a `RenderContext`:
 
 - `.Project` (`IRProject`) — name, description, database, auth, apiStyle, platform, enums, entities, cache, cors, deploy. Methods: `.HasAuth()`, `.Addons` / `.HasAddon("dapr")`, `.Infrastructure` (`.Queue`/`.Cache`/`.Secrets`/`.Storage`), `.AllFilterOperators()`.
 - `.Entity` (`IREntity`) — name, namePlural, fields, relationsOut, relationsIn, indexes, seed, permissions, features. Methods: `.HasFeature("audit")`, `.HasAudit()`, `.HasAuditLog()`, `.HasSoftDelete()`, `.HasOptimisticLock()`, `.NonRelationFields()`, `.RelationFields()`, `.HasEventSourced()`, `.HasCacheable()`, `.OldName`.
-- `.Bridge` (`BridgeConfig`) — bridge configuration (name, description, outputDir, helpers, delimiters, ...).
+- `.Bridge` (`BridgeConfig`) — bridge configuration (name, description, outputDir, helpers, delimiters, extends, ...).
 - `.Packages` (`map[string]string`) — resolved package versions from the registry.
 
 ## `RenderContext` convenience methods
@@ -57,9 +57,9 @@ Non-validation operation errors use a stable `{code, message}` envelope (`INVALI
 - String transforms: `pluralize`, `pascalcase`, `camelcase`, `lowercase`, `uppercase`, `humanize`.
 - `jsonValue`, `fkName`, `seedKind`.
 - IR helpers: `IREntity.PrimaryKey()`, `IREntity.FieldByName(name)`, `IREntity.AllIndexes()`, `IREntity.Endpoints()`, `IREntity.PermissionPlan(op)`, `IREntity.TableName()`, `IREntity.SearchableFields()`, `IREntity.SortableFields()`, `IREntity.FilterableFields()`, `IREntity.QuerySchema()`, `IREntity.FilterablePaths()`, `IREntity.EagerLoadRelations()`, `IRRelation.EagerLoadNavigation()`, `IRRelation.ForeignKeyColumnName()`, `IRField.ColumnName()`, `IRField.FilterOperators()`, `IRField.IsUuid()`, `IRField.IsText()`, `IRField.IsString()`, `IRField.IsTextOnly()`, `IRField.IsInteger()`, `IRField.IsBigInt()`, `IRField.IsFloat()`, `IRField.IsDecimal()`, `IRField.IsBoolean()`, `IRField.IsDate()`, `IRField.IsDateTime()`, `IRField.IsJson()`, `IRField.IsJsonB()`, `IRProject.AuthEntity()`, `IRProject.AuthEndpoints()`, `IRProject.EnumValues(name)` (→ `[]IREnumValue{ Name, WireValue, Ordinal }`), `IRProject.AllFilterOperators()` (→ the canonical operator vocabulary), `IRIndex.DatabaseName()`, `IREndpoint.AuthPolicy()`, `IRPermissions.HasOwnerToken()`, `IRPermissions.IsPublic(op)`, `SeedValue.Kind()`, `SeedValue.ElementType()`.
-- All sprig functions.
+- The `templatefuncs` set (`internal/templatefuncs`, stdlib-backed): `add`, `any`, `append`, `atoi`, `base`, `contains`, `default`, `dict`, `hasPrefix`, `join`, `kindIs`, `kindOf`, `list`, `lower`, `now`, `set`, `splitList`, `title`, `toString`, `upper`, plus the textutil-backed `pluralize`, `pascalcase`, `camelcase`, `lowercase`, `uppercase`, `humanize`, `fkName`, `snakecase`, `kebabcase`.
 
-> **Column/table/enum-wire/index names are core-owned.** Print `IREntity.TableName()`, `IRField.DatabaseColumnName` / `IRField.ColumnName()`, `IRRelation.ForeignKeyColumnName()`, `IREnumValue.WireValue` and `IRIndex.DatabaseName()` — never re-derive them with sprig `snakecase`, which diverges from `textutil.ToDatabaseColumnName` on acronyms (e.g. `IPv4Address`).
+> **Column/table/enum-wire/index names are core-owned.** Print `IREntity.TableName()`, `IRField.DatabaseColumnName` / `IRField.ColumnName()`, `IRRelation.ForeignKeyColumnName()`, `IREnumValue.WireValue` and `IRIndex.DatabaseName()` — never re-derive them with the template `snakecase`, which diverges from `textutil.ToDatabaseColumnName` on acronyms (e.g. `IPv4Address`).
 
 ## Bridge functions (from type_mappings.yaml)
 

@@ -16,7 +16,7 @@ domain.yaml --> Parser (calls Lexer per field) --> Validator --> IR Builder --> 
 | **Lexer** | `internal/lexer` | Parses field definition strings like `"string [required, max:255]"` into structured `FieldDefinition` objects. Validates modifier syntax, type constraints and relation-specific rules. |
 | **Validator** | `internal/validator` | Logical consistency: missing/duplicate PKs, broken relations, `on_delete:set_null` on required fields, unused enums, auth entity validation, index integrity, permission cross-checks, seed compatibility, column collisions. |
 | **IR Builder** | `internal/ir` | Converts `ParsedSchema` to a fully linked `IRProject` graph with bidirectional relations and resolved navigation names — the contract templates consume. |
-| **Renderer** | `internal/renderer` | Reads `bridge.yaml`, loads `text/template` files with sprig + bridge type mappings, renders IR to disk. Honors `overwrite: false` and returns a manifest. |
+| **Renderer** | `internal/renderer` | Reads `bridge.yaml`, loads `text/template` files with stdlib-backed template functions (`internal/templatefuncs`) + bridge type mappings, renders IR to disk. Honors `overwrite: false`, returns a manifest, and composes `extends:` base bridges (base templates/helpers/type_mappings render first; the adapter wins). |
 
 Two companion paths:
 
