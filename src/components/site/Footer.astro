@@ -30,13 +30,12 @@ function footerHref(key: string, isRoot: boolean): string {
   if (key === 'studio') return withBase(`${prefix}/studio`);
   if (key === 'changelog') return withBase(`${prefix}/changelog`);
   if (key === 'blog') return withBase(`${prefix}/blog`);
-  if (key === 'roadmap') return withBase(`${prefix}/#roadmap`);
   return withBase(`${prefix}/#`);
 }
 ---
 
 <footer class="border-t border-border">
-  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr]">
+  <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr]">
     <div class="space-y-4">
       <a href={withBase(isRoot ? '/' : '/ru/')} class="flex items-center gap-2">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">

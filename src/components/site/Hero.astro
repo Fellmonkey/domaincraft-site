@@ -22,24 +22,24 @@ const generateHref = lang === 'en' ? '#install' : withBase('/ru/#install');
     <div class="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.5)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.5)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
   </div>
 
-  <div class="mx-auto max-w-6xl px-4 pt-14 pb-12 sm:px-6 sm:pt-20">
-    <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
+  <div class="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 sm:pt-20">
+    <div class="grid grid-cols-1 items-center gap-10 sm:gap-14 lg:grid-cols-[1.05fr_1fr]">
       <div class="flex flex-col gap-6">
         <Badge variant="outline" className="w-fit font-mono text-xs">{messages.badge}</Badge>
-        <h1 class="text-balance text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-[3.4rem]">
+        <h1 class="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-[3.4rem]">
           {messages.titleStart}{' '}
           <span class="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             {messages.titleHighlight}
           </span>{' '}
           {messages.titleEnd}
         </h1>
-        <p class="max-w-xl text-pretty text-lg text-muted-foreground">{messages.subtitle}</p>
-        <div class="flex flex-wrap items-center gap-3">
-          <a href={generateHref}>
-            <Button size="lg">{messages.primaryCta}</Button>
+        <p class="max-w-xl text-pretty text-base text-muted-foreground sm:text-lg">{messages.subtitle}</p>
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <a href={generateHref} className="w-full sm:w-auto">
+            <Button size="lg" className="w-full sm:w-auto">{messages.primaryCta}</Button>
           </a>
-          <a href={studioHref}>
-            <Button size="lg" variant="outline">{messages.secondaryCta}</Button>
+          <a href={studioHref} className="w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">{messages.secondaryCta}</Button>
           </a>
         </div>
         <div class="flex w-fit max-w-full flex-wrap items-center gap-3">

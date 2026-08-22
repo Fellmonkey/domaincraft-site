@@ -18,6 +18,24 @@ const bridges = [
     language: 'HTML',
     status: 'ready',
     description: 'Админ-панель на Alpine.js + 0build UIkit'
+  },
+  {
+    id: 'appwrite',
+    language: 'JSON',
+    status: 'ready',
+    description: 'Схема Appwrite: TablesDB + команды ролей + настройки, деплой через Appwrite CLI'
+  },
+  {
+    id: 'ts-core',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Фреймворк-агностичный слой данных — типизированный DSL запросов, Zod-валидация, JWT-клиент, права'
+  },
+  {
+    id: 'react-rest',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Слой данных для React (extends ts-core) — хуки TanStack Query, типизированные фильтры, auth'
   }
 ];
 
@@ -50,10 +68,11 @@ const description =
 
     <p class="mt-5 text-sm text-muted-foreground">
       В планах: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">java-spring</code> (Spring Boot) и{' '}
-      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">typescript</code> (Express / Prisma).
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">vue-rest</code> /{' '}
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">svelte-rest</code> (тонкие адаптеры поверх ts-core).
     </p>
 
-    <div class="mt-12 grid gap-10 lg:grid-cols-2">
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
       <div>
         <h2 class="text-lg font-semibold">Использовать мост</h2>
         <p class="mt-2 text-sm text-muted-foreground">

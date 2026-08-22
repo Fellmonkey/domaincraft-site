@@ -8,7 +8,6 @@ import Features from './site/Features.astro';
 import AISection from './site/AISection.astro';
 import StudioSection from './site/StudioSection.astro';
 import Bridges from './site/Bridges.astro';
-import Oss from './site/Oss.astro';
 import Cta from './site/Cta.astro';
 
 interface Props {
@@ -27,5 +26,4 @@ const { lang, messages } = Astro.props;
 <AISection messages={messages.ai} />
 <StudioSection messages={messages.studio} />
 <Bridges lang={lang} messages={messages.bridges} />
-<Oss lang={lang} messages={messages.oss} />
 <Cta lang={lang} messages={messages.cta} />

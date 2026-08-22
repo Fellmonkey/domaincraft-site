@@ -19,12 +19,12 @@ export const ru: Messages = {
   },
 
   hero: {
-    badge: 'Open source · генератор кода на основе домена',
-    titleStart: 'Опишите домен один раз в YAML. Получите',
-    titleHighlight: 'готовый бэкенд',
-    titleEnd: 'на любом языке.',
+    badge: 'Open source · доменный компилятор',
+    titleStart: 'Опишите домен один раз в YAML и',
+    titleHighlight: 'скомпилируйте весь продукт',
+    titleEnd: ' — API, веб, мобильное приложение.',
     subtitle:
-      'DomainCraft превращает один domain.yaml в полностью рабочий код — CRUD, авторизация, права, миграции, админка. Детерминированный вывод, чистая компиляция, безопасная регенерация.',
+      'DomainCraft компилирует один domain.yaml в продакшн-API, типизированный веб-клиент и админку. Типы, валидация, запросы и права остаются согласованными во всех слоях — по построению.',
     primaryCta: 'Начать генерацию',
     secondaryCta: 'Открыть Studio',
     installLabel: 'Установка за 60 секунд',
@@ -41,7 +41,7 @@ export const ru: Messages = {
 
   trust: {
     title: 'Стек, который поставляется с коробки',
-    items: ['Ядро Go', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'Dapr', 'Docker']
+    items: ['Ядро Go', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'TypeScript', 'Dapr', 'Docker']
   },
 
   problem: {
@@ -58,6 +58,10 @@ export const ru: Messages = {
       { traditional: 'Повторять CRUD-логику в каждом проекте', domaincraft: 'Генерировать одинаково каждый раз' },
       { traditional: 'Чинить одни и те же баги бойлерплейта', domaincraft: 'Чинить баги в шаблонах — сразу везде' },
       { traditional: 'Сменить язык? Перепиши всё', domaincraft: 'Сменить мост, оставив тот же домен' },
+      {
+        traditional: 'Изменился API — фронтенд молча сломался',
+        domaincraft: 'Регенерация: все слои обновляются из одной модели'
+      },
       {
         traditional: 'Права доступа разбросаны по всему коду',
         domaincraft: 'Объявлены рядом с сущностью, связаны сквозно'
@@ -92,12 +96,17 @@ export const ru: Messages = {
 
   features: {
     eyebrow: 'Возможности',
-    titleStart: 'Всё, что нужно продакшн-бэкенду,',
+    titleStart: 'Всё, что нужно вашему продукту,',
     titleHighlight: 'декларативно, не вручную',
     titleEnd: '.',
     subtitle:
       'Каждая фича — пара декларативных слов в domain.yaml. Шаблон делает остальное — одинаково, каждый раз.',
     cards: [
+      {
+        title: 'Одна модель — весь контракт',
+        description:
+          'Типы, валидация, запросы, права и ошибки собираются из одного IR для каждого слоя — бэкенд, веб-клиент, админка. Им невозможно разойтись.'
+      },
       {
         title: 'Day-2 safety · Generation Gap',
         description:
@@ -133,17 +142,17 @@ export const ru: Messages = {
     titleHighlight: 'одной сессией',
     titleEnd: '.',
     subtitle:
-      'Агент описывает домен, DomainCraft генерирует 40+ файлов продакшн-кода, агент вписывает бизнес-логику в хуки — и docker compose up всё запускает. Ничего не забыто, ничего не вручную.',
+      'Агент описывает домен, DomainCraft компилирует API и его типизированный TypeScript-клиент из одной модели, агент вписывает бизнес-логику в хуки — и docker compose up всё запускает. Ничего не забыто, ничего не вручную.',
     cards: [
       {
         title: 'Опишите домен',
         description:
-          'Один файл — весь спецификатор: сущности, связи, права, фичи. Всё остальное генератор выводит из него.'
+          'Один файл — вся спецификация: сущности, связи, права, фичи. Всё остальное компилятор выводит из него.'
       },
       {
-        title: 'Генерация бэкенда',
+        title: 'Компиляция стека',
         description:
-          'domaincraft generate выдаёт полное ASP.NET Core решение — контроллеры, DTO, репозитории, миграции, тесты, Docker — детерминированно при каждом запуске.'
+          'domaincraft generate выдаёт продакшн-API на ASP.NET Core плюс типизированный TypeScript-клиент и админку — детерминированно при каждом запуске.'
       },
       {
         title: 'Бизнес-логика в хуки',
@@ -185,7 +194,7 @@ export const ru: Messages = {
     titleHighlight: 'любой стек',
     titleEnd: '.',
     subtitle:
-      'Каждый мост — это подключаемый пакет шаблонов. Ядро не знает языков — оно поставляет IR и ничего не навязывает.',
+      'Каждый мост — это подключаемый пакет шаблонов. Ядро не знает языков — оно поставляет IR и ничего не навязывает. Композиция даёт 1 ядро + N тонких адаптеров вместо N×M мостов. Экраны строят ИИ-агенты поверх типизированного клиента.',
     buildYourOwn: 'Создайте свой мост',
     buildYourOwnDesc:
       'Мосты — это обычные шаблоны и манифест. Без Go-кода — добавьте язык за один вечер.',
@@ -196,33 +205,21 @@ export const ru: Messages = {
         description: 'ASP.NET Core REST API · чистая архитектура · EF Core + PostgreSQL + JWT + аддоны Dapr.'
       },
       {
+        name: 'ts-core',
+        status: 'ready',
+        description: 'Фреймворк-агностичный слой данных на TypeScript — типизированный DSL запросов, Zod-валидация, JWT-клиент, права.'
+      },
+      {
+        name: 'react-rest',
+        status: 'ready',
+        description: 'Слой данных для React (extends ts-core) — хуки TanStack Query, типизированные фильтры, auth.'
+      },
+      {
         name: 'java-spring',
         status: 'planned',
         description: 'Spring Boot REST API для JVM. В планах.'
-      },
-      {
-        name: 'typescript',
-        status: 'planned',
-        description: 'Бэкенд TypeScript / Express / Prisma. В планах.'
       }
     ]
-  },
-
-  oss: {
-    eyebrow: 'Сообщество',
-    titleStart: 'Открытый код,',
-    titleHighlight: 'MIT, бесплатно навсегда',
-    titleEnd: '.',
-    subtitle:
-      'Читайте исходники, запускайте, форкайте — без аккаунта, без ограничений, без привязки.',
-    license: 'Лицензия MIT',
-    licenseDesc: 'Разрешительная лицензия — ваш сгенерированный код остаётся вашим, без условий.',
-    contribute: 'Внести вклад',
-    contributeDesc: 'Понятные гайды и строгое протестированное ядро.',
-    roadmap: 'Публичный роадмап',
-    roadmapDesc: 'Больше БД, больше стилей API, больше аддонов — открытый трекинг в репозитории.',
-    star: 'Звезда на GitHub',
-    starDesc: 'Звёзды — сигнал реальной востребованности. Помогите другим разработчикам найти DomainCraft.'
   },
 
   cta: {
@@ -230,7 +227,7 @@ export const ru: Messages = {
     titleHighlight: 'бойлерплейт',
     titleEnd: '. Начинайте выводить свой домен.',
     subtitle:
-      'Go не нужен — скачайте бинарник и сгенерируйте первый бэкенд уже сегодня.',
+      'Go не нужен — скачайте бинарник и скомпилируйте первый проект уже сегодня.',
     primaryCta: 'Скачать бинарник',
     secondaryCta: 'Читать документацию',
     code: 'go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest',
@@ -239,7 +236,7 @@ export const ru: Messages = {
   },
 
   footer: {
-    tagline: 'Домен-ориентированная генерация кода для любого языка.',
+    tagline: 'Одна модель домена. Весь ваш стек.',
     product: 'Продукт',
     productLinks: {
       bridges: 'Мосты',

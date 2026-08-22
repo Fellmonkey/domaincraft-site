@@ -124,22 +124,6 @@ export interface BridgesMessages {
   cards: Bridge[];
 }
 
-export interface OssMessages {
-  eyebrow: string;
-  titleStart: string;
-  titleHighlight: string;
-  titleEnd: string;
-  subtitle: string;
-  license: string;
-  licenseDesc: string;
-  contribute: string;
-  contributeDesc: string;
-  roadmap: string;
-  roadmapDesc: string;
-  star: string;
-  starDesc: string;
-}
-
 export interface CtaMessages {
   titleStart: string;
   titleHighlight: string;
@@ -184,7 +168,6 @@ export interface Messages {
   ai: AiMessages;
   studio: StudioMessages;
   bridges: BridgesMessages;
-  oss: OssMessages;
   cta: CtaMessages;
   footer: FooterMessages;
   blog: BlogMessages;

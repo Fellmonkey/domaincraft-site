@@ -33,7 +33,7 @@ const docsHref = withBase(lang === 'en' ? '/docs/getting-started/quickstart' : '
 
     <p class="mt-8 text-xs text-muted-foreground">{messages.goNote}</p>
     <div class="mx-auto mt-3 flex w-fit max-w-full items-center gap-2 rounded-lg border border-border bg-card py-2.5 pl-4 pr-2">
-      <code class="truncate font-mono text-xs text-muted-foreground sm:text-sm">{messages.code}</code>
+      <code class="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs text-muted-foreground [scrollbar-width:none] sm:text-sm [&::-webkit-scrollbar]:hidden">{messages.code}</code>
       <CopyButton client:load value={messages.code} label="" copiedLabel={messages.copied} className="shrink-0" />
     </div>
   </div>

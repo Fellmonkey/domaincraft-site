@@ -118,15 +118,15 @@ export default function AiSession({ messages }: { messages: AiSessionMessages })
       onMouseLeave={() => setPaused(false)}
     >
       <div className="mb-3 flex items-center justify-between gap-2 rounded-xl border border-border bg-card px-4 py-2.5">
-        <span className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-          <span className="flex gap-1.5" aria-hidden="true">
+        <span className="flex min-w-0 items-center gap-2 font-mono text-xs text-muted-foreground">
+          <span className="flex shrink-0 gap-1.5" aria-hidden="true">
             <i className="size-2.5 rounded-full bg-red-400/80" />
             <i className="size-2.5 rounded-full bg-yellow-400/80" />
             <i className="size-2.5 rounded-full bg-green-400/80" />
           </span>
-          {messages.sessionTitle}
+          <span className="truncate">{messages.sessionTitle}</span>
         </span>
-        <CopyButton value={prompt} label={messages.copyPrompt} copiedLabel={messages.copied} />
+        <CopyButton value={prompt} label={messages.copyPrompt} copiedLabel={messages.copied} className="shrink-0" />
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xl">
@@ -152,21 +152,21 @@ export default function AiSession({ messages }: { messages: AiSessionMessages })
         </div>
 
         {/* carousel viewport */}
-        <div className="relative h-72 overflow-hidden">
+        <div className="relative h-[20rem] overflow-hidden sm:h-80">
           <div
             className="flex h-full transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
             {steps.map((step, i) => (
-              <div key={step.value} className="h-full w-full shrink-0 p-4">
-                <div className="flex h-full flex-col">
-                  <p className="mb-2 flex items-center gap-2 font-mono text-xs font-semibold">
+              <div key={step.value} className="h-full w-full min-w-0 shrink-0 p-3 sm:p-4">
+                <div className="flex h-full min-w-0 flex-col">
+                  <p className="mb-2 flex items-center gap-2 truncate font-mono text-xs font-semibold">
                     {step.icon}
-                    {step.label}
+                    <span className="truncate">{step.label}</span>
                   </p>
                   <pre
                     className={cn(
-                      "flex-1 overflow-hidden whitespace-pre-wrap break-words rounded-lg border border-border bg-background/60 p-4 font-mono text-[13px] leading-relaxed text-foreground/90",
+                      "min-w-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border bg-background/60 p-3 font-mono text-xs leading-relaxed text-foreground/90 sm:p-4 sm:text-[13px]",
                       i === index && isLast && "border-green-500/40"
                     )}
                   >

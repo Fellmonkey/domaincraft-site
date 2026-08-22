@@ -69,13 +69,16 @@ export default function TerminalDemo({ messages }: { messages: TerminalMessages 
       </div>
 
       <Tabs defaultValue="domain">
-        <TabsList className="mx-4 mt-3 w-fit" variant="line">
+        <TabsList
+          className="mx-4 mt-3 w-fit max-w-full overflow-x-auto [&>*]:shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          variant="line"
+        >
           <TabsTrigger value="domain">{messages.domainTab}</TabsTrigger>
           <TabsTrigger value="code">{messages.codeTab}</TabsTrigger>
           <TabsTrigger value="tree">{messages.treeTab}</TabsTrigger>
         </TabsList>
         <div className="p-4 pt-3">
-          <div className="flex h-[34rem] flex-col">
+          <div className="flex h-[22rem] flex-col sm:h-[28rem] lg:h-[34rem]">
             <TabsContent value="domain" className="m-0 flex flex-1">
               <CodePane code={domainYaml} />
             </TabsContent>

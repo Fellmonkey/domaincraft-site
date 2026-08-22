@@ -19,12 +19,12 @@ export const en: Messages = {
   },
 
   hero: {
-    badge: 'Open source · Domain-driven code generator',
-    titleStart: 'Describe your domain once in YAML. Ship a',
-    titleHighlight: 'production backend',
-    titleEnd: 'in any language.',
+    badge: 'Open source · Domain compiler',
+    titleStart: 'Describe your domain once in YAML and',
+    titleHighlight: 'compile your entire product',
+    titleEnd: ' — API, web, mobile.',
     subtitle:
-      'DomainCraft turns a single domain.yaml into fully working code — CRUD, auth, permissions, migrations, admin. Deterministic output, compiles clean, safe to regenerate.', 
+      'DomainCraft compiles a single domain.yaml into a production API, a typed web client and an admin panel. Types, validation, queries and permissions stay consistent across every layer — by construction.', 
     primaryCta: 'Start generating',
     secondaryCta: 'Open the Studio',
     installLabel: 'Install in 60 seconds',
@@ -41,7 +41,7 @@ export const en: Messages = {
 
   trust: {
     title: 'The stack it ships with',
-    items: ['Go core', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'Dapr', 'Docker']
+    items: ['Go core', 'ASP.NET Core', 'EF Core', 'PostgreSQL', 'TypeScript', 'Dapr', 'Docker']
   },
 
   problem: {
@@ -58,6 +58,10 @@ export const en: Messages = {
       { traditional: 'Repeat CRUD logic on every project', domaincraft: 'Generate it consistently every time' },
       { traditional: 'Fix the same boilerplate bugs everywhere', domaincraft: 'Fix bugs in templates, fixed everywhere' },
       { traditional: 'Switch language? Rewrite everything', domaincraft: 'Switch bridges, keep the same domain' },
+      {
+        traditional: 'API changed — the frontend silently broke',
+        domaincraft: 'Regenerate: every layer updates from one model'
+      },
       {
         traditional: 'Permissions scattered across the codebase',
         domaincraft: 'Declared beside entities, wired end-to-end'
@@ -92,12 +96,17 @@ export const en: Messages = {
 
   features: {
     eyebrow: 'Features',
-    titleStart: 'Everything a production backend needs,',
+    titleStart: 'Everything your product needs,',
     titleHighlight: 'declared not written',
     titleEnd: '.',
     subtitle:
       'Each feature is a few declarative words in domain.yaml. The template does the rest — consistently, every single time.',
     cards: [
+      {
+        title: 'One model, whole contract',
+        description:
+          'Types, validation, queries, permissions and errors are compiled from the same IR into every layer — backend, web client, admin. They cannot drift apart.'
+      },
       {
         title: 'Day-2 safety · Generation Gap',
         description:
@@ -133,17 +142,17 @@ export const en: Messages = {
     titleHighlight: 'one session',
     titleEnd: '.',
     subtitle:
-      'The agent describes the domain, DomainCraft generates 40+ production files, the agent drops business logic into hooks — then docker compose up runs it. Zero forgotten wiring, nothing hand-built.',
+      'The agent describes the domain, DomainCraft compiles the API and its typed TypeScript client from one model, the agent drops business logic into hooks — then docker compose up runs it. Zero forgotten wiring, nothing hand-built.',
     cards: [
       {
         title: 'Describe the domain',
         description:
-          'One file is the whole spec — entities, relations, permissions, features. Everything else the generator derives from it.'
+          'One file is the whole spec — entities, relations, permissions, features. Everything else the compiler derives from it.'
       },
       {
-        title: 'Generate the backend',
+        title: 'Compile the stack',
         description:
-          'domaincraft generate emits a full ASP.NET Core solution — controllers, DTOs, repositories, migrations, tests, Docker — deterministic on every run.'
+          'domaincraft generate emits a production ASP.NET Core API plus its typed TypeScript client and an admin panel — deterministic on every run.'
       },
       {
         title: 'Drop in business logic',
@@ -185,7 +194,7 @@ export const en: Messages = {
     titleHighlight: 'any stack',
     titleEnd: '.',
     subtitle:
-      'Each bridge is a pluggable template pack. The core never knows a language — it ships the IR and constrains nothing.',
+      'Each bridge is a pluggable template pack. The core never knows a language — it ships the IR and constrains nothing. Composition gives you 1 core + N thin adapters, not N×M bridges. Screens are built by AI agents against the typed client.',
     buildYourOwn: 'Build your own bridge',
     buildYourOwnDesc:
       'Bridges are plain templates and a manifest. No Go code required — add a language in an afternoon.',
@@ -196,33 +205,21 @@ export const en: Messages = {
         description: 'ASP.NET Core REST API · clean architecture · EF Core + PostgreSQL + JWT + Dapr addons.'
       },
       {
+        name: 'ts-core',
+        status: 'ready',
+        description: 'Framework-agnostic TypeScript data layer — typed query DSL, Zod validation, JWT client, permissions.'
+      },
+      {
+        name: 'react-rest',
+        status: 'ready',
+        description: 'React data layer (extends ts-core) — TanStack Query hooks, typed filters, auth.'
+      },
+      {
         name: 'java-spring',
         status: 'planned',
         description: 'Spring Boot REST API for the JVM. On the roadmap.'
-      },
-      {
-        name: 'typescript',
-        status: 'planned',
-        description: 'TypeScript / Express / Prisma backend. On the roadmap.'
       }
     ]
-  },
-
-  oss: {
-    eyebrow: 'Community',
-    titleStart: 'Open source,',
-    titleHighlight: 'MIT, free forever',
-    titleEnd: '.',
-    subtitle:
-      'Read the source, run it yourself, fork it — no account, no gate, no lock-in, ever.',
-    license: 'MIT Licensed',
-    licenseDesc: 'Permissive license — keep your generated code, no strings attached.',
-    contribute: 'Contribute',
-    contributeDesc: 'Clear contributing guides and a strict, tested core.',
-    roadmap: 'Public roadmap',
-    roadmapDesc: 'More databases, more API styles, more addons — tracked publicly on the repo.',
-    star: 'Star on GitHub',
-    starDesc: 'Momentum signals real adoption. A star helps other developers find DomainCraft.'
   },
 
   cta: {
@@ -230,7 +227,7 @@ export const en: Messages = {
     titleHighlight: 'boilerplate',
     titleEnd: '. Start shipping your domain.',
     subtitle:
-      'No Go required — download a binary and generate your first backend today.',
+      'No Go required — download a binary and compile your first project today.',
     primaryCta: 'Download binary',
     secondaryCta: 'Read the docs',
     code: 'go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest',
@@ -239,7 +236,7 @@ export const en: Messages = {
   },
 
   footer: {
-    tagline: 'Domain-driven code generation for any language.',
+    tagline: 'One domain model. Your entire stack.',
     product: 'Product',
     productLinks: {
       bridges: 'Bridges',

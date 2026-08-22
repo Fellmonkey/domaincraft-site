@@ -18,6 +18,24 @@ const bridges = [
     language: 'HTML',
     status: 'ready',
     description: 'Admin panel with Alpine.js + 0build UIkit'
+  },
+  {
+    id: 'appwrite',
+    language: 'JSON',
+    status: 'ready',
+    description: 'Appwrite schema: TablesDB + role teams + settings, deployed via the Appwrite CLI'
+  },
+  {
+    id: 'ts-core',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Framework-agnostic data layer — typed query DSL, Zod validation, JWT client, permissions'
+  },
+  {
+    id: 'react-rest',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'React data layer (extends ts-core) — TanStack Query hooks, typed filters, auth'
   }
 ];
 
@@ -50,10 +68,11 @@ const description =
 
     <p class="mt-5 text-sm text-muted-foreground">
       Planned: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">java-spring</code> (Spring Boot) and{' '}
-      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">typescript</code> (Express / Prisma).
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">vue-rest</code> /{' '}
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">svelte-rest</code> (thin adapters over ts-core).
     </p>
 
-    <div class="mt-12 grid gap-10 lg:grid-cols-2">
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
       <div>
         <h2 class="text-lg font-semibold">Use a bridge</h2>
         <p class="mt-2 text-sm text-muted-foreground">
