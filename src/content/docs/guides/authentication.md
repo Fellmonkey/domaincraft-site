@@ -3,7 +3,7 @@ title: Authentication
 description: Configure JWT authentication — the auth block, the auth entity, roles and the login/register/me/setup endpoints.
 section: guides
 order: 1
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
 Authentication is configured as a nested `auth:` block in `domain.yaml`:
@@ -57,7 +57,7 @@ The endpoint is `[AllowAnonymous]` but only works until the first account exists
 
 With `type: jwt` the C# bridge generates:
 
-- JWT middleware and an auth controller (login / register / me).
+- JWT middleware and an auth controller (login / register / me / setup).
 - A password hasher (bcrypt) and its interface.
 - Role claims wired into the permission policies.
 - `IPasswordHasher` / `I<AuthEntity>Service` and their implementations registered in DI.

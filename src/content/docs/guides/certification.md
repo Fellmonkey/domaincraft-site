@@ -2,8 +2,8 @@
 title: Bridge Certification (TCK)
 description: The compliance suite — a hand-written, language-agnostic test set that certifies a bridge implements the DomainCraft contract. kitchen-sink.yaml, suite.js and the certification.yml CI template.
 section: guides
-order: 7
-updated: "2026-08-08"
+order: 8
+updated: "2026-08-22"
 ---
 
 DomainCraft ships a **compliance suite** (a Technology Compatibility Kit, or TCK) in the core repository at `DomainCraft/compliance-suite/`. It certifies that a bridge — any bridge, in any language — implements the DomainCraft contract correctly.
@@ -52,3 +52,20 @@ k6 run -e API_URL=http://localhost:9000 ../DomainCraft/compliance-suite/suite.js
 - **Permissions** — role-based 403s, `@Owner` isolation (a user cannot touch another user's rows), public (`*`) endpoints.
 - **Entity features** — soft delete, audit timestamps, optimistic-lock `409` on stale writes, `event_sourced` publishing, `cacheable` behavior.
 - **Data contract** — seed data round-trip (ids/skus), jsonb deep equality, versioning headers, `email`/`url` validator rejections, `429` rate limiting.
+
+## TypeScript bridges
+
+The HTTP/k6 suite cannot certify TypeScript bridges: their value lives in
+**compile-time types** and **wire serialization**, not HTTP behavior. So the
+TypeScript family ships its own TCK in `domaincraft-bridge-ts/tck/`, certifying
+the shared `ts-core` contract once (same independence rule) — in three halves:
+
+| Half | Tool | Certifies |
+|------|------|-----------|
+| `type-contract.ts` | static (`tsc --noEmit`) | `Equal<A,B>` positives plus `@ts-expect-error` negatives: hidden/readonly/password exclusions, wire enum values, `T \| null` vs `T \| undefined`, per-type filter operators — including that ordered operators on a plain `json` column fail at compile time while `jsonb` accepts them |
+| `runtime.test.ts` | vitest, mocked fetch | exact `path:op:value` serialization (`json` and `jsonb` accessors), query params, model-derived constants (`PAGINATION`, searchable keys), the `can()` matrix, JWT header, the full `ApiError` taxonomy (409 unique vs concurrency, 429 retry/backoff), field-error mapping |
+| `interop.test.ts` | vitest against a live certified backend | round-trips: setup → login → CRUD, filter/sort/include restrict semantics, enum wire values, error mapping — proving the wire format is *accepted*, not just self-consistent |
+
+Framework adapters (`react-rest`) are certified by this shared suite once plus a
+`tsc --noEmit` glue smoke: typechecking proves an adapter is *self-consistent*,
+the TCK proves it honors the *contract*.

@@ -13,11 +13,11 @@ updated: "2026-08-03"
 Global settings in the YAML root:
 
 - `project.name` — project name.
-- `database` — target database: `postgresql`, `mysql`, `sqlite`, `mssql`, `mongodb`, `appwrite`. The core validates all of them; the ready `csharp-restful` bridge targets PostgreSQL (EF Core + Npgsql), and `appwrite` targets Appwrite TablesDB via the `appwrite` bridge.
-- `api_style` — how controllers are generated: `rest`. The core validates `graphql` and `grpc` too, but the ready `csharp-restful` bridge generates REST only.
+- `database` — target database: `postgresql`, `mysql`, `sqlite`, `mssql`, `mongodb`, `appwrite`. The core validates all of them. The ready bridges target: `csharp-rest` (via `csharp-efcore` + Npgsql) → PostgreSQL, `appwrite` → Appwrite TablesDB.
+- `api_style` — how the transport layer generates controllers: `rest`. The core also validates `graphql` and `grpc`, but the ready `csharp-rest` bridge generates REST only — a `csharp-grpc` bridge would add gRPC as one more `transport` layer.
 - `project.infrastructure` — declarative infrastructure (see the Infrastructure guide).
 - `auth` — authorization mode: `jwt` or `none` (see the Authentication guide).
-- `project.multi_tenancy` — SaaS mode, e.g. `mode: column`. The core validates the mode; **bridges decide how (or whether) to implement it** — the `csharp-restful` bridge currently does not generate tenant isolation, so a `tenantId` column must be declared explicitly if you need one (the compliance suite does exactly that).
+- `project.multi_tenancy` — SaaS mode, e.g. `mode: column`. The core validates the mode; **bridges decide whether to implement it** — the ready C# bridges currently do not generate tenant isolation, so declare `tenantId` explicitly if you need it (the compliance suite does).
 
 ## Data types
 
@@ -53,7 +53,7 @@ Defaults: `default:false`, `default:"Unknown"`, `default:now()` (database-level)
 
 - **Many-to-One / One-to-Many** — written on the child: `userId: relation(User)`. Creates an `Orders[]` list on `User`.
 - **One-to-One** — a `[unique]` relation: `profileId: relation(Profile) [unique]`.
-- **Many-to-Many** — `tags: relation(Tag) [many]`. The core reconciles the two declarations into one `[many]` relation; EF Core (the C# bridge) creates the hidden join table via `HasMany/WithMany` and exposes the collection as a navigation, eager-loaded via `Include`.
+- **Many-to-Many** — `tags: relation(Tag) [many]`. The core reconciles the two declarations into one `[many]` relation; the persistence bridge creates the hidden join table (EF Core via `HasMany`/`WithMany` and `Include`) and exposes it as a collection.
 - **`on_delete`** — `cascade`, `set_null` (only on optional fields), `restrict`, `no_action`.
 
 ## Features
@@ -91,7 +91,7 @@ seed:
   - { id: 2, name: "Customer" }
 ```
 
-The bridge generates a seeder class that applies the rows idempotently at application startup (and on a daily recurring job) — the exact mechanism is bridge-specific.
+The bridge generates a seeder (e.g. `DomainSeeder` in C#) that inserts rows idempotently at application startup — it checks with `AnyAsync()` and skips if data already exists. The exact trigger is bridge-specific.
 
 ## Full example
 
@@ -118,5 +118,5 @@ Document:
 
 ## Planned
 
-- `@Tenant` token — ABAC data isolation. In the spec, but **not implemented**: neither the core nor the `csharp-restful` bridge interprets it (the core only validates any `@...` token as an ownership-style token).
+- `@Tenant` token — ABAC data isolation. In the spec, but **not implemented**: the core validates any `@...` token as an ownership-style token, but no ready bridge interprets it yet.
 - Custom permission conditions (`condition(...)`) — described in the spec, **not** implemented.

@@ -23,10 +23,10 @@ Each of `read`, `create`, `update`, `delete` is a list of directives:
 - **RBAC (global roles)** — a role name such as `Admin` or `Manager`. Generates a role-claim check in the token.
 - **ABAC owner** — `update: ["@Owner"]`. The core looks up the relation between the entity and the users table (e.g. `userId`, `authorId`) and generates: "only the user whose ID matches the foreign key in this row may edit it."
 
-> **`@Tenant`** (row isolation per organization) is **in the spec but not implemented** — neither the core nor the `csharp-restful` bridge interprets it today (the core only validates any `@...` token as an ownership-style token). Do not rely on it for generated code yet.
+> **`@Tenant`** (row isolation per organization) is **in the spec but not implemented** — the core validates any `@...` token as an ownership-style token, but no bridge interprets it yet. Do not rely on it for generated code.
 
 ## Rules
 
 - Roles (other than the reserved `*` and `@` tokens) must be declared in `auth.roles`.
 - Unknown permission keys are a parse error — custom conditions such as `condition(...)` are **not** implemented and must not be used.
-- The `csharp-restful` bridge always generates `IPermissionService` / `PermissionService` and `IOwnerResolver` / `OwnerResolver`, and registers one authorization policy per entity operation (`Policy = "<Entity><Op>"`).
+- The C# bridges always generate `IPermissionService` / `PermissionService` and `IOwnerResolver` / `OwnerResolver`, and register one authorization policy per entity operation (`Policy = "<Entity><Op>"`).

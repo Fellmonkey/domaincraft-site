@@ -3,7 +3,7 @@ title: Template context (IR)
 description: What bridge templates receive — RenderContext, entity and field methods, and the available template functions.
 section: reference
 order: 4
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
 Bridge templates receive a `RenderContext`:
@@ -36,7 +36,7 @@ Key `IRField` fields: name, databaseType, navigationName, isPrimary, isNullable,
 
 `IRRelation` fields: fieldName, targetEntity, navigationName, inverseNavName, onDeleteBehavior, isNullable, isMany, relationType, pairFieldName, pairNavigationName.
 
-`IRAuthConfig`: type, entity, roles, endpoints (`.HasLogin()`, `.HasRegister()`, `.HasMe()`).
+`IRAuthConfig`: type, entity, roles, endpoints (`HasLogin`, `HasRegister`, `HasMe`, `HasSetup` — boolean fields; templates gate auth templates per endpoint with them).
 
 ## Validation rules & errors
 

@@ -1,28 +1,32 @@
 ---
 title: Architecture
-description: The compiler pipeline — parser, lexer, validator, IR builder, renderer — and what each stage owns.
+description: The compiler pipeline and how axes, layers and replacement render deterministically from one IR.
 section: concepts
 order: 2
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
 ```
-domain.yaml --> Parser (calls Lexer per field) --> Validator --> IR Builder --> Renderer --> Generated Code
+domain.yaml → Parser (Lexer per field) → Validator → IR Builder → Renderer → Generated Code
+                                              ↑
+                                Snapshot/migration (.domaincraft/snapshot.json)
 ```
 
-| Stage | Package | Responsibility |
-|-------|---------|---------------|
-| **Parser** | `internal/parser` | Reads YAML into `RawSchema` (strict decoding — unknown keys are errors), converts to `ParsedSchema`. Calls the lexer per field. Validates syntax: field types, modifiers, `on_delete` values. Auto-adds fields from features (audit, soft_delete, ...). Generates plural names and snake_case DB columns. |
-| **Lexer** | `internal/lexer` | Parses field definition strings like `"string [required, max:255]"` into structured `FieldDefinition` objects. Validates modifier syntax, type constraints and relation-specific rules. |
-| **Validator** | `internal/validator` | Logical consistency: missing/duplicate PKs, broken relations, `on_delete:set_null` on required fields, unused enums, auth entity validation, index integrity, permission cross-checks, seed compatibility, column collisions. |
-| **IR Builder** | `internal/ir` | Converts `ParsedSchema` to a fully linked `IRProject` graph with bidirectional relations and resolved navigation names — the contract templates consume. |
-| **Renderer** | `internal/renderer` | Reads `bridge.yaml`, loads `text/template` files with stdlib-backed template functions (`internal/templatefuncs`) + bridge type mappings, renders IR to disk. Honors `overwrite: false`, returns a manifest, and composes `extends:` base bridges (base templates/helpers/type_mappings render first; the adapter wins). |
+| Stage | Package | What it does |
+|-------|---------|--------------|
+| **Parser** | `internal/parser` | YAML → `RawSchema` (strict, unknown keys are errors) → `ParsedSchema`. Calls the Lexer per field. Validates syntax, auto-adds feature fields and generates plurals and `snake_case` columns. |
+| **Lexer** | `internal/lexer` | `string [required, max:255]` → `FieldDefinition`. Checks modifier syntax and relation rules. |
+| **Validator** | `internal/validator` | Logical consistency: PKs, relations, `on_delete:set_null` on required fields, enums, auth, indexes, permissions, seed and column collisions. |
+| **IR Builder** | `internal/ir` | `ParsedSchema` → `IRProject` — a fully linked graph with resolved navigation names. This is the contract templates read. |
+| **Renderer** | `internal/renderer` | Merges the `extends` chain base-first. Loads `text/template` plus `type_mappings.yaml`, renders to disk, honors `overwrite: false` and returns a manifest. Every map that affects output uses `sort.Strings` — two runs produce identical bytes. |
+| **Snapshot** | `internal/snapshot` | Saves the IR and file manifest to `.domaincraft/snapshot.json`. Diffs the next `domain.yaml` to find deleted or renamed entities and type changes. |
 
-Two companion paths:
+Parallel paths: **WASM validator** (`cmd/wasm-validator`) — the same parser and validator compiled to the browser for Studio; **Bridge resolver** (`internal/bridge`) — `extends`/`layer`/`--replace` resolution with `~/.domaincraft` cache.
 
-- **Snapshot/migration** (`internal/snapshot`) — persists the IR + file manifest to `<output>/.domaincraft/snapshot.json`, diffs the next `domain.yaml` against it, and provides delete/rename helpers.
-- **WASM validator** (`cmd/wasm-validator`) — exposes the same parser + validator to the GUI browser, so validation is never duplicated in type land.
+## How composition works
+
+Bridges compose via `extends` + `layer` + `--replace` — see **[Axes and layers](./three-axes)** for the full model. In short: `extends` builds a linear chain, `layer` marks the position in the axis, and `--replace` swaps one edge. Merged base-first (`templates`/`helpers`/`type_mappings.yaml`, adapter wins), `output_dir`/`name` from the top adapter, `migrations:`/`registry_packages` — first `enabled` top-down. Deterministic (`sort.Strings`) and sibling-checkout aware for monorepo dev.
 
 ## Language-agnostic core
 
-The Go core never contains language-specific constructs — no C# namespaces, no Python imports. All language-specific formatting lives in bridge templates and `type_mappings.yaml`. If a bridge needs a new language-specific helper, it goes in the bridge's `type_mappings.yaml` or as a template function — never hard-coded in Go.
+The Go core never contains C# namespaces, TypeScript imports or other language-specific code. All formatting lives in bridge templates and `type_mappings.yaml`. Need a new helper? Add it to the bridge — never hard-code it in Go.

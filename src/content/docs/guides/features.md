@@ -21,19 +21,19 @@ Feature fields are auto-injected by the core — templates must filter them with
 
 ## `audit`
 
-Adds `createdAt: datetime` and `updatedAt: datetime`. The API bridge generates code that updates these timestamps on every save.
+Adds `createdAt` and `updatedAt` (`datetime`). The API updates them on every save — so you get a timestamped history without writing it yourself.
 
 ## `audit_log`
 
-Extended audit. Adds `createdBy: uuid` and `updatedBy: uuid`, automatically filled with the ID of the current authenticated user from the token. Requires auth to be enabled.
+Extends `audit` with `createdBy` and `updatedBy` (`uuid`). Filled automatically from the current user in the JWT. Requires auth.
 
 ## `soft_delete`
 
-Adds `deletedAt: datetime [optional]`. A DELETE request no longer removes the row physically — it marks it as deleted. GET queries automatically filter with `WHERE deletedAt IS NULL`.
+Adds `deletedAt` (`datetime [optional]`). `DELETE` no longer removes the row — it marks it. `GET` automatically adds `WHERE deletedAt IS NULL` — so you can restore or audit deleted rows.
 
 ## `optimistic_lock`
 
-Adds `version: int`. The version increments on every update; concurrent stale writes are rejected with `409 Conflict`.
+Adds `version: int`. It increments on every update; a stale write gets `409 Conflict` — so concurrent edits don't silently overwrite each other.
 
 ## `event_sourced`
 

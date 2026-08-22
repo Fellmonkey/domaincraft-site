@@ -3,7 +3,7 @@ title: CLI reference
 description: Every domaincraft command and flag — generate, validate, bridges, and their options.
 section: reference
 order: 2
-updated: "2026-08-04"
+updated: "2026-08-22"
 ---
 
 ## Commands
@@ -24,16 +24,19 @@ updated: "2026-08-04"
 | `--bridge` / `-b` | Bridge ID, local path, or `owner/repo`. |
 | `--output` / `-o` | Output directory. |
 | `--non-interactive` | Force flag-only mode. |
-| `--addons` | Comma-separated infrastructure accelerators that toggle addon templates, e.g. `--addons "dapr"`. |
-| `--update-bridges` | Check cached bridges for newer versions and download them before generating (no prompts, CI-safe). |
+| `--addons` | Comma-separated addons that toggle templates, e.g. `--addons "dapr"`. |
+| `--update-bridges` | Check cached bridges for newer versions and download them before generating (CI-safe). |
 
 ## `generate` flags
 
 | Flag | Description |
 |------|-------------|
 | `--admin` | Generate an admin panel; optional bridge ID, default `admin-alpine`. |
-| `--prune` | Automatically remove/rename orphaned files, rewrite renamed identifiers in custom files, and run the bridge's migrations (best-effort) when the schema changed, without prompting (CI-friendly). |
-| `--migrate` | After generation, run the bridge's declared database-migration commands (`migrations:` in `bridge.yaml`) against a real database. |
+| `--replace` | Replace one layer without forking: `layer=bridgeRef` or `bridgeId=bridgeRef` (repeatable). E.g. `--replace persistence=csharp-dapper` builds `core+dapper+rest` instead of `core+efcore+rest`. If the replacement itself extends a base, that base is included automatically. |
+| `--prune` | Remove/rename orphaned files, rewrite identifiers in custom files, and run the bridge's migrations (best-effort) when the schema changed — without prompting (CI-friendly). |
+| `--migrate` | Run the bridge's `migrations:` commands (`dotnet ef ...`) against a real database after generation. |
+
+`--replace` keeps thousands of bridges as thousands of repos, not `N×M` combinatorial repos. Each new `persistence` or `transport` is one repo, a combination is a flag.
 
 ## `bridges` flags
 
@@ -44,6 +47,8 @@ updated: "2026-08-04"
 ## Bridge resolution order
 
 1. Local path → use directly.
-2. Registry ID (e.g. `csharp-restful`) → check `~/.domaincraft/bridges/`, clone if needed.
+2. Registry ID (e.g. `csharp-rest`) → check `~/.domaincraft/bridges/`, clone if needed.
 3. `owner/repo` GitHub shorthand → clone.
 4. Empty + interactive terminal → show selection menu.
+
+`--replace` resolves the same way as `--bridge` — including the sibling-checkout fallback, so monorepo development works before the replacement is published.

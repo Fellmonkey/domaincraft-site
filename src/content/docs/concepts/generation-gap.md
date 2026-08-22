@@ -1,9 +1,9 @@
 ---
 title: The Generation Gap pattern
-description: How bridges protect developer-written code across regenerations with overwrite:false and partial classes.
+description: How bridges keep hand-written code safe across regenerations — generated core vs. developer-owned code.
 section: concepts
 order: 3
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
 Code generators have a classic problem: what happens to hand-written business logic when you regenerate? DomainCraft answers it with the **Generation Gap** pattern — split generated code (always overwritten) from developer code (scaffolded once and owned).
@@ -12,20 +12,22 @@ Code generators have a classic problem: what happens to hand-written business lo
 
 Bridges mark a template `overwrite: false` to scaffold a file once; the renderer skips it afterwards and records it in the file manifest as `Custom: true`, `Written: false`. The migration engine uses this manifest to protect developer-owned files when an entity is deleted, renamed or its types change.
 
-The reference C# bridge implements the pattern with C# partial classes. Per entity it generates:
+The C# bridges (`csharp-core` + `csharp-rest`) are the reference implementation. Per entity they generate:
 
-- `src/Application/Generated/<Entity>Service.g.cs` — **always overwritten** `partial class` with CRUD and the full hook surface: async before/after hooks (`OnBeforeCreateAsync`, `OnAfterUpdateAsync`, ...) and full-flow override hooks (`On*OverrideAsync`). All of them return `HookResult` — `Success()` to continue, `Handled()` to take over persistence (e.g. route to a queue instead of the DB), or `Fail("reason")` to abort cleanly (mapped to HTTP 400).
-- `src/Application/Services/<Entity>Service.cs` — `overwrite: false` partial where the developer overrides the async hooks.
-- `I<Entity>Service` interface and DI registration `I<Entity>Service → <Entity>Service` (the merged partial class).
+- `src/Application/Generated/<Entity>Service.g.cs` — **always overwritten** with CRUD and the full hook surface. Before/after hooks (`OnBeforeCreateAsync`, `OnAfterUpdateAsync`, …) and full-flow overrides (`On*OverrideAsync`) all return `HookResult`: `Success()` continues, `Handled()` takes over persistence (e.g. route to a queue), `Fail("reason")` aborts to HTTP 400.
+- `src/Application/Services/<Entity>Service.cs` — `overwrite: false`, created once and owned by you. You override the async hooks there.
+- `I<Entity>Service` interface + DI registration `I<Entity>Service → <Entity>Service`.
+
+The split uses a language-appropriate mechanism — **partial classes in C#**, base classes in other languages:
 
 ```text
 Generated/<Entity>Service.g.cs   (rewritten every generate)
-        │  partial class <Entity>Service : I<Entity>Service
+        │  class <Entity>Service : I<Entity>Service  (partial in C#)
         ▼
-Services/<Entity>Service.cs      (created once, developer-owned partial)
-        │  override Task<HookResult> OnBeforeCreateAsync(...) { /* your logic */ }
+Services/<Entity>Service.cs      (created once, your partial/base)
+        │  OnBeforeCreateAsync(...) { /* your logic */ }
         ▼
-DI:  I<Entity>Service → <Entity>Service    (merged partial)
+DI:  I<Entity>Service → <Entity>Service
 ```
 
 ## Why it works

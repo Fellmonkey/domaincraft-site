@@ -1,125 +1,102 @@
 ---
 title: Writing a bridge
-description: Bridge anatomy — bridge.yaml, type_mappings.yaml, templates, when-conditions, overwrite rules and helpers.
+description: Bridge anatomy — bridge.yaml, layer, extends, replacement, type_mappings, templates and helpers.
 section: guides
-order: 5
-updated: "2026-08-03"
+order: 6
+updated: "2026-08-22"
 ---
 
-A bridge is a directory of template files plus a `bridge.yaml` manifest. Bridges are fully decoupled from the Go core — no Go code is required to add a language.
-
-## Resolution
-
-The CLI resolves a bridge in this order:
-
-1. Local path → used directly.
-2. Registry ID (e.g. `csharp-restful`) → checked in `~/.domaincraft/bridges/`, cloned if needed.
-3. `owner/repo` GitHub shorthand → cloned.
-4. Empty + interactive terminal → selection menu.
+A bridge is a directory of `text/template` files plus a `bridge.yaml` manifest. You don't need to write Go to add a language — bridges are fully decoupled from the core. Each bridge covers exactly **one layer in one axis**.
 
 ## bridge.yaml
 
 ```yaml
-name: csharp-restful
-description: C# REST API bridge (EF Core + PostgreSQL + JWT)
+name: csharp-efcore
+description: EF Core persistence (extends csharp-core)
 version: "1.0.0"
+layer: persistence          # open ^[a-z][a-z0-9_]*$ — convention per family (domain|persistence|transport for C#, core|framework|offline for web/mobile)
+extends: csharp-core        # optional base — path, registry ID or owner/repo (linear chain)
+
 output_dir: generated
 helpers: templates/_helpers.cs.tmpl
 
 registry_url: "https://api.nuget.org/v3-flatcontainer/{id}/index.json"
-
 registry_packages:
   ef_core: Microsoft.EntityFrameworkCore
-  jwt_bearer: Microsoft.AspNetCore.Authentication.JwtBearer
 
 migrations:
   enabled: true
   commands:
     - "dotnet ef migrations add InitialCreate --project src/Infrastructure ..."
-    - "dotnet ef database update --project src/Infrastructure ..."
-
-supports:
-  - api_style: rest
-  - database: postgresql
-  - auth: jwt
-  - multi_tenancy: "none"
 ```
 
-- `registry_url` / `registry_packages` — optional package registry used to auto-resolve latest stable versions (`{id}` is replaced with the lowercased package ID).
-- `migrations` — commands the core runs when invoked with `domaincraft generate --migrate`.
-- `supports` — documented configurations the bridge targets.
+* `layer` — your position in the axis; if the same `layer` appears twice in one chain the build fails, so a miswired stack is caught early. A `layer` mismatch on `--replace` is a warning, not an error.
+* `extends` — a linear chain (local path, registry ID or `owner/repo`). A sibling checkout next to the adapter is checked first, so monorepo development works before publishing.
+* `registry_url` / `registry_packages` and `migrations:` — merged base-first; the first `enabled` `migrations:` top-down wins (so `rest` without migrations still runs `efcore`'s `dotnet ef` commands).
+
+## Replacement
+
+New persistence or transport ships as **one repo** — see **[Axes and layers](../../concepts/three-axes)** for the full model:
+
+```bash
+domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
+```
+
+`--replace left=right` (`generate` only, repeatable): `left` is a `layer` or a `bridgeId`, `right` is any bridge ref.
+
+## Composition
+
+Base `templates`/`helpers`/`type_mappings.yaml` render first, adapter wins — full details in **[Axes and layers](../../concepts/three-axes)**. Example:
+
+```yaml
+name: react-rest
+layer: framework
+extends: ts-core
+```
 
 ## Templates
-
-Each template spec has:
 
 ```yaml
 templates:
   - for: entity            # entity = once per entity; project = once per project
     source: templates/entity.cs.tmpl
-    target: "src/Domain/Entities/{{ .Entity.Name }}.cs"
-    when: hasEnums         # optional condition
-    overwrite: false       # optional: scaffold once, developer owns the file
-    delimiters: ["<<", ">>"]  # optional: for JSX/TSX bridges
+    target: "src/Domain/Entities/{{ .Entity.Name }}.g.cs"
+    when: hasAuth          # optional
+    overwrite: false       # scaffold once, developer owns the file
+    delimiters: ["<<", ">>"]  # for JSX/TSX
 ```
 
-### `when` conditions
+`when`: `hasSeed`, `hasEnums`, `hasOwnerTokens`, `hasAuth`, `hasMigration`, `hasMockData`, `hasAddon:dapr` / `notHasAddon:dapr`.
 
-- `hasSeed`, `hasEnums`, `hasOwnerTokens`, `hasAuth`, `hasMigration`, `hasMockData`
-- `hasAddon:dapr` / `notHasAddon:dapr`
-- `when: hasAuth` only renders when auth is enabled.
-- `when: hasMigration` only renders when the core computed a non-empty schema-migration plan (e.g. `RenameTable`/`RenameColumn` for `old_name` hints).
-- `when: hasMockData` only renders when the core generated deterministic mock data.
+`overwrite: false` — renderer skips existing files (`Custom: true` in the manifest, protected by the snapshot engine). Rule: **Core (regenerated) vs Custom (`overwrite: false`)** — put logic behind interfaces and scaffold once using the idiom of your target language (partial classes in C#, base classes in Python, etc.).
 
-### `overwrite: false`
-
-Creates a file **only once**; the developer owns it afterwards. The renderer skips existing files and records them in the manifest as `Custom: true`. The migration engine uses this to protect developer-owned files when an entity is deleted, renamed or its types change. Rule for bridge authors: **split Core (always regenerated) and Custom (`overwrite: false`) code** — put generated logic behind interfaces and scaffold the developer-owned implementation only once (e.g. `partial` classes in C#).
-
-### Template context
-
-Templates receive a `RenderContext` with `.Project`, `.Entity`, `.Bridge`, `.Packages`. Entity methods: `.HasFeature("audit")`, `.HasAudit()`, `.HasSoftDelete()`, `.NonRelationFields()`, `.RelationFields()`. Field methods: `.IsArray()`, `.IsEnum()`, `.EnumTypeName()`, `.IsFeatureField()`, `.IsPatchable()`, `.IsUuid()`, `.IsText()`, `.IsInteger()`, `.IsFloat()`, `.IsNumeric()`, `.IsBoolean()`, `.IsDate()`, `.IsDateTime()`, `.IsJson()`, `.HasValidation(name)`, `.ValidationValue(name)`. Use `{{ .Entity.Name }}`, `{{ pluralize .Entity.Name }}`, `{{ fkName .Name | pascalcase }}` directly.
+Context: `RenderContext{ .Project, .Entity, .Bridge, .Packages }` — use `{{ .Entity.Name }}`, `{{ fkName .Name | pascalcase }}`, `.IsFeatureField`, `.HasValidation`.
 
 ## type_mappings.yaml
 
-Language-specific type mapping, loaded at runtime — the Go core stays language-agnostic:
+Language-specific mapping, loaded at runtime — the core stays language-agnostic:
 
 ```yaml
 types:
   uuid: "Guid"
   string: "string"
-  decimal: "decimal"
-
-value_types: ["int", "long", "bool", "DateTime", "Guid"]
-
+value_types: ["int", "Guid"]
 behaviors:
   cascade: "Cascade"
-  set_null: "SetNull"
-
 array_format: "List<%s>"
 nullable_format: "?"
-enum_nullable: true
-
-# Literal syntax — how to write a value/default of each IR type.
-# Keys match IR database types; "enum" is reserved for user-declared enums.
 literals:
-  uuid:    { parse: "Guid.Parse(%s)", default: "Guid.NewGuid()" }
-  decimal: { suffix: "m", default: "0m" }
-  enum:    { parse: "Enum.Parse<%s>(%s)", member: "%s.%s", zero: "(%s)0" }
-
-# Array literal delimiters — %s is the bridge's array type.
+  uuid: { parse: "Guid.Parse(%s)", default: "Guid.NewGuid()" }
 array:
   open: "new %s { "
   close: " }"
-  empty: "new %s()"
 ```
 
-These power the `languageType`, `isValueType`, `deleteBehaviorName`, `inputType` (admin),
-`literalValue`, `literalDefault`, `literalMember` and `arrayLiteralOpen`/`arrayLiteralClose`
-template functions.
+Powers `languageType`, `isValueType`, `deleteBehaviorName`, `literalValue`, `literalDefault`, `literalMember`.
 
 ## Constraints
 
-- Templates must use `{{-` / `-}}` whitespace trimming for clean output.
-- All map iteration that affects output must be sorted — Go maps are randomized; two runs on the same `domain.yaml` must produce identical output.
-- Feature fields (`createdAt`, `updatedAt`, ...) are auto-injected — filter them with `.IsFeatureField`.
-- For JSX/TSX bridges, remove inline `style={{ }}` and set `delimiters: ["<<", ">>"]` to avoid conflicts with Go template delimiters.
+* `{{-` / `-}}` whitespace trimming.
+* Every `map` affecting output must be `sort.Strings` — deterministic output is a hard rule.
+* Filter feature fields with `.IsFeatureField`.
+* For JSX/TSX, `delimiters: ["<<", ">>"]` and no inline `style={{ }}`.

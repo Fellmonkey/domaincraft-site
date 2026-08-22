@@ -1,40 +1,35 @@
 ---
 title: Quick start
-description: Install DomainCraft, define your domain in domain.yaml and generate a production-ready backend in minutes.
+description: Install DomainCraft, define your domain in domain.yaml and generate production-ready code in minutes.
 section: getting-started
 order: 1
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
-DomainCraft turns a single `domain.yaml` file into fully working source code for a target language and framework. This quick start takes you from zero to a running C# REST API in four steps.
+DomainCraft compiles one `domain.yaml` into every layer of your product. The same model produces the API, its typed clients and the admin panel. There's no boilerplate to keep in sync and no drift between layers.
 
 ## 1. Install the CLI
 
-No Go toolchain required. Download the prebuilt binary for your platform from GitHub Releases:
+Prebuilt binary (no Go required):
 
 [Download from GitHub Releases](https://github.com/DomainCraft/DomainCraft/releases)
 
-> Alternatively, if Go is already installed on your machine:
->
-> ```bash
-> go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest
-> ```
+```bash
+go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest
+```
 
 ## 2. Create a project
 
-<!-- Студия — отдельный деплой, поэтому ссылка ведёт на её собственный URL, а не на /studio: относительные пути не работают на двух глубинах доков, а /studio без base-префикса ломается на GitHub Pages. -->
-Create a `domain.yaml` by hand or in the visual editor ([DomainCraft Studio](https://domaincraft.github.io/domaincraft-studio/)). A minimal starter looks like:
+By hand or in the visual editor ([Studio](https://domaincraft.github.io/domaincraft-studio/)):
 
 ```yaml
 project:
   name: MyShop
   version: 1.0.0
-
 database: postgresql
 auth:
   type: jwt
 api_style: rest
-
 entities:
   User:
     fields:
@@ -46,19 +41,9 @@ entities:
 
 ## 3. Define your domain
 
-Edit `domain.yaml`. This is all you write — the generator produces everything else:
+The compiler derives the rest:
 
 ```yaml
-project:
-  name: MyShop
-
-database: postgresql
-
-auth:
-  type: jwt
-  entity: User
-  roles: [Admin, User]   # roles referenced in permissions must be declared here
-
 entities:
   Product:
     features: [audit, soft_delete]
@@ -72,18 +57,31 @@ entities:
       update: ["@Owner", Admin]
 ```
 
-Validate it at any time:
-
 ```bash
 domaincraft validate --domain domain.yaml
 ```
 
-## 4. Generate & run
+## 4. Generate your backend
 
 ```bash
-domaincraft generate --domain domain.yaml --bridge csharp-restful
-cd generated
-dotnet run --project src/WebApi
+# C# API — the same output as the archived csharp-restful (core → efcore → rest)
+domaincraft generate --domain domain.yaml --bridge csharp-rest
+cd generated && dotnet run --project src/WebApi
 ```
 
-You now have a complete, compilable backend — entities, repositories, controllers, auth, migrations, Docker and Kubernetes manifests. The next guide walks through a fuller example with relations and features.
+Want a different database without copying 71 templates? Swap one layer:
+
+```bash
+domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper
+```
+
+The same model also builds a typed frontend:
+
+```bash
+domaincraft generate --domain domain.yaml --bridge ts-core
+domaincraft generate --domain domain.yaml --bridge react-rest   # ts-core + TanStack Query
+```
+
+Why this matters: types, validation, `path:op:value` queries, enum wire values, errors and permissions are all compiled from the same IR. Rename a field in `domain.yaml` and the API, the client and the admin panel update together — in one run, with no hidden runtime.
+
+Next: **First project** (relations + features), then **TypeScript client**.

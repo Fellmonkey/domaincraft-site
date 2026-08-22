@@ -2,7 +2,7 @@
 title: Infrastructure & addons
 description: Declare infrastructure in domain.yaml and toggle the Dapr addon — events, caching, email and storage ports.
 section: guides
-order: 6
+order: 7
 updated: "2026-08-03"
 ---
 
@@ -26,18 +26,18 @@ This section generates nothing by itself — it tells the bridge which services 
 Addons are infrastructure accelerators connected through the CLI, not through `domain.yaml`:
 
 ```bash
-# Lightweight monolith — in-memory events, no sidecars
-domaincraft generate --bridge csharp-restful
+# Lightweight — in-memory events, no sidecars
+domaincraft generate --bridge csharp-rest
 
-# Enterprise: microservice with a Dapr sidecar and ready-to-use dapr/components
-domaincraft generate --bridge csharp-restful --addons dapr
+# Enterprise — Dapr sidecar with ready-to-use dapr/components
+domaincraft generate --bridge csharp-rest --addons dapr
 ```
 
 With the addon enabled, the bridge renders the extra templates guarded by `when: hasAddon:dapr` — including `dapr/components/{pubsub,statestore,email,storage}.yaml`.
 
 ## Ports and implementations
 
-The C# bridge always generates the port interfaces; the concrete implementation is selected at DI time by the addon:
+The C# bridges always generate the port interfaces; the concrete implementation is selected at DI time by the addon:
 
 | Port                  | Interface              | No addon (in-process)            | `--addons dapr`                  |
 |-----------------------|------------------------|----------------------------------|----------------------------------|

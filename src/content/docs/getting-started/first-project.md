@@ -3,7 +3,7 @@ title: Your first project
 description: Build a small store with entities, relations, a permission matrix and auth, then generate the full backend.
 section: getting-started
 order: 2
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
 This guide builds a small store — `User`, `Product`, `Category` — to show relations, features, permissions and seed data in one model.
@@ -32,18 +32,19 @@ A relation is written on the owning (child) side with `relation(Target)`. The in
     fields:
       id: uuid [primary]
       name: string [required, unique]
-      products: relation(Product) [many]   # many-to-many, join table auto-created
+      products: relation(Product) [many]   # one-to-many: reconciles with the FK below
 
   Product:
     fields:
       id: uuid [primary]
       title: string [required, min:3, max:200]
       price: decimal [required, gte:0]
-      categoryId: relation(Category) [required]   # many-to-one
+      categoryId: relation(Category) [required]   # many-to-one (FK column)
 ```
 
-- `relation(Category)` on `Product.categoryId` creates a `Products` list on `Category`.
-- `relation(Product) [many]` creates an automatic many-to-many join table with composite keys.
+- `relation(Category)` on `Product.categoryId` creates the FK column.
+- `products: relation(Product) [many]` on `Category` declares the collection side. When the target has a matching FK, the core **reconciles** the two declarations into a single one-to-many relation — no join table, no duplicate foreign key.
+- A true **many-to-many** needs `[many]` on *both* sides and no FK: e.g. `tags: relation(Tag) [many]` on `Product` plus `products: relation(Product) [many]` on `Tag` → an implicit join table is created.
 - `relation(Profile) [unique]` on a child field makes the relation one-to-one.
 
 ## Foreign-key behaviour (`on_delete`)
@@ -107,7 +108,9 @@ Seed rows are inserted on first run:
 ## Generate
 
 ```bash
-domaincraft generate --domain domain.yaml --bridge csharp-restful --admin
+domaincraft generate --domain domain.yaml --bridge csharp-rest --admin
 ```
 
-Passing `--admin` additionally scaffolds an admin panel. The generated project includes entity summaries under `docs/Entities/` and a `docs/ProjectSummary.md`.
+`csharp-rest` (`core → efcore → rest`) is the current C# bridge — the monolith `csharp-restful` is archived and kept for compatibility. Passing `--admin` also scaffolds an admin panel. The generated project includes entity summaries under `docs/Entities/` and a `docs/ProjectSummary.md`.
+
+> **Next:** the same model compiles into a typed TypeScript client and React hooks — see **The TypeScript client** guide in this section.

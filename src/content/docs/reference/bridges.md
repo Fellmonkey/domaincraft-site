@@ -1,55 +1,64 @@
 ---
 title: Bridges registry
-description: Known bridges, their capabilities, resolution order and how the admin panel generation works.
+description: Known bridges, axes and layers, and how composition and replacement work.
 section: reference
 order: 3
-updated: "2026-08-03"
+updated: "2026-08-22"
 ---
 
-Bridges are how DomainCraft targets a language or framework. The registry is hardcoded in the core and clones bridges on demand into `~/.domaincraft/bridges/`.
+A bridge is a set of templates that turns your `domain.yaml` into code for one language or framework. The registry is hard-coded and clones on demand into `~/.domaincraft/bridges/`.
 
 ## Registered bridges
 
-| ID | Language | Description |
-|----|----------|-------------|
-| `csharp-restful` | C# | ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture |
-| `admin-alpine` | HTML | Admin panel with Alpine.js + 0build UIkit |
+| ID | Layer | Language | Description | Composition |
+|----|-------|----------|-------------|-------------|
+| `csharp-core` | `domain` | C# | Domain + Application (entities, ports, Generation Gap) | base |
+| `csharp-efcore` | `persistence` | C# | EF Core + PostgreSQL + Hangfire | `extends: csharp-core` |
+| `csharp-rest` | `transport` | C# | ASP.NET Core REST + JWT + k8s/tests | `extends: csharp-efcore` |
+| `csharp-restful` | — | C# | *Archived* monolith (71 files) — use `csharp-rest` | — |
+| `ts-core` | `core` | TypeScript | Framework-agnostic data layer (types, Zod, query DSL, permissions) | base |
+| `react-rest` | `framework` | TypeScript | React — TanStack Query + `useCan` | `extends: ts-core` |
+| `appwrite` | — | JSON | Appwrite TablesDB + teams + settings (`appwrite.config.json`) | single layer |
+| `admin-alpine` | — | HTML | Alpine.js admin panel (`--admin`) | single layer |
 
-## Bridge directories
+`csharp-rest` via `core→efcore→rest` is byte-identical to the archived `csharp-restful` — verified on `examples/domain.yaml` (142 files) and `compliance-suite/kitchen-sink.yaml` (187 files).
 
-- `domaincraft-bridge-csharp` — the `csharp-restful` bridge (templates only, no Go code).
-- `domaincraft-bridge-admin` — the `admin-alpine` admin panel bridge (Alpine.js + 0build UIkit) with list/form/login/register pages.
+## Axes and layers
+
+A layered bridge is one layer in one axis — see **[Axes and layers](../../concepts/three-axes)** for the full model.
 
 ## Generate with a bridge
 
 ```bash
-# By registry ID
-domaincraft generate --domain domain.yaml --bridge csharp-restful
+domaincraft generate --domain domain.yaml --bridge csharp-rest
+domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper
+domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp-rest
+domaincraft generate --domain domain.yaml --bridge ts-core
+domaincraft generate --domain domain.yaml --bridge react-rest
 
-# By local path
-domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp
-
-# By GitHub shorthand
-domaincraft generate --domain domain.yaml --bridge DomainCraft/domaincraft-bridge-csharp
-
-# With an admin panel (default admin-alpine)
-domaincraft generate --domain domain.yaml --bridge csharp-restful --admin
+# with admin panel
+domaincraft generate --domain domain.yaml --bridge csharp-rest --admin
 ```
 
-`--admin` is only valid on `generate`; it accepts an optional bridge ID for the admin panel, defaulting to `admin-alpine`.
+## Composition details
+
+Base templates/helpers/`type_mappings.yaml` render first, adapter wins on conflict. `output_dir`/`name`/`delimiters` from the top adapter; `migrations:`/`registry_packages` — first `enabled` top-down. `when:` (`hasAuth`, `hasSeed`, `hasAddon:dapr`, …) is evaluated per template regardless of owner. Resolution reuses the same path/ID/`owner/repo` logic as `--bridge` plus a sibling-checkout fallback for monorepo dev (`resolveBaseChain`).
 
 ## Adding a bridge
 
-Append an entry to `DefaultRegistry` in `internal/bridge/registry.go`:
+Append to `DefaultRegistry` in `internal/bridge/registry.go` and add `layer` + optional `extends` in `bridge.yaml`:
 
 ```go
 {
-  ID:          "csharp-restful",
-  Name:        "C# REST API",
-  Description: "ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture",
-  Language:    "C#",
-  GitHub:      "DomainCraft/domaincraft-bridge-csharp",
+  ID:     "csharp-dapper",
+  Name:   "C# Dapper",
+  Language: "C#",
+  GitHub: "DomainCraft/domaincraft-bridge-csharp-dapper",
 },
 ```
 
-See the *Writing a bridge* guide for the manifest format.
+```yaml
+name: csharp-dapper
+layer: persistence
+extends: csharp-core
+```
