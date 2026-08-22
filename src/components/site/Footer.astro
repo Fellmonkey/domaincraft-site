@@ -10,7 +10,7 @@ interface Props {
   alternateLang: string;
 }
 
-const { lang, messages } = Astro.props;
+const { lang, messages, alternateHref, alternateLabel } = Astro.props;
 const isRoot = lang === 'en';
 const year = new Date().getFullYear();
 const rights = messages.footer.rights.replace('{year}', String(year));
@@ -68,8 +68,8 @@ function footerHref(key: string, isRoot: boolean): string {
     <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:px-6">
       <p>{rights}</p>
       <p>
-        <a href={withBase(lang === 'en' ? '/ru/' : '/')} class="underline underline-offset-4 hover:text-foreground">
-          {lang === 'en' ? 'Русский' : 'English'}
+        <a href={alternateHref} class="underline underline-offset-4 hover:text-foreground">
+          {alternateLabel}
         </a>
       </p>
     </div>

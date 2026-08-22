@@ -15,16 +15,14 @@ interface Props {
   alternateLang: string;
 }
 
-const { lang, messages } = Astro.props;
+const { lang, messages, alternateHref } = Astro.props;
 
 const isRoot = lang === 'en';
 const currentLabel = lang === 'en' ? 'English' : 'Русский';
-const root = withBase('/');
-const ruRoot = withBase('/ru/');
-const currentHref = lang === 'en' ? root : ruRoot;
+const currentHref = Astro.url.pathname;
 const options = [
-  { code: 'en', label: 'English', href: lang === 'en' ? currentHref : root },
-  { code: 'ru', label: 'Русский', href: lang === 'ru' ? currentHref : ruRoot }
+  { code: 'en', label: 'English', href: lang === 'en' ? currentHref : alternateHref },
+  { code: 'ru', label: 'Русский', href: lang === 'ru' ? currentHref : alternateHref }
 ];
 
 const prefix = isRoot ? '' : '/ru';
