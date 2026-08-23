@@ -200,24 +200,24 @@ export const en: Messages = {
       'Bridges are plain templates and a manifest. No Go code required — add a language in an afternoon.',
     cards: [
       {
-        name: 'csharp-restful',
+        name: 'csharp-rest',
         status: 'ready',
-        description: 'ASP.NET Core REST API · clean architecture · EF Core + PostgreSQL + JWT + Dapr addons.'
+        description: 'ASP.NET Core + EF Core + PostgreSQL + JWT (core → domain → efcore → rest).'
       },
       {
         name: 'ts-core',
         status: 'ready',
-        description: 'Framework-agnostic TypeScript data layer — typed query DSL, Zod validation, JWT client, permissions.'
+        description: 'Thin TypeScript core — typed query DSL, wire-value enums, permission matrix.'
       },
       {
-        name: 'react-rest',
+        name: 'ts-client + react-rest',
         status: 'ready',
-        description: 'React data layer (extends ts-core) — TanStack Query hooks, typed filters, auth.'
+        description: 'Zod, JWT client, CRUD, TanStack Query hooks (extends ts-core).'
       },
       {
-        name: 'java-spring',
-        status: 'planned',
-        description: 'Spring Boot REST API for the JVM. On the roadmap.'
+        name: 'admin-alpine',
+        status: 'ready',
+        description: 'Admin panel for any REST backend — one --admin flag.'
       }
     ]
   },

@@ -200,24 +200,24 @@ export const ru: Messages = {
       'Мосты — это обычные шаблоны и манифест. Без Go-кода — добавьте язык за один вечер.',
     cards: [
       {
-        name: 'csharp-restful',
+        name: 'csharp-rest',
         status: 'ready',
-        description: 'ASP.NET Core REST API · чистая архитектура · EF Core + PostgreSQL + JWT + аддоны Dapr.'
+        description: 'ASP.NET Core + EF Core + PostgreSQL + JWT (core → domain → efcore → rest).'
       },
       {
         name: 'ts-core',
         status: 'ready',
-        description: 'Фреймворк-агностичный слой данных на TypeScript — типизированный DSL запросов, Zod-валидация, JWT-клиент, права.'
+        description: 'Тонкое TypeScript-ядро — типизированный DSL запросов, wire-значения enum, матрица прав.'
       },
       {
-        name: 'react-rest',
+        name: 'ts-client + react-rest',
         status: 'ready',
-        description: 'Слой данных для React (extends ts-core) — хуки TanStack Query, типизированные фильтры, auth.'
+        description: 'Zod, fetch-клиент, CRUD, хуки TanStack Query (extends ts-core).'
       },
       {
-        name: 'java-spring',
-        status: 'planned',
-        description: 'Spring Boot REST API для JVM. В планах.'
+        name: 'admin-alpine',
+        status: 'ready',
+        description: 'Админ-панель для любого REST-бэкенда — один флаг --admin.'
       }
     ]
   },

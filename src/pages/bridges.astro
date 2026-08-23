@@ -8,46 +8,58 @@ const messages = getMessages('en');
 
 const bridges = [
   {
-    id: 'csharp-restful',
+    id: 'csharp-rest',
     language: 'C#',
     status: 'ready',
-    description: 'ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture'
+    description: 'ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture (core → domain → efcore → rest)'
+  },
+  {
+    id: 'csharp-core',
+    language: 'C#',
+    status: 'ready',
+    description: 'Thin language core — enum wire values, entity types, query schema'
+  },
+  {
+    id: 'ts-core',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Thin language core — typed query DSL, permissions, wire values'
+  },
+  {
+    id: 'ts-client',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Zod validation, JWT fetch client, per-entity CRUD (extends ts-core)'
+  },
+  {
+    id: 'react-rest',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'React glue (extends ts-client) — TanStack Query hooks, typed filters, auth'
   },
   {
     id: 'admin-alpine',
     language: 'HTML',
     status: 'ready',
-    description: 'Admin panel with Alpine.js + 0build UIkit'
+    description: 'Admin panel with Alpine.js + 0build UIkit — CRUD for any REST backend'
   },
   {
     id: 'appwrite',
     language: 'JSON',
     status: 'ready',
     description: 'Appwrite schema: TablesDB + role teams + settings, deployed via the Appwrite CLI'
-  },
-  {
-    id: 'ts-core',
-    language: 'TypeScript',
-    status: 'ready',
-    description: 'Framework-agnostic data layer — typed query DSL, Zod validation, JWT client, permissions'
-  },
-  {
-    id: 'react-rest',
-    language: 'TypeScript',
-    status: 'ready',
-    description: 'React data layer (extends ts-core) — TanStack Query hooks, typed filters, auth'
   }
 ];
 
-const title = 'Bridges — DomainCraft';
+const title = 'Code generator bridges — DomainCraft axes & layers';
 const description =
-  'The pluggable template packs that translate your domain into a target language. See what is available and how to add your own.';
+  'Code generator bridges: per-language cores and role layers that compose C#, TypeScript and beyond from one domain. See what is available and how to add your own.';
 ---
 
 <Layout lang="en" title={title} description={description} messages={messages} alternatePath="/ru/bridges" alternateLabel="Русский">
   <PageHero
     title="Bridges"
-    lede="Each bridge is a pluggable template pack. The core never knows a language — it ships the IR and constrains nothing."
+    lede="Each bridge is one layer in one axis: a thin certified core plus role layers on top. `extends` builds the chain, `--replace` swaps a layer — no forks, no N×M repositories."
   />
 
   <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -67,9 +79,10 @@ const description =
     </div>
 
     <p class="mt-5 text-sm text-muted-foreground">
-      Planned: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">java-spring</code> (Spring Boot) and{' '}
+      Planned: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">csharp-dapper</code> (persistence),
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">csharp-grpc</code> (transport) and{' '}
       <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">vue-rest</code> /{' '}
-      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">svelte-rest</code> (thin adapters over ts-core).
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">svelte-rest</code> (thin adapters over ts-client).
     </p>
 
     <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
@@ -80,13 +93,16 @@ const description =
           <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">~/.domaincraft/bridges/</code>.
         </p>
         <pre class="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-4 font-mono text-[13px] leading-relaxed">{`# By registry ID
-domaincraft generate --domain domain.yaml --bridge csharp-restful
+domaincraft generate --domain domain.yaml --bridge csharp-rest
 
 # By local path
-domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp
+domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp-rest
+
+# Swap one layer (Dapper persistence instead of EF Core)
+domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper
 
 # With an admin panel (default admin-alpine)
-domaincraft generate --domain domain.yaml --bridge csharp-restful --admin`}</pre>
+domaincraft generate --domain domain.yaml --bridge csharp-rest --admin`}</pre>
       </div>
       <div>
         <h2 class="text-lg font-semibold">Add your own</h2>

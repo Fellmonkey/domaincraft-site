@@ -8,46 +8,58 @@ const messages = getMessages('ru');
 
 const bridges = [
   {
-    id: 'csharp-restful',
+    id: 'csharp-rest',
     language: 'C#',
     status: 'ready',
-    description: 'ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture'
+    description: 'ASP.NET Core + EF Core + PostgreSQL + JWT + Clean Architecture (core → domain → efcore → rest)'
+  },
+  {
+    id: 'csharp-core',
+    language: 'C#',
+    status: 'ready',
+    description: 'Тонкое языковое ядро — wire-значения enum, типы сущностей, схема запросов'
+  },
+  {
+    id: 'ts-core',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Тонкое языковое ядро — типизированный DSL запросов, права, wire-значения'
+  },
+  {
+    id: 'ts-client',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'Zod-валидация, JWT fetch-клиент, CRUD по сущностям (extends ts-core)'
+  },
+  {
+    id: 'react-rest',
+    language: 'TypeScript',
+    status: 'ready',
+    description: 'React-клей (extends ts-client) — хуки TanStack Query, типизированные фильтры, auth'
   },
   {
     id: 'admin-alpine',
     language: 'HTML',
     status: 'ready',
-    description: 'Админ-панель на Alpine.js + 0build UIkit'
+    description: 'Админ-панель на Alpine.js + 0build UIkit — CRUD для любого REST-бэкенда'
   },
   {
     id: 'appwrite',
     language: 'JSON',
     status: 'ready',
     description: 'Схема Appwrite: TablesDB + команды ролей + настройки, деплой через Appwrite CLI'
-  },
-  {
-    id: 'ts-core',
-    language: 'TypeScript',
-    status: 'ready',
-    description: 'Фреймворк-агностичный слой данных — типизированный DSL запросов, Zod-валидация, JWT-клиент, права'
-  },
-  {
-    id: 'react-rest',
-    language: 'TypeScript',
-    status: 'ready',
-    description: 'Слой данных для React (extends ts-core) — хуки TanStack Query, типизированные фильтры, auth'
   }
 ];
 
-const title = 'Мосты — DomainCraft';
+const title = 'Мосты генератора кода — DomainCraft: оси и слои';
 const description =
-  'Подключаемые темплейт-паки, которые переводят ваш домен на целевой язык. Что доступно и как добавить свой.';
+  'Мосты генератора кода: пер-языковые ядра и ролевые слои, которые собирают C#, TypeScript и другие языки из одного домена. Что доступно и как добавить свой.';
 ---
 
 <Layout lang="ru" title={title} description={description} messages={messages} alternatePath="/bridges" alternateLabel="English">
   <PageHero
     title="Мосты"
-    lede="Каждый мост — это подключаемый набор шаблонов. Ядро не знает ни одного языка — оно отдаёт IR и ничем вас не ограничивает."
+    lede="Каждый мост — это один слой в одной оси: тонкое сертифицированное ядро плюс ролевые слои поверх. `extends` собирает цепочку, `--replace` меняет слой — без форков и N×M репозиториев."
   />
 
   <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -67,9 +79,10 @@ const description =
     </div>
 
     <p class="mt-5 text-sm text-muted-foreground">
-      В планах: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">java-spring</code> (Spring Boot) и{' '}
+      В планах: <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">csharp-dapper</code> (persistence),
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">csharp-grpc</code> (transport) и{' '}
       <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">vue-rest</code> /{' '}
-      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">svelte-rest</code> (тонкие адаптеры поверх ts-core).
+      <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">svelte-rest</code> (тонкие адаптеры поверх ts-client).
     </p>
 
     <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
@@ -80,13 +93,16 @@ const description =
           <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">~/.domaincraft/bridges/</code>.
         </p>
         <pre class="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-4 font-mono text-[13px] leading-relaxed">{`# По ID моста
-domaincraft generate --domain domain.yaml --bridge csharp-restful
+domaincraft generate --domain domain.yaml --bridge csharp-rest
 
 # По локальному пути
-domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp
+domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp-rest
+
+# Поменять один слой (Dapper-персистенция вместо EF Core)
+domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper
 
 # С админ-панелью (по умолчанию admin-alpine)
-domaincraft generate --domain domain.yaml --bridge csharp-restful --admin`}</pre>
+domaincraft generate --domain domain.yaml --bridge csharp-rest --admin`}</pre>
       </div>
       <div>
         <h2 class="text-lg font-semibold">Добавить свой</h2>

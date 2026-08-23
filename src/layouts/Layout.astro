@@ -66,6 +66,18 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'DomainCraft',
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Windows, macOS, Linux',
+      description,
+      url: canonical,
+      image: ogImage,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      author: { '@type': 'Organization', name: 'DomainCraft' }
+    })} />
     <script is:inline set:html={themeInit}></script>
     <title>{title}</title>
   </head>
