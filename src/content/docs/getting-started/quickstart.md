@@ -3,7 +3,7 @@ title: Quick start
 description: Install DomainCraft, define your domain in domain.yaml and generate production-ready code in minutes.
 section: getting-started
 order: 1
-updated: "2026-08-22"
+updated: "2026-08-23"
 ---
 
 DomainCraft compiles one `domain.yaml` into every layer of your product. The same model produces the API, its typed clients and the admin panel. There's no boilerplate to keep in sync and no drift between layers.
@@ -64,7 +64,7 @@ domaincraft validate --domain domain.yaml
 ## 4. Generate your backend
 
 ```bash
-# C# API — the same output as the archived csharp-restful (core → efcore → rest)
+# C# API — core → domain → efcore → rest
 domaincraft generate --domain domain.yaml --bridge csharp-rest
 cd generated && dotnet run --project src/WebApi
 ```
@@ -82,6 +82,6 @@ domaincraft generate --domain domain.yaml --bridge ts-core
 domaincraft generate --domain domain.yaml --bridge react-rest   # ts-core + TanStack Query
 ```
 
-Why this matters: types, validation, `path:op:value` queries, enum wire values, errors and permissions are all compiled from the same IR. Rename a field in `domain.yaml` and the API, the client and the admin panel update together — in one run, with no hidden runtime.
+Why this matters: types, validation, `path:op:value` queries, enum wire values, errors and permissions are all compiled from the same IR. Rename a field in `domain.yaml` and the API, the client and the admin panel update together — in one run.
 
-Next: **First project** (relations + features), then **TypeScript client**.
+Next: [First project](../first-project/) (relations + features), then the [TypeScript client](../../guides/typescript-client/).

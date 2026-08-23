@@ -3,7 +3,7 @@ title: CLI reference
 description: Every domaincraft command and flag — generate, validate, bridges, and their options.
 section: reference
 order: 2
-updated: "2026-08-22"
+updated: "2026-08-23"
 ---
 
 ## Commands
@@ -36,7 +36,7 @@ updated: "2026-08-22"
 | `--prune` | Remove/rename orphaned files, rewrite identifiers in custom files, and run the bridge's migrations (best-effort) when the schema changed — without prompting (CI-friendly). |
 | `--migrate` | Run the bridge's `migrations:` commands (`dotnet ef ...`) against a real database after generation. |
 
-`--replace` keeps thousands of bridges as thousands of repos, not `N×M` combinatorial repos. Each new `persistence` or `transport` is one repo, a combination is a flag.
+`-`--replace` keeps `N×M` combinations shippable as `N+M` repositories: each new `persistence` or `transport` layer is one repo, a combination is a flag.
 
 ## `bridges` flags
 

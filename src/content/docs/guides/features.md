@@ -2,7 +2,7 @@
 title: Entity features
 description: Audit, soft delete and optimistic locking — declarative behaviour macros that inject fields and generated logic.
 section: guides
-order: 2
+order: 3
 updated: "2026-08-03"
 ---
 
@@ -37,7 +37,7 @@ Adds `version: int`. It increments on every update; a stale write gets `409 Conf
 
 ## `event_sourced`
 
-The entity publishes domain events (`OrderCreated`, `OrderUpdated`, `OrderDeleted`) through the `IEventPublisher` interface. In the base monolith these are logged by `InMemoryEventPublisher`; with the Dapr addon (`--addons dapr`) they are published to a broker by `DaprEventPublisher`. This is a business feature — it knows nothing about concrete infrastructure.
+The entity publishes domain events (`OrderCreated`, `OrderUpdated`, `OrderDeleted`) through the `IEventPublisher` interface. Without an addon the persistence layer generates `InMemoryEventPublisher`; with the Dapr addon (`--addons dapr`) events go to a broker via `DaprEventPublisher`. This is a business feature — it knows nothing about concrete infrastructure.
 
 ## `cacheable`
 

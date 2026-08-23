@@ -46,7 +46,7 @@ Then you run a single command:
 domaincraft generate
 ```
 
-And you get a **complete source-code project**: the data model and database migrations, a REST API, JWT authentication, permission checks, Docker configuration, tests. Today, that's C#/ASP.NET Core with PostgreSQL. The core isn't tied to any language: other languages plug in as "bridges" — template packages written without touching the core.
+And you get a **complete source-code project**: the data model and database migrations, a REST API, JWT authentication, permission checks, Docker configuration, tests. Today that's a C#/ASP.NET Core backend with PostgreSQL plus a typed TypeScript client (React hooks included). The core isn't tied to any language: other languages plug in as "bridges" — template packages written without touching the core.
 
 The key word here is **source code**. You can read it, compile it, run it on your own infrastructure, hand it to a client, and keep developing it by hand even if DomainCraft disappears tomorrow. The generator doesn't own your project — it creates it and steps away.
 
@@ -120,7 +120,7 @@ An honest answer to "who is it for" is impossible without the flip side.
 
 **You don't need DomainCraft if** you're building an MVP and want an API in one minute without compiling anything — PocketBase or Supabase are faster. If you're a frontend developer who doesn't want to know how the backend works at all — a BaaS removes that question. If you only need an admin panel on top of an existing database — Appsmith or Retool will solve it in an evening.
 
-**You don't need DomainCraft yet if** you work outside C#/.NET: today there's one ready bridge (csharp-restful); the Java and TypeScript bridges are announced but not shipped. The ecosystem is young, and that's worth factoring into your choice.
+**You don't need DomainCraft yet if** you work outside C#/.NET and TypeScript: the shipped bridges are the C# backend (`csharp-rest`) and the TypeScript frontend family (`ts-core` → `ts-client` → `react-rest`); Go, Java and Python are planned. The ecosystem is growing, and that's worth factoring into your choice.
 
 **You don't need DomainCraft if** you're not comfortable with YAML and compiling a generated project. It's a tool for developers: it removes the drudgery, but it doesn't remove the need to understand your stack.
 

@@ -2,7 +2,7 @@
 title: Writing a bridge
 description: Bridge anatomy — bridge.yaml, layer, extends, replacement, type_mappings, templates and helpers.
 section: guides
-order: 6
+order: 9
 updated: "2026-08-22"
 ---
 
@@ -12,10 +12,10 @@ A bridge is a directory of `text/template` files plus a `bridge.yaml` manifest. 
 
 ```yaml
 name: csharp-efcore
-description: EF Core persistence (extends csharp-core)
+description: EF Core persistence (extends csharp-domain)
 version: "1.0.0"
-layer: persistence          # open ^[a-z][a-z0-9_]*$ — convention per family (domain|persistence|transport for C#, core|framework|offline for web/mobile)
-extends: csharp-core        # optional base — path, registry ID or owner/repo (linear chain)
+layer: persistence          # open ^[a-z][a-z0-9_]*$ — convention: core|domain|persistence|transport for C#, core|client|framework|offline for web/mobile
+extends: csharp-domain      # optional base — path, registry ID or owner/repo (linear chain)
 
 output_dir: generated
 helpers: templates/_helpers.cs.tmpl
@@ -48,10 +48,9 @@ domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
 
 Base `templates`/`helpers`/`type_mappings.yaml` render first, adapter wins — full details in **[Axes and layers](../../concepts/three-axes)**. Example:
 
-```yaml
-name: react-rest
-layer: framework
-extends: ts-core
+```yamlname: react-rest
+ layer: framework
+ extends: ts-client
 ```
 
 ## Templates

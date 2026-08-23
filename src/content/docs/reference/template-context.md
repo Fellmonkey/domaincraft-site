@@ -23,7 +23,7 @@ Bridge templates receive a `RenderContext`:
 - `IREntity.SearchableFields()` — scalar text columns eligible for free-text `search`.
 - `IREntity.SortableFields()` — scalar columns a list endpoint may order by (`field` / `-field`).
 - `IREntity.FilterableFields()` — scalar columns filterable by value; each field exposes `IRField.FilterOperators()` (the operators its type supports).
-- `IREntity.FilterablePaths()` — the full filter path schema for a bridge's runtime validator: scalar fields, one-hop to-one relation paths (`category.name`) and JSON roots (`meta`, open-ended keys), each with its allowed operators. The core emits the *schema*; the bridge parses and validates the `path:op:value` strings at runtime (see `spec/query.md` for the grammar).
+- `IREntity.FilterablePaths()` — the full filter path schema for a bridge's runtime validator: scalar fields, one-hop to-one relation paths (`category.name`) and JSON roots (`meta`, open-ended keys), each with its allowed operators. The core emits the *schema*; the bridge parses and validates the `path:op:value` strings at runtime (see the [Query language](../query/) reference for the grammar).
 - `IRProject.AllFilterOperators()` — the fixed filter-operator vocabulary (`eq | ne | gt | gte | lt | lte | in | contains | startsWith | endsWith`) in deterministic order; iterate it to generate a bridge's runtime operator enum (member names via `pascalcase`) instead of hand-writing a parallel list.
 - `IREntity.EagerLoadRelations()` — the relations to eager-load on a full-graph fetch; each relation exposes `IRRelation.EagerLoadNavigation()` for the property to Include (collection for `[many]`, navigation for single FKs; casing is applied by the bridge). List endpoints accept `?include=` (comma-separated relation field names) to restrict which `[many]` collections are loaded.
 - `IREntity.CursorField()` — the keyset-pagination cursor: the primary key when it is a monotonic integer (`int`/`bigint`), nil otherwise. A bridge renders `?cursor=` keyset paging only for entities where this is non-nil (others fall back to offset).
@@ -40,7 +40,7 @@ Key `IRField` fields: name, databaseType, navigationName, isPrimary, isNullable,
 
 ## Validation rules & errors
 
-`IRField.ValidationRules()` returns normalized, ordered `IRValidationRule`s (see `spec/errors.md` for the full contract):
+`IRField.ValidationRules()` returns normalized, ordered `IRValidationRule`s:
 
 - `.Kind` — semantic kind (`required`, `email`, `url`, `ipv4`, `regex`, `min_length`, `max_length`, `min_value`, `max_value`).
 - `.Code` — stable wire code (`REQUIRED`, `EMAIL`, `URL`, `IPV4`, `REGEX`, `MIN_LENGTH`, `MAX_LENGTH`, `MIN_VALUE`, `MAX_VALUE`).
@@ -50,13 +50,13 @@ Key `IRField` fields: name, databaseType, navigationName, isPrimary, isNullable,
 
 Bridges map each rule to their framework's validator: DataAnnotations uses `.Message` for `ErrorMessage`; FluentValidation/class-validator use `.Code` (`.WithErrorCode`) + `.Message`.
 
-Non-validation operation errors use a stable `{code, message}` envelope (`INVALID_FILTER`, `INVALID_PATCH`, `CONCURRENCY_CONFLICT`); validation failures use the framework's native validation response (see `spec/errors.md`).
+Non-validation operation errors use a stable `{code, message}` envelope (`INVALID_FILTER`, `INVALID_PATCH`, `CONCURRENCY_CONFLICT`); validation failures use the framework's native validation response.
 
 ## Core template functions
 
 - String transforms: `pluralize`, `pascalcase`, `camelcase`, `lowercase`, `uppercase`, `humanize`.
 - `jsonValue`, `fkName`, `seedKind`.
-- IR helpers: `IREntity.PrimaryKey()`, `IREntity.FieldByName(name)`, `IREntity.AllIndexes()`, `IREntity.Endpoints()`, `IREntity.PermissionPlan(op)`, `IREntity.TableName()`, `IREntity.SearchableFields()`, `IREntity.SortableFields()`, `IREntity.FilterableFields()`, `IREntity.QuerySchema()`, `IREntity.FilterablePaths()`, `IREntity.EagerLoadRelations()`, `IRRelation.EagerLoadNavigation()`, `IRRelation.ForeignKeyColumnName()`, `IRField.ColumnName()`, `IRField.FilterOperators()`, `IRField.IsUuid()`, `IRField.IsText()`, `IRField.IsString()`, `IRField.IsTextOnly()`, `IRField.IsInteger()`, `IRField.IsBigInt()`, `IRField.IsFloat()`, `IRField.IsDecimal()`, `IRField.IsBoolean()`, `IRField.IsDate()`, `IRField.IsDateTime()`, `IRField.IsJson()`, `IRField.IsJsonB()`, `IRProject.AuthEntity()`, `IRProject.AuthEndpoints()`, `IRProject.EnumValues(name)` (→ `[]IREnumValue{ Name, WireValue, Ordinal }`), `IRProject.AllFilterOperators()` (→ the canonical operator vocabulary), `IRIndex.DatabaseName()`, `IREndpoint.AuthPolicy()`, `IRPermissions.HasOwnerToken()`, `IRPermissions.IsPublic(op)`, `SeedValue.Kind()`, `SeedValue.ElementType()`.
+- IR helpers not covered above: `IREntity.PrimaryKey()`, `IREntity.TableName()`, `IREntity.FieldByName(name)`, `IREntity.AllIndexes()`, `IREntity.Endpoints()`, `IREntity.PermissionPlan(op)`, `IREntity.SearchableFields()`, `IREntity.SortableFields()`, `IREntity.FilterableFields()`, `IRRelation.EagerLoadNavigation()`, `IRRelation.ForeignKeyColumnName()`, `IRField.ColumnName()`, `IRField.FilterOperators()`, `IRProject.AuthEntity()`, `IRProject.AuthEndpoints()`, `IRProject.EnumValues(name)` (→ `[]IREnumValue{ Name, WireValue, Ordinal }`), `IRIndex.DatabaseName()`, `IREndpoint.AuthPolicy()`, `IRPermissions.HasOwnerToken()`, `IRPermissions.IsPublic(op)`, `SeedValue.Kind()`, `SeedValue.ElementType()`.
 - The `templatefuncs` set (`internal/templatefuncs`, stdlib-backed): `add`, `any`, `append`, `atoi`, `base`, `contains`, `default`, `dict`, `hasPrefix`, `join`, `kindIs`, `kindOf`, `list`, `lower`, `now`, `set`, `splitList`, `title`, `toString`, `upper`, plus the textutil-backed `pluralize`, `pascalcase`, `camelcase`, `lowercase`, `uppercase`, `humanize`, `fkName`, `snakecase`, `kebabcase`.
 
 > **Column/table/enum-wire/index names are core-owned.** Print `IREntity.TableName()`, `IRField.DatabaseColumnName` / `IRField.ColumnName()`, `IRRelation.ForeignKeyColumnName()`, `IREnumValue.WireValue` and `IRIndex.DatabaseName()` — never re-derive them with the template `snakecase`, which diverges from `textutil.ToDatabaseColumnName` on acronyms (e.g. `IPv4Address`).

@@ -2,8 +2,8 @@
 title: Permissions (RBAC + ABAC)
 description: Row-level security via permissions blocks — global roles, public access and the @Owner token.
 section: guides
-order: 3
-updated: "2026-08-03"
+order: 2
+updated: "2026-08-23"
 ---
 
 The `permissions` block declares fine-grained access for each entity. It is one of the biggest time-savers in the tool — the generator emits the policy checks for you.
@@ -23,7 +23,7 @@ Each of `read`, `create`, `update`, `delete` is a list of directives:
 - **RBAC (global roles)** — a role name such as `Admin` or `Manager`. Generates a role-claim check in the token.
 - **ABAC owner** — `update: ["@Owner"]`. The core looks up the relation between the entity and the users table (e.g. `userId`, `authorId`) and generates: "only the user whose ID matches the foreign key in this row may edit it."
 
-> **`@Tenant`** (row isolation per organization) is **in the spec but not implemented** — the core validates any `@...` token as an ownership-style token, but no bridge interprets it yet. Do not rely on it for generated code.
+> **`@Tenant`** (row isolation per organization) is **in the spec but not implemented** — no ready bridge interprets it, so don't rely on it in generated code. See [Roadmap](../../concepts/roadmap/).
 
 ## Rules
 

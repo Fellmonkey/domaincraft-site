@@ -3,7 +3,7 @@ title: Authentication
 description: Configure JWT authentication — the auth block, the auth entity, roles and the login/register/me/setup endpoints.
 section: guides
 order: 1
-updated: "2026-08-22"
+updated: "2026-08-23"
 ---
 
 Authentication is configured as a nested `auth:` block in `domain.yaml`:
@@ -83,7 +83,4 @@ Role names are validated against the permission cross-checks during `validate`.
 
 ## Planned
 
-- `auth.type: cookie` — HTTP-only cookie auth instead of bearer tokens.
-- `auth.type: oauth2` — OAuth2 providers (Google, GitHub, ...).
-
-Both are described in the spec but not yet implemented.
+Spec'd but not implemented: `auth.type: cookie` and `oauth2` — see [Roadmap](../../concepts/roadmap/).

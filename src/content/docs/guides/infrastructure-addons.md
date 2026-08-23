@@ -2,7 +2,7 @@
 title: Infrastructure & addons
 description: Declare infrastructure in domain.yaml and toggle the Dapr addon — events, caching, email and storage ports.
 section: guides
-order: 7
+order: 6
 updated: "2026-08-03"
 ---
 

@@ -3,7 +3,7 @@ title: domain.yaml reference
 description: Complete reference of the domain.yaml language — project scope, data types, fields, relations, features, permissions, indexes and seed data.
 section: reference
 order: 1
-updated: "2026-08-03"
+updated: "2026-08-23"
 ---
 
 `domain.yaml` is the single source of truth for the domain model. This is the exhaustive specification of the language.
@@ -18,6 +18,11 @@ Global settings in the YAML root:
 - `project.infrastructure` — declarative infrastructure (see the Infrastructure guide).
 - `auth` — authorization mode: `jwt` or `none` (see the Authentication guide).
 - `project.multi_tenancy` — SaaS mode, e.g. `mode: column`. The core validates the mode; **bridges decide whether to implement it** — the ready C# bridges currently do not generate tenant isolation, so declare `tenantId` explicitly if you need it (the compliance suite does).
+- `project.deploy` — host + port for local/Docker runs, e.g. `domain: localhost`, `port: 9000`. The generated `docker-compose.yml` and k8s manifests map this port.
+- `project.pagination` — list-endpoint defaults, e.g. `default_page_size: 20`, `max_page_size: 200`. Compiled into the client as `PAGINATION` so a UI can clamp/prefill instead of hard-coding.
+- `project.versioning` — API versioning, e.g. `enabled: true`, `default_version: 1.0`.
+- `project.rate_limit` — API rate limiting, e.g. `enabled: true`, `policy: fixed`, `permit_limit`, `window_seconds` (the compliance suite exercises the generated `429`).
+- `project.cache` — cache configuration; used together with the `cacheable` entity feature.
 
 ## Data types
 
@@ -42,6 +47,7 @@ Base traits:
 - `hidden` — excluded from API responses.
 - `readonly` — in responses, excluded from create/update/patch (server-owned).
 - `required` — NOT NULL in the database.
+- `old_name` — rename hint (entity or field): the migration engine emits `RenameTable`/`RenameColumn` and `--prune` rewrites identifiers in custom files (see the Migrations guide).
 
 String validations: `min:X`, `max:X`, `email`, `url`, `ipv4`, `regex:"^[A-Z]+$"`.
 
@@ -118,5 +124,4 @@ Document:
 
 ## Planned
 
-- `@Tenant` token — ABAC data isolation. In the spec, but **not implemented**: the core validates any `@...` token as an ownership-style token, but no ready bridge interprets it yet.
-- Custom permission conditions (`condition(...)`) — described in the spec, **not** implemented.
+Spec'd but not implemented: `@Tenant`, custom permission conditions (`condition(...)`), `auth.type: cookie`/`oauth2` — see [Roadmap](../../concepts/roadmap/). Unknown permission keys remain a parse error.

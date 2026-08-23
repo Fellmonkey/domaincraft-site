@@ -3,7 +3,7 @@ title: Architecture
 description: The compiler pipeline and how axes, layers and replacement render deterministically from one IR.
 section: concepts
 order: 2
-updated: "2026-08-22"
+updated: "2026-08-23"
 ---
 
 ```
@@ -25,7 +25,7 @@ Parallel paths: **WASM validator** (`cmd/wasm-validator`) — the same parser an
 
 ## How composition works
 
-Bridges compose via `extends` + `layer` + `--replace` — see **[Axes and layers](./three-axes)** for the full model. In short: `extends` builds a linear chain, `layer` marks the position in the axis, and `--replace` swaps one edge. Merged base-first (`templates`/`helpers`/`type_mappings.yaml`, adapter wins), `output_dir`/`name` from the top adapter, `migrations:`/`registry_packages` — first `enabled` top-down. Deterministic (`sort.Strings`) and sibling-checkout aware for monorepo dev.
+Bridges compose via `extends` + `layer` + `--replace` — see **[Axes and layers](../three-axes)** for the full model. In short: `extends` builds a linear chain, `layer` marks the position in the axis, and `--replace` swaps one edge. Merged base-first (`templates`/`helpers`/`type_mappings.yaml`, adapter wins), `output_dir`/`name` from the top adapter, `migrations:`/`registry_packages` — first `enabled` top-down. Deterministic and sibling-checkout aware for monorepo dev.
 
 ## Language-agnostic core
 

@@ -3,37 +3,40 @@ title: The TypeScript client
 description: Generate a certified typed data layer and React glue — ts-core and react-rest, query DSL, TanStack Query hooks, JWT auth.
 section: guides
 order: 5
-updated: "2026-08-22"
+updated: "2026-08-23"
 ---
 
-DomainCraft does not stop at the backend. The `ts-core` bridge compiles the same `domain.yaml` into a framework-agnostic TypeScript data layer — types, Zod validation, a typed query DSL, a JWT client and the permission matrix. The `react-rest` adapter (`extends: ts-core`) adds TanStack Query hooks, auth hooks and a project scaffold. Because both are compiled from the same IR as the API, the client cannot drift from the server: rename a field in the model and both sides change in one run.
+DomainCraft does not stop at the backend. `ts-core` compiles the same `domain.yaml` into the shared TypeScript language contract — types, a typed query DSL and the permission matrix. On top of it `ts-client` adds Zod schemas, a JWT fetch client and per-entity CRUD, and the `react-rest` adapter (`extends: ts-client`) adds TanStack Query hooks, auth hooks and a project scaffold. Since every layer is compiled from the same IR as the API, the client cannot drift from the server: rename a field in the model and both sides change in one run.
 
 ## Generate
 
 ```bash
-# React app (composes ts-core automatically)
+# React app (composes ts-core → ts-client automatically)
 domaincraft generate --domain domain.yaml --bridge react-rest --output frontend
 
-# Data layer only (Vue/Svelte/solid authors: bind your own store to these functions)
+# Data layer without React (ts-core types/query/permissions + ts-client Zod/fetch/CRUD)
+domaincraft generate --domain domain.yaml --bridge ts-client --output frontend
+
+# Language core only (types, query DSL, permission matrix)
 domaincraft generate --domain domain.yaml --bridge ts-core --output frontend
 ```
 
 ```
 frontend/
 ├─ src/generated/          # regenerated on every run — never edit
-│  ├─ types.ts             # read DTOs, wire-value enums, ListResult
-│  ├─ schemas.ts           # Zod create/update/patch schemas (same rules the API enforces)
-│  ├─ query.ts             # typed filter/sort/search/include DSL + serializer
-│  ├─ client.ts            # fetch wrapper: JWT, 429 retry/backoff, typed ApiError
-│  ├─ api.ts               # per-entity CRUD functions + route constants
-│  ├─ permissions.ts       # ROLES matrix + can()
-│  ├─ hooks.ts             # TanStack Query hooks (react-rest)
-│  └─ auth.ts              # login/register/setup/me + useLogout/useCan (if auth enabled)
+│  ├─ types.ts             # read DTOs, wire-value enums, ListResult        (ts-core)
+│  ├─ query.ts             # typed filter/sort/search/include DSL           (ts-core)
+│  ├─ permissions.ts       # ROLES matrix + can()                           (ts-core)
+│  ├─ schemas.ts           # Zod create/update/patch schemas                (ts-client)
+│  ├─ client.ts            # fetch wrapper: JWT, 429 retry/backoff, ApiError (ts-client)
+│  ├─ api.ts               # per-entity CRUD functions + route constants   (ts-client)
+│  ├─ hooks.ts             # TanStack Query hooks                          (react-rest)
+│  └─ auth.ts              # login/register/setup/me + useLogout/useCan    (react-rest)
 ├─ src/index.ts            # barrel — your app imports everything from here
 └─ package.json, tsconfig.json
 ```
 
-Your code lives next to it (`src/App.tsx`, `src/pages/…`) and imports exclusively from `./index`. Note: the scaffold files themselves regenerate too — treat added dependencies carefully.
+Your code lives next to it (`src/App.tsx`, `src/pages/…`) and imports exclusively from `./index`. The scaffold files regenerate on every run — edits and added dependencies are overwritten.
 
 ## Read projections
 
@@ -65,7 +68,7 @@ const orders = await listOrders({
 });
 ```
 
-Every key and operator is type-checked against the model: `contains` on a number or an unknown field is a compile error, not a runtime 400. Keyset pagination (`cursor`) is available for entities whose primary key is `int`/`bigint`. `PAGINATION.defaultPageSize/maxPageSize` expose the model's list limits for UI controls.
+Every key and operator is type-checked against the model: `contains` on a number or an unknown field is a compile error, not a runtime 400. The full wire grammar (`path`/`op`/`value`, `json` vs `jsonb` operator sets, `search`) is in the [Query language](../../reference/query/) reference. Keyset pagination (`cursor`) is available for entities whose primary key is `int`/`bigint`. `PAGINATION.defaultPageSize/maxPageSize` expose the model's list limits for UI controls.
 
 ## Mutations with optimistic updates
 
@@ -101,7 +104,7 @@ const can = useCan();
 can("Order", "delete"); // permission matrix hint — the server remains authoritative
 ```
 
-Endpoints follow `auth.endpoints` in the model: disable `register` and the generated client simply has no `register()` function. Auth routes come from the same endpoint contract as the API.
+Endpoints follow `auth.endpoints` in the model — disable `register` and the generated client has no `register()` function, because routes come from the same endpoint contract as the API.
 
 ## Certification
 

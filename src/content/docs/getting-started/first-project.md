@@ -3,7 +3,7 @@ title: Your first project
 description: Build a small store with entities, relations, a permission matrix and auth, then generate the full backend.
 section: getting-started
 order: 2
-updated: "2026-08-22"
+updated: "2026-08-23"
 ---
 
 This guide builds a small store — `User`, `Product`, `Category` — to show relations, features, permissions and seed data in one model.
@@ -113,4 +113,4 @@ domaincraft generate --domain domain.yaml --bridge csharp-rest --admin
 
 `csharp-rest` (`core → efcore → rest`) is the current C# bridge — the monolith `csharp-restful` is archived and kept for compatibility. Passing `--admin` also scaffolds an admin panel. The generated project includes entity summaries under `docs/Entities/` and a `docs/ProjectSummary.md`.
 
-> **Next:** the same model compiles into a typed TypeScript client and React hooks — see **The TypeScript client** guide in this section.
+> **Next:** the same model compiles into a typed TypeScript client and React hooks — see the [TypeScript client](../../guides/typescript-client/) guide.

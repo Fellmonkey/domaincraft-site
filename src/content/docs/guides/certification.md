@@ -2,11 +2,21 @@
 title: Bridge Certification (TCK)
 description: The compliance suite — a hand-written, language-agnostic test set that certifies a bridge implements the DomainCraft contract. kitchen-sink.yaml, suite.js and the certification.yml CI template.
 section: guides
-order: 8
+order: 10
 updated: "2026-08-22"
 ---
 
-DomainCraft ships a **compliance suite** (a Technology Compatibility Kit, or TCK) in the core repository at `DomainCraft/compliance-suite/`. It certifies that a bridge — any bridge, in any language — implements the DomainCraft contract correctly.
+DomainCraft ships a **three-level TCK pyramid**: one `k6` suite, one `per-language` TCK per thin `core`, and a compile-smoke for every adapter. The core repository at `DomainCraft/compliance-suite/` holds the top level.
+
+```
+                 k6 suite.js              ← HTTP oracle: one for all languages (certifies a server chain)
+                /
+per-language TCK                         ← language contract: certifies the thin core
+  (thin core)  /           \
+compile-smoke  interop.test              ← certifies layers above core (framework/client)
+```
+
+Every bridge — any language, any layer — is certified through this pyramid.
 
 ## Why an independent suite
 
@@ -38,7 +48,7 @@ The suite is maintained in the core, so every new check is automatically inherit
 # from DomainCraft/ (after `go build -o bin/domaincraft ./cmd/domaincraft`)
 ./bin/domaincraft generate \
   --domain compliance-suite/kitchen-sink.yaml \
-  --bridge ../domaincraft-bridge-csharp \
+  --bridge csharp-rest \
   --output /tmp/tck-app \
   --non-interactive
 cd /tmp/tck-app && docker compose up -d --build
@@ -53,19 +63,19 @@ k6 run -e API_URL=http://localhost:9000 ../DomainCraft/compliance-suite/suite.js
 - **Entity features** — soft delete, audit timestamps, optimistic-lock `409` on stale writes, `event_sourced` publishing, `cacheable` behavior.
 - **Data contract** — seed data round-trip (ids/skus), jsonb deep equality, versioning headers, `email`/`url` validator rejections, `429` rate limiting.
 
-## TypeScript bridges
+## Per-language TCK — where to write it
 
-The HTTP/k6 suite cannot certify TypeScript bridges: their value lives in
-**compile-time types** and **wire serialization**, not HTTP behavior. So the
-TypeScript family ships its own TCK in `domaincraft-bridge-ts/tck/`, certifying
-the shared `ts-core` contract once (same independence rule) — in three halves:
+The `k6` suite cannot certify a `core` — its value is **compile-time types** and **wire serialization**, not HTTP. Each language has one thin `core` (`csharp-core`, `ts-core`) and its own TCK in that bridge's `tck/` (the layers above the core certify themselves in the next bridge's `tck/`):
 
-| Half | Tool | Certifies |
-|------|------|-----------|
-| `type-contract.ts` | static (`tsc --noEmit`) | `Equal<A,B>` positives plus `@ts-expect-error` negatives: hidden/readonly/password exclusions, wire enum values, `T \| null` vs `T \| undefined`, per-type filter operators — including that ordered operators on a plain `json` column fail at compile time while `jsonb` accepts them |
-| `runtime.test.ts` | vitest, mocked fetch | exact `path:op:value` serialization (`json` and `jsonb` accessors), query params, model-derived constants (`PAGINATION`, searchable keys), the `can()` matrix, JWT header, the full `ApiError` taxonomy (409 unique vs concurrency, 429 retry/backoff), field-error mapping |
-| `interop.test.ts` | vitest against a live certified backend | round-trips: setup → login → CRUD, filter/sort/include restrict semantics, enum wire values, error mapping — proving the wire format is *accepted*, not just self-consistent |
+* **C# (`csharp-core` thin):** `domaincraft-bridge-csharp-core/tck/` — a hand-written xunit project that **compiles the generated sources** (the build itself is a contract check: a template emitting invalid C# fails `dotnet build`) and runs the wire + query contract (`dotnet test`): enum wire values and the JSON converter, entity type surface (`Guid`/`int`/`long`/`double`/`decimal`, `T?` vs required, collections), the `path:op:value` grammar, sort/LINQ translation, `ListQuery` + `PagedResult`. No database needed.
+* **TypeScript (`ts-core` thin):** `domaincraft-bridge-ts-core/tck/` — `type-contract.ts` (static `tsc --noEmit` with `Equal`/`@ts-expect-error`) + `runtime.test.ts` (vitest). It imports only `types`/`query`/`permissions` (what `ts-core` alone generates). The layer above the core is certified in `domaincraft-bridge-ts-client/tck/` — `type-contract-client.ts` + `runtime.client.test.ts` (vitest, mocked fetch) and `interop.test.ts`, which proves the wire is *accepted* by a live `k6`-certified backend.
+* **Dart / Kotlin (future):** copy `ts-core/tck/`, translate assertions, keep test vectors identical.
 
-Framework adapters (`react-rest`) are certified by this shared suite once plus a
-`tsc --noEmit` glue smoke: typechecking proves an adapter is *self-consistent*,
-the TCK proves it honors the *contract*.
+A `core` is certified **once per language**. Everything above it reuses that proof:
+
+| What you ship | How you certify it |
+|---|---|
+| New `persistence` (e.g. `csharp-dapper`) | `--replace persistence=my-bridge` + `k6 suite.js` |
+| New `transport` / `framework` (e.g. `csharp-grpc`, `vue-rest`) | `compile-smoke` (`tsc --noEmit` / `dart analyze` / `dotnet build`) + `interop` against a `k6`-certified backend |
+
+Framework adapters (`react-rest` → `ts-client` → `ts-core`) add only a smoke: typechecking proves they are *self-consistent*, the `per-language TCK` on the thin `core` proves they honor the *contract*.
