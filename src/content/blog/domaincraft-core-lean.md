@@ -3,6 +3,7 @@ title: "Lean Core: −34 Dependencies, −20% Binary"
 description: "We measured every dependency in the core and replaced almost all with the standard library: 40 modules became 6, the binary lost 20%, and the generated code didn't change a single byte."
 date: 2026-08-21
 lang: en
+tags: [core, engineering]
 ---
 
 *We asked ourselves a simple question: how much does each dependency weigh in the DomainCraft binary? The answer was so telling that we removed almost all of them.*

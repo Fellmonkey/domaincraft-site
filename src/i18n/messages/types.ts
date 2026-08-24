@@ -96,6 +96,21 @@ export interface AiMessages {
   stepDeployResult: string;
 }
 
+export interface AudienceCard {
+  title: string;
+  description: string;
+  bullets: string[];
+}
+
+export interface AudienceMessages {
+  eyebrow: string;
+  titleStart: string;
+  titleHighlight: string;
+  titleEnd: string;
+  subtitle: string;
+  cards: AudienceCard[];
+}
+
 export interface StudioMessages {
   eyebrow: string;
   titleStart: string;
@@ -155,6 +170,8 @@ export interface BlogMessages {
   toc: string;
   readingTime: string;
   backToPosts: string;
+  topics: string;
+  read: string;
 }
 
 export interface Messages {
@@ -167,6 +184,7 @@ export interface Messages {
   features: FeaturesMessages;
   ai: AiMessages;
   studio: StudioMessages;
+  audience: AudienceMessages;
   bridges: BridgesMessages;
   cta: CtaMessages;
   footer: FooterMessages;

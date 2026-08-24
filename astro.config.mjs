@@ -14,10 +14,13 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      // /studio и /ru/studio — полноэкранные iframe-страницы без индексируемого контента
+      // /studio и /ru/studio — полноэкранные iframe-страницы без индексируемого контента;
+      // /ru/404/ — страница «не найдено», не должна индексироваться (корневой /404/ GitHub Pages
+      // отдаёт спец-образом, и в sitemap он не попадает).
+      // sitemap передаёт полный URL: pathname включает `base`. Снимаем base перед сравнением.
       filter: (page) => {
-        const path = new URL(page).pathname;
-        return path !== '/studio/' && path !== '/ru/studio/';
+        const path = new URL(page).pathname.replace('/domaincraft-site', '');
+        return !['/studio/', '/ru/studio/', '/ru/404/'].includes(path);
       }
     })
   ],

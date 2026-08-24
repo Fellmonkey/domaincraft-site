@@ -1,5 +1,19 @@
 import GithubSlugger from 'github-slugger';
 
+/** Localized display names for blog topic tags (title case per language). */
+export const TAG_LABELS: Record<string, { en: string; ru: string }> = {
+  product: { en: 'Product', ru: 'Продукт' },
+  compiler: { en: 'Compiler', ru: 'Компилятор' },
+  bridges: { en: 'Bridges', ru: 'Мосты' },
+  architecture: { en: 'Architecture', ru: 'Архитектура' },
+  core: { en: 'Core', ru: 'Ядро' },
+  engineering: { en: 'Engineering', ru: 'Инженерия' }
+};
+
+export function tagLabel(tag: string, lang: 'en' | 'ru'): string {
+  return TAG_LABELS[tag]?.[lang] ?? tag;
+}
+
 export interface TocHeading {
   id: string;
   text: string;

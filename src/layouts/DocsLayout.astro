@@ -24,9 +24,10 @@ interface Props {
   sectionLabel: string;
   prev?: DocItem | null;
   next?: DocItem | null;
+  breadcrumb?: Array<{ name: string; url?: string }>;
 }
 
-const { lang, title, description, docsRoot, groups, currentSlug, sectionLabel, prev, next } = Astro.props;
+const { lang, title, description, docsRoot, groups, currentSlug, sectionLabel, prev, next, breadcrumb } = Astro.props;
 const messages = getMessages(lang);
 const editBase = 'https://github.com/DomainCraft/domaincraft-site/blob/main/src/content/docs';
 const root = withBase(docsRoot);
@@ -34,7 +35,7 @@ const alternatePath = lang === 'en' ? `/ru/docs/${currentSlug}` : `/docs/${curre
 const alternateLabel = lang === 'en' ? 'Русский' : 'English';
 ---
 
-<Layout lang={lang} title={title} description={description} messages={messages} alternatePath={alternatePath} alternateLabel={alternateLabel}>
+<Layout lang={lang} title={title} description={description} messages={messages} alternatePath={alternatePath} alternateLabel={alternateLabel} breadcrumb={breadcrumb}>
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)]">
     <nav class="docs-sidebar lg:sticky lg:top-20 lg:h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:self-start" aria-label="Documentation">
       <details class="rounded-lg border border-border bg-card lg:hidden">

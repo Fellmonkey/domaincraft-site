@@ -1,0 +1,57 @@
+---
+import type { AudienceMessages } from '../../i18n/messages/types';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  messages: AudienceMessages;
+}
+
+const { messages } = Astro.props;
+
+const anchors = ['for-backend', 'for-frontend', 'for-ai'];
+---
+
+<section id="audience" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6">
+  <SectionHeading
+    eyebrow={messages.eyebrow}
+    titleStart={messages.titleStart}
+    titleHighlight={messages.titleHighlight}
+    titleEnd={messages.titleEnd}
+    subtitle={messages.subtitle}
+  />
+
+  <div class="mt-14 grid gap-5 lg:grid-cols-3">
+    {
+      messages.cards.map((card, i) => (
+        <article
+          id={anchors[i % anchors.length]}
+          class="flex scroll-mt-24 flex-col gap-4 rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/40"
+        >
+          <h3 class="text-base font-semibold">{card.title}</h3>
+          <p class="text-sm text-muted-foreground">{card.description}</p>
+          <ul class="mt-auto space-y-2">
+            {card.bullets.map((bullet) => (
+              <li class="flex items-start gap-2 text-sm text-muted-foreground">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mt-0.5 shrink-0 text-primary"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>

@@ -3,6 +3,7 @@ title: "Who Is DomainCraft For"
 description: "An honest breakdown of what DomainCraft is, how it differs from Firebase, PocketBase, JHipster and Retool — and who actually needs it, who doesn't."
 date: 2026-08-10
 lang: en
+tags: [product]
 ---
 
 *An honest breakdown of what DomainCraft is, how it differs from Firebase, PocketBase, JHipster and Retool — and who actually needs it, who doesn't.*

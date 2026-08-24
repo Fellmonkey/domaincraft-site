@@ -3,6 +3,7 @@ title: "Для кого DomainCraft"
 description: "Честный разбор: что такое DomainCraft, чем он отличается от Firebase, PocketBase, JHipster и Retool — и кому он реально нужен, а кому нет."
 date: 2026-08-10
 lang: ru
+tags: [product]
 ---
 
 *Честный разбор: что это за инструмент, чем он отличается от Firebase, PocketBase, JHipster и Retool — и кому он реально нужен, а кому нет.*

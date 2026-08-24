@@ -20,7 +20,9 @@ const blog = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     lang: z.enum(['en', 'ru']),
-    updated: z.string().optional()
+    updated: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    ogImage: z.string().optional()
   })
 });
 

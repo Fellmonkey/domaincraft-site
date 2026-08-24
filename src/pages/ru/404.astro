@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getMessages } from '../../i18n';
+import { withBase } from '../../lib/paths';
+
+const lang = 'ru';
+const messages = getMessages(lang);
+
+const title = '404 — Страница не найдена · DomainCraft';
+const description =
+  'Страница, которую вы ищете, не существует. Вернитесь на главную DomainCraft — генератора кода и компилятора домена, который превращает один domain.yaml в полноценный продукт.';
+---
+
+<Layout
+  lang={lang}
+  title={title}
+  description={description}
+  messages={messages}
+  alternatePath="/404"
+  alternateLabel="English"
+>
+  <div class="mx-auto flex min-h-[60dvh] max-w-2xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6">
+    <p class="font-mono text-sm font-semibold uppercase tracking-widest text-primary">404</p>
+    <h1 class="mt-4 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">Такой страницы нет</h1>
+    <p class="mt-4 text-pretty text-lg text-muted-foreground">
+      Ссылка устарела или страница переехала. Модель же по-прежнему одна — domain.yaml.
+    </p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a
+        href={withBase('/ru/')}
+        class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+      >
+        На главную
+      </a>
+      <a
+        href={withBase('/ru/docs/getting-started/quickstart')}
+        class="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium transition-colors hover:border-primary/40 hover:text-foreground"
+      >
+        Прочитать быстрый старт
+      </a>
+    </div>
+  </div>
+</Layout>

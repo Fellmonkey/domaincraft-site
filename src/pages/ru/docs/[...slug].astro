@@ -39,6 +39,11 @@ const title = `${entry.data.title} · Документация — DomainCraft`;
   sectionLabel={sectionLabel(entry.data.section, lang)}
   prev={prev}
   next={next}
+  breadcrumb={[
+    { name: 'Главная', url: '/' },
+    { name: 'Документация', url: '/ru/docs/' },
+    { name: entry.data.title }
+  ]}
 >
   <Content />
 </DocsLayout>

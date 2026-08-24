@@ -3,6 +3,7 @@ title: "From Monolith to Axes and Layers: Why One Bridge Became a Stack"
 description: "How the 71-template monolith gave birth to the idea of axes and layers, why the C# bridge was split into four independent repositories, and what it means for DomainCraft's future."
 date: 2026-08-23
 lang: en
+tags: [bridges, architecture]
 ---
 
 *The story of one modernization: a 71-template monolith, the "one layer, one repository" idea, byte-identical output, and the math that turns N×M into N+M.*

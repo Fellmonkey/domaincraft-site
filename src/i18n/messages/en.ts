@@ -188,6 +188,47 @@ export const en: Messages = {
     bullets: ['Graph + code, two-way sync', 'Instant WASM validation', 'Shared role registry & permission matrix']
   },
 
+  audience: {
+    eyebrow: 'Who it is for',
+    titleStart: 'One model,',
+    titleHighlight: 'three jobs',
+    titleEnd: '.',
+    subtitle:
+      'DomainCraft serves everyone who touches the product — the API, the web client and the screens in between.',
+    cards: [
+      {
+        title: 'Backend developers',
+        description:
+          'A production ASP.NET Core + PostgreSQL API out of the box — JWT auth, migrations, permission checks. Business logic goes into Generation Gap hooks, never into generated files.',
+        bullets: [
+          'REST API with auth, roles and @Owner isolation',
+          'EF Core + PostgreSQL with database migrations',
+          'Hooks for business logic without touching generated code'
+        ]
+      },
+      {
+        title: 'Frontend developers',
+        description:
+          'A typed client compiled from the same model — types, queries and permissions that cannot drift from the API, because they are compiled from the same IR.',
+        bullets: [
+          'Types + Zod validation from one intermediate representation',
+          'Typed path:op:value query grammar',
+          'Framework-agnostic ts-core, React via react-rest'
+        ]
+      },
+      {
+        title: 'AI agents',
+        description:
+          'Screens are built against a certified client — permissions and query schema are already part of the types, so the agent writes UI instead of guessing about the API.',
+        bullets: [
+          'Per-bridge agent skills with UI recipes',
+          'Compile-time permission matrix',
+          'No guessing about the API contract'
+        ]
+      }
+    ]
+  },
+
   bridges: {
     eyebrow: 'Bridges',
     titleStart: 'One domain,',
@@ -258,7 +299,9 @@ export const en: Messages = {
   blog: {
     toc: 'On this page',
     readingTime: 'min read',
-    backToPosts: '← All posts'
+    backToPosts: '← All posts',
+    topics: 'Topics',
+    read: 'Read'
   },
 
   announcementBar: {

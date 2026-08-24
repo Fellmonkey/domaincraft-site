@@ -5,6 +5,7 @@ import TrustBar from './site/TrustBar.astro';
 import Problem from './site/Problem.astro';
 import HowItWorks from './site/HowItWorks.astro';
 import Features from './site/Features.astro';
+import Audience from './site/Audience.astro';
 import AISection from './site/AISection.astro';
 import StudioSection from './site/StudioSection.astro';
 import Bridges from './site/Bridges.astro';
@@ -23,6 +24,7 @@ const { lang, messages } = Astro.props;
 <Problem messages={messages.problem} />
 <HowItWorks messages={messages.howItWorks} />
 <Features messages={messages.features} />
+<Audience messages={messages.audience} />
 <AISection messages={messages.ai} />
 <StudioSection messages={messages.studio} />
 <Bridges lang={lang} messages={messages.bridges} />

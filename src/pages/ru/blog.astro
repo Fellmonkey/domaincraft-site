@@ -2,7 +2,9 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/blog/PostCard.astro';
 import { getMessages } from '../../i18n';
+import { tagLabel } from '../../lib/blog';
 import { withBase } from '../../lib/paths';
 
 const messages = getMessages('ru');
@@ -11,8 +13,10 @@ const posts = (await getCollection('blog'))
   .filter((p) => p.data.lang === 'ru')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const title = 'Блог — DomainCraft';
-const description = 'Истории, руководства и разборы от команды DomainCraft.';
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+
+const title = 'Блог — DomainCraft';  const description =
+    'Истории, руководства и разборы о генераторе кода и компиляторе домена DomainCraft — один domain.yaml в ASP.NET Core API, TypeScript-клиент и админку.';
 ---
 
 <Layout lang="ru" title={title} description={description} messages={messages} alternatePath="/blog" alternateLabel="English">
@@ -21,21 +25,39 @@ const description = 'Истории, руководства и разборы о
     lede="Истории, руководства и разборы — от генерации кода на основе домена до того, как устроены мосты."
   />
 
-  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+    {
+      allTags.length > 0 && (
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-sm font-medium text-muted-foreground">{messages.blog.topics}:</span>
+          {
+            allTags.map((tag) => (
+              <a
+                href={withBase(`/ru/blog/tag/${tag}/`)}
+                class="rounded-full border border-border bg-card px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+              >
+                {tagLabel(tag, 'ru')}
+              </a>
+            ))
+          }
+        </div>
+      )
+    }
+  </div>
+
+  <div class="mx-auto max-w-6xl px-4 py-4 pb-16 sm:px-6">
     <div class="grid gap-6 sm:grid-cols-2">
       {
         posts.map((post) => (
-          <a
-            href={withBase(`/ru/blog/${post.id.replace(/^ru\//, '')}/`)}
-            class="group flex flex-col gap-3 rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/40 hover:bg-muted/30"
-          >
-            <p class="font-mono text-xs text-muted-foreground">
-              {post.data.date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-            <h2 class="text-lg font-semibold group-hover:text-primary">{post.data.title}</h2>
-            <p class="text-sm text-muted-foreground">{post.data.description}</p>
-            <p class="mt-auto text-sm font-medium text-primary">Читать →</p>
-          </a>
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            href={`/ru/blog/${post.id.replace(/^ru\//, '')}/`}
+            tags={post.data.tags}
+            lang="ru"
+            readLabel={messages.blog.read}
+          />
         ))
       }
     </div>

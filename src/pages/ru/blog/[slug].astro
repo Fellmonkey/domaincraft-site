@@ -4,7 +4,7 @@ import Layout from '../../../layouts/Layout.astro';
 import Prose from '../../../components/Prose.astro';
 import ReadingProgress from '../../../components/blog/ReadingProgress';
 import BlogToc from '../../../components/blog/BlogToc';
-import { extractTocHeadings } from '../../../lib/blog';
+import { extractTocHeadings, tagLabel } from '../../../lib/blog';
 import { getMessages } from '../../../i18n';
 import { withBase } from '../../../lib/paths';
 
@@ -48,6 +48,7 @@ const tocHeadings = extractTocHeadings(entry.body ?? '');
   ogType="article"
   publishedTime={entry.data.date.toISOString()}
   modifiedTime={modifiedTime}
+  ogImage={entry.data.ogImage ?? `/og/${entry.id.replace(/\//g, '-')}.png`}
 >
   <ReadingProgress client:load />
 
@@ -71,6 +72,23 @@ const tocHeadings = extractTocHeadings(entry.body ?? '');
         </div>
 
         <div class="mt-12 border-t border-border pt-8">
+          {
+            entry.data.tags.length > 0 && (
+              <div class="mb-6 flex flex-wrap items-center gap-2">
+                <span class="text-sm font-medium text-muted-foreground">{messages.blog.topics}:</span>
+                {
+                  entry.data.tags.map((tag) => (
+                    <a
+                      href={withBase(`/ru/blog/tag/${tag}/`)}
+                      class="rounded-full border border-border bg-card px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+                    >
+                      {tagLabel(tag, 'ru')}
+                    </a>
+                  ))
+                }
+              </div>
+            )
+          }
           <a href={withBase('/ru/blog')} class="text-sm font-medium text-primary underline underline-offset-4 hover:underline-offset-8">
             {messages.blog.backToPosts}
           </a>
