@@ -1,6 +1,6 @@
 ---
 title: "Lean Core: −34 Dependencies, −20% Binary"
-description: "We measured every dependency in the core and replaced almost all with the standard library: 40 modules became 6, the binary lost 20%, and the generated code didn't change a single byte."
+description: "We measured every dependency in the DomainCraft core and replaced almost all with the standard library: 40 modules became 6, the binary lost 20%, and the compiled output didn't change a single byte."
 date: 2026-08-21
 lang: en
 tags: [core, engineering]
@@ -10,9 +10,15 @@ tags: [core, engineering]
 
 This article is not about theory — it's about measurements. Five commits of the core, five builds, a size table, a stopwatch. Everything is reproducible, everything is honest — including the places where there was no win.
 
+## Why a compiler should travel light
+
+DomainCraft is a domain compiler: one `domain.yaml` becomes an API, a typed client and an admin panel, through a real pipeline — lexer, parser, validator, IR, renderer. The whole point of compiling from a single model is that the contract cannot drift between layers. If the tool that enforces that contract itself drags in forty third-party modules, the promise gets weaker, not stronger: every transitive dependency is a place where an upgrade, a CVE or a breaking change can quietly break the one thing the tool exists to guarantee.
+
+A lean core is not a cosmetic goal. It is the same principle that makes the compiler trustworthy in the first place: as little surface as possible between the model and the code, so that what comes out is exactly what the model says. The fewer moving parts the compiler has of its own, the more of its behavior is auditable from the standard library alone.
+
 ## Where the task came from
 
-The DomainCraft core is a Go CLI code generator. At the start, it had **5 direct dependencies** and **40 modules** in `go.mod`. The question wasn't "how to write less code" but "which libraries can be replaced by the standard library, once you measure each one's real value".
+The DomainCraft core is a Go CLI that compiles a domain model into code. At the start, it had **5 direct dependencies** and **40 modules** in `go.mod`. The question wasn't "how to write less code" but "which libraries can be replaced by the standard library, once you measure each one's real value".
 
 The plan:
 
@@ -20,7 +26,7 @@ The plan:
 2. Remove `sprig` — the template library with 211 functions, of which the bridges actually called 22.
 3. Remove `huh` — the TUI prompt library with a tree of 28 modules — and write the prompts ourselves.
 
-Each step was measured: binary size, module count, speed. And each was verified with a byte-for-byte diff: after removing a library, the generated code had to stay exactly the same as before.
+Each step was measured: binary size, module count, speed. And each was verified with a byte-for-byte diff: after removing a library, the compiled output had to stay exactly the same as before — the contract the tool guarantees must not move while we trim the tool.
 
 ## Methodology
 
@@ -98,9 +104,9 @@ Conclusions:
 ## What it means
 
 - **Downloads.** The release binary is ~2.6 MB smaller. For a CLI tool installed via `go install` or from GitHub Releases, that's a real difference, especially on slow connections.
-- **Audit.** Less code — a smaller surface for vulnerabilities and less third-party code inside your tool. The core is now almost entirely the standard library.
-- **Maintenance.** Every dependency in `go.mod` is now justified: either it has no stdlib replacement (YAML, TUI, CLI), or it has been measured and found necessary.
-- **Regression risk** — zero: after each removal we regenerated all five bridges and compared the output byte for byte. 187 files of C#, TypeScript, React, admin panel and Appwrite — not a single differing byte.
+- **Audit.** Less code — a smaller surface for vulnerabilities and less third-party code inside your tool. The core is now almost entirely the standard library. For a compiler whose job is to be the single source of truth across an entire stack, that matters more than for a regular CLI: the trust in the output can only be as high as the trust in the tool that produces it.
+- **Maintenance.** Every dependency in `go.mod` is now justified: either it has no stdlib replacement (YAML, TUI, CLI), or it has been measured and found necessary. Nothing hides in the tree by accident.
+- **The compiler principle holds.** The whole exercise only works because DomainCraft is a compiler, not a template engine with a config file. A compiler has a defined pipeline and a fixed contract — remove a dependency, rerun the same `domain.yaml`, and the output must be byte-identical. That invariant is what let us cut aggressively without fear: when the contract is the spec, you can shrink the tool and watch the output stay still.
 
 All of this shipped in release **v0.6.0**.
 
