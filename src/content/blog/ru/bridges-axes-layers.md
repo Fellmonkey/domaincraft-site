@@ -24,7 +24,7 @@ DomainCraft — это компилятор доменной модели. Од�
 
 Мы поняли: язык — это вертикаль, но внутри неё есть горизонтальные уровни, которые почти не меняются от комбинации к комбинации. Любой C#-стек начинается с одного и того же тонкого ядра: сущности, enum-ы, схема запросов, права. Дальше вверх идут ролевые слои: домен (сервисы, порты), персистенция (EF Core или Dapper), транспорт (REST, gRPC).
 
-Так родились **оси и слои** — одна ось на независимое направление продукта, внутри оси — стек слоёв. Полное описание — в статье [Оси и слои](https://domaincraft.github.io/domaincraft-site/docs/concepts/three-axes/):
+Так родились **оси и слои** — одна ось на независимое направление продукта, внутри оси — стек слоёв. Полное описание — в статье [Оси и слои](https://fellmonkey.github.io/domaincraft-site/docs/concepts/three-axes/):
 
 ```
 бэкенд C#:      core → domain → persistence → transport
@@ -48,7 +48,7 @@ layer: persistence
 extends: csharp-domain
 ```
 
-Подмена одного слоя — это флаг в команде `generate` (см. [справку по CLI](https://domaincraft.github.io/domaincraft-site/docs/reference/cli/)):
+Подмена одного слоя — это флаг в команде `generate` (см. [справку по CLI](https://fellmonkey.github.io/domaincraft-site/docs/reference/cli/)):
 
 ```bash
 domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
@@ -61,12 +61,12 @@ domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
 
 Мы не запускали это вслепую: собрали новый стек из четырёх репозиториев и сравнили его вывод с монолитом на двух эталонных моделях — `compliance-suite/kitchen-sink.yaml` и `examples/domain.yaml`. Результат — **побитово идентично**: 187 файлов в kitchen-sink, 142 в example, ноль отличий. Монолит `csharp-restful` остался в истории как архив, а новые проекты рендерятся через четыре слоя.
 
-То же на фронтенде: тонкое ядро `ts-core` (типы, query, permissions) сертифицируется один раз, `ts-client` добавляет валидацию и fetch-клиент (Zod + JWT), а `react-rest` — буквально три шаблона клея на TanStack Query. Подробнее о том, как устроен каждый слой — в [списке мостов](https://domaincraft.github.io/domaincraft-site/docs/reference/bridges/).
+То же на фронтенде: тонкое ядро `ts-core` (типы, query, permissions) сертифицируется один раз, `ts-client` добавляет валидацию и fetch-клиент (Zod + JWT), а `react-rest` — буквально три шаблона клея на TanStack Query. Подробнее о том, как устроен каждый слой — в [списке мостов](https://fellmonkey.github.io/domaincraft-site/docs/reference/bridges/).
 
 ## Что это меняет для будущего
 
 - **Новые языки заходят быстрее.** Тонкое ядро — недорогой фундамент: вся линейка стеков языка растёт из одного маленького ядра, а не из 71 шаблона.
-- **Качество держится тестами.** У каждого тонкого ядра — свой TCK: рукописный контракт, который не повторяет ошибки моста. Об этом — [как устроена сертификация](https://domaincraft.github.io/domaincraft-site/docs/guides/certification/).
+- **Качество держится тестами.** У каждого тонкого ядра — свой TCK: рукописный контракт, который не повторяет ошибки моста. Об этом — [как устроена сертификация](https://fellmonkey.github.io/domaincraft-site/docs/guides/certification/).
 - **Сообществу открыт путь.** Добавить свой слой (персистенцию, транспорт, фреймворк) — это 2–3 шаблона и прогон тестов, а не написание стека с нуля.
 
 То, что начиналось с одного 71-шаблонного монолита, превратилось в архитектуру, которая готовит DomainCraft не к двум языкам, а к десяти — и к любой N×M комбинации внутри них.

@@ -59,7 +59,7 @@ const description =
 <Layout lang="en" title={title} description={description} messages={messages} alternatePath="/ru/bridges" alternateLabel="Русский">
   <PageHero
     title="Bridges"
-    lede="Each bridge is one layer in one axis: a thin certified core plus role layers on top. `extends` builds the chain, `--replace` swaps a layer — no forks, no N×M repositories."
+    lede="Each bridge is one layer in one axis: a thin certified core plus role layers on top. `extends` builds the chain, `--replace` swaps a layer — no forks; every layer is a bridge in the same repository."
   />
 
   <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -96,7 +96,7 @@ const description =
 domaincraft generate --domain domain.yaml --bridge csharp-rest
 
 # By local path
-domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp-rest
+domaincraft generate --domain domain.yaml --bridge csharp-rest
 
 # Swap one layer (Dapper persistence instead of EF Core)
 domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper

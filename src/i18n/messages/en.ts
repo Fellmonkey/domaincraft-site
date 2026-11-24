@@ -235,7 +235,7 @@ export const en: Messages = {
     titleHighlight: 'any stack',
     titleEnd: '.',
     subtitle:
-      'Each bridge is a pluggable template pack. The core never knows a language — it ships the IR and constrains nothing. Composition gives you 1 core + N thin adapters, not N×M bridges. Screens are built by AI agents against the typed client.',
+      'Each bridge is a pluggable template pack. The core never knows a language — it ships the IR and constrains nothing. Composition gives you 1 core + N thin adapters, all in one repository. Screens are built by AI agents against the typed client.',
     buildYourOwn: 'Build your own bridge',
     buildYourOwnDesc:
       'Bridges are plain templates and a manifest. No Go code required — add a language in an afternoon.',

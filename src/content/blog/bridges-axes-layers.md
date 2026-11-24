@@ -24,7 +24,7 @@ Do the math: 10 storage backends × 10 API transports = 100 bridges, each with 7
 
 We realized: language is a vertical, but inside it there are horizontal levels that barely change from one combination to the next. Every C# stack starts with the same thin core — entities, enums, query schema, permissions. Above it sit the role layers: domain (services, ports), persistence (EF Core or Dapper), transport (REST, gRPC).
 
-That's how **axes and layers** were born — one axis per independent product direction, with a stack of layers inside each axis. The full model is in the docs: [Axes and layers](https://domaincraft.github.io/domaincraft-site/docs/concepts/three-axes/).
+That's how **axes and layers** were born — one axis per independent product direction, with a stack of layers inside each axis. The full model is in the docs: [Axes and layers](https://fellmonkey.github.io/domaincraft-site/docs/concepts/three-axes/).
 
 ```
 C# backend:     core → domain → persistence → transport
@@ -48,7 +48,7 @@ layer: persistence
 extends: csharp-domain
 ```
 
-Swapping one layer is a flag on the `generate` command (see the [CLI reference](https://domaincraft.github.io/domaincraft-site/docs/reference/cli/)):
+Swapping one layer is a flag on the `generate` command (see the [CLI reference](https://fellmonkey.github.io/domaincraft-site/docs/reference/cli/)):
 
 ```bash
 domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
@@ -61,12 +61,12 @@ No forks. A new persistence backend or transport is a small separate repository,
 
 We didn't do it blind: we built the new four-layer stack and compared its output against the monolith on two reference models — `compliance-suite/kitchen-sink.yaml` and `examples/domain.yaml`. The result: **byte-identical** — 187 files in kitchen-sink, 142 in example, zero differences. The `csharp-restful` monolith stays in history as an archive; new projects render through the four layers.
 
-The frontend got the same treatment. The thin `ts-core` (types, query, permissions) is certified once; `ts-client` adds validation and the fetch client (Zod + JWT); `react-rest` is literally three templates of glue on TanStack Query. Details on each layer in the [bridges list](https://domaincraft.github.io/domaincraft-site/docs/reference/bridges/).
+The frontend got the same treatment. The thin `ts-core` (types, query, permissions) is certified once; `ts-client` adds validation and the fetch client (Zod + JWT); `react-rest` is literally three templates of glue on TanStack Query. Details on each layer in the [bridges list](https://fellmonkey.github.io/domaincraft-site/docs/reference/bridges/).
 
 ## What this changes for the future
 
 - **New languages get in faster.** A thin core is a cheap foundation: a whole language line of backends and frontends grows from one small core, not from 71 templates.
-- **Certification holds the line.** Each thin core has its own hand-written contract that cannot repeat the bridge's mistakes: the per-language TCK. More in the [certification guide](https://domaincraft.github.io/domaincraft-site/docs/guides/certification/).
+- **Certification holds the line.** Each thin core has its own hand-written contract that cannot repeat the bridge's mistakes: the per-language TCK. More in the [certification guide](https://fellmonkey.github.io/domaincraft-site/docs/guides/certification/).
 - **The community gets a path in.** Contributing a layer (persistence, transport, framework) is 2–3 templates and a test run — not writing a stack from scratch.
 
 What started as a single 71-template monolith has become an architecture that prepares DomainCraft not for two languages but for ten — and for any N×M combination inside them.

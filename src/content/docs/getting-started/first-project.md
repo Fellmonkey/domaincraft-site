@@ -111,6 +111,6 @@ Seed rows are inserted on first run:
 domaincraft generate --domain domain.yaml --bridge csharp-rest --admin
 ```
 
-`csharp-rest` (`core → efcore → rest`) is the current C# bridge — the monolith `csharp-restful` is archived and kept for compatibility. Passing `--admin` also scaffolds an admin panel. The generated project includes entity summaries under `docs/Entities/` and a `docs/ProjectSummary.md`.
+`csharp-rest` (`core → domain → efcore → rest`) is the current C# bridge — the monolith `csharp-restful` is archived and kept for compatibility. Passing `--admin` also scaffolds an admin panel. The generated project includes entity summaries under `docs/Entities/` and a `docs/ProjectSummary.md`.
 
 > **Next:** the same model compiles into a typed TypeScript client and React hooks — see the [TypeScript client](../../guides/typescript-client/) guide.

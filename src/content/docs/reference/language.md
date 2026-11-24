@@ -53,13 +53,13 @@ String validations: `min:X`, `max:X`, `email`, `url`, `ipv4`, `regex:"^[A-Z]+$"`
 
 Numeric validations: `gte:0`, `lt:100`, and similar comparisons.
 
-Defaults: `default:false`, `default:"Unknown"`, `default:now()` (database-level).
+Defaults: `default:false`, `default:"Unknown"`, `default:now()` and `default:uuid()` (function defaults; the core supports `now` on date/datetime and `uuid` on uuid fields).
 
 ## Relations
 
 - **Many-to-One / One-to-Many** — written on the child: `userId: relation(User)`. Creates an `Orders[]` list on `User`.
 - **One-to-One** — a `[unique]` relation: `profileId: relation(Profile) [unique]`.
-- **Many-to-Many** — `tags: relation(Tag) [many]`. The core reconciles the two declarations into one `[many]` relation; the persistence bridge creates the hidden join table (EF Core via `HasMany`/`WithMany` and `Include`) and exposes it as a collection.
+- **Many-to-Many** — `tags: relation(Tag) [many]`. The persistence bridge creates the hidden join table (EF Core via `HasMany`/`WithMany` and `Include`) and exposes it as a collection. If the target declares a single FK back, the core reconciles the pair into **one one-to-many** relation (`IRRelation.PairFieldName`) and no join table is rendered — that case is not many-to-many.
 - **`on_delete`** — `cascade`, `set_null` (only on optional fields), `restrict`, `no_action`.
 
 ## Features
@@ -80,7 +80,7 @@ Directives: role names (RBAC), `*` (public), `@Owner` (ABAC). Custom conditions 
 
 ## Indexes
 
-Composite indexes and unique groups:
+Composite indexes and unique groups. Index types: `btree`, `hash`, `gist`, `gin`, `brin`; sort directions: `asc`, `desc`.
 
 ```yaml
 indexes:

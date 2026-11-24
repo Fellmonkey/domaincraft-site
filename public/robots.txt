@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://domaincraft.github.io/domaincraft-site/sitemap-index.xml
+Sitemap: https://fellmonkey.github.io/domaincraft-site/sitemap-index.xml

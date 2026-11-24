@@ -34,7 +34,7 @@ After generation the CLI prints a smart "manual refactoring" report listing chan
 
 ## Field renames
 
-Fields can carry an `old_name` hint (same syntax as entities): `name: string [required, max:200, old_name:title]`. The migration engine detects it, prints a data-preservation report, and the C# bridge ships the exact `migrationBuilder.RenameColumn(...)` statements for every renamed column in `src/Infrastructure/Persistence/Migrations/SchemaRenames.cs`. Call `SchemaRenames.Apply(migrationBuilder)` at the top of the `Up()` method of the migration you write — the file also lists any `RenameTable` for renamed entities. EF Core cannot infer a rename from the model snapshot and would otherwise **drop** the old table/column and **add** a new one, destroying the data. The file regenerates on every run while a rename is pending, so new renames added later are picked up automatically.
+Fields can carry an `old_name` hint (same syntax as entities): `name: string [required, max:200, old_name:title]`. The migration engine detects it, prints a data-preservation report, and the C# bridge ships the exact `migrationBuilder.RenameColumn(...)` statements for every renamed column in `src/Infrastructure/Persistence/Migrations/SchemaRenames.g.cs`. Call `SchemaRenames.Apply(migrationBuilder)` at the top of the `Up()` method of the migration you write — the file also lists any `RenameTable` for renamed entities. EF Core cannot infer a rename from the model snapshot and would otherwise **drop** the old table/column and **add** a new one, destroying the data. The file regenerates on every run while a rename is pending, so new renames added later are picked up automatically.
 
 ## `--prune`
 

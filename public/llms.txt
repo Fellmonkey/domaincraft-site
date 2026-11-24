@@ -1,0 +1,51 @@
+# DomainCraft
+
+> DomainCraft is a domain-driven compiler. One `domain.yaml` defines entities, fields, relations, permissions and features; pluggable bridges compile it into a backend API, a typed TypeScript client, React glue, an admin panel and an Appwrite schema. The Go core is language-agnostic: all language-specific output lives in bridge templates.
+
+Key facts:
+
+- Pipeline: lexer → parser → validator → IR → renderer. Two runs on the same model produce byte-identical output; map iterations that affect output are sorted.
+- Core-owned names: table names, database columns, enum wire values and index names come from the IR, not from template string transforms.
+- Bridges compose in layers via `extends` plus `--replace layer=bridgeRef`. Official bridges ship embedded in the binary; community bridges are cloned on demand.
+- Presentation is not generated. Screens are built against the certified typed client using the bridge skills; `admin-alpine` is the only generated UI.
+- Workflow: `domaincraft validate` must pass before `domaincraft generate --domain domain.yaml --bridge <id>`. Business logic goes into scaffold-once (`overwrite: false`) files, never into regenerated files.
+- Generated files carry a `.g.cs` suffix in the C# family; plain `.cs` files are developer-owned.
+
+## Getting started
+
+- [Quickstart](https://fellmonkey.github.io/domaincraft-site/docs/getting-started/quickstart/): install the CLI, write a first `domain.yaml`, generate and run.
+- [First project](https://fellmonkey.github.io/domaincraft-site/docs/getting-started/first-project/): a complete walk-through from model to running stack.
+- [CLI reference](https://fellmonkey.github.io/domaincraft-site/docs/reference/cli/): every command and flag, including `init`, `validate`, `generate`, `bridges` and `update`.
+
+## Model and query contract
+
+- [Language reference](https://fellmonkey.github.io/domaincraft-site/docs/reference/language/): the `domain.yaml` grammar — fields, modifiers, relations, features, auth, permissions, seed and indexes.
+- [Query grammar](https://fellmonkey.github.io/domaincraft-site/docs/reference/query/): the shared `path:op:value` filter contract and its operator vocabulary.
+- [Template context](https://fellmonkey.github.io/domaincraft-site/docs/reference/template-context/): the IR and helper functions a bridge template receives.
+
+## Guides
+
+- [Authentication](https://fellmonkey.github.io/domaincraft-site/docs/guides/authentication/): JWT endpoints, roles and the `/setup` bootstrap.
+- [Permissions](https://fellmonkey.github.io/domaincraft-site/docs/guides/permissions/): role arrays, `*` and `@Owner` tokens.
+- [Migrations](https://fellmonkey.github.io/domaincraft-site/docs/guides/migrations/): snapshots, `old_name` renames, `--prune` and `--migrate`.
+- [Writing a bridge](https://fellmonkey.github.io/domaincraft-site/docs/guides/writing-a-bridge/): `bridge.yaml`, `type_mappings.yaml`, `extends` and the certification path.
+- [Certification](https://fellmonkey.github.io/domaincraft-site/docs/guides/certification/): the three-level TCK and why its tests are hand-written.
+- [Bridges reference](https://fellmonkey.github.io/domaincraft-site/docs/reference/bridges/): the layer chain on each axis.
+
+## Concepts
+
+- [Domain model](https://fellmonkey.github.io/domaincraft-site/docs/concepts/domain-model/): what the single source of truth contains.
+- [Architecture](https://fellmonkey.github.io/domaincraft-site/docs/concepts/architecture/): compiler stages, IR contract and determinism.
+- [Generation Gap](https://fellmonkey.github.io/domaincraft-site/docs/concepts/generation-gap/): regenerated code versus custom hooks.
+- [Three axes](https://fellmonkey.github.io/domaincraft-site/docs/concepts/three-axes/): backend × web × mobile, layers instead of N×M forks.
+
+## Source and specification
+
+- [Core repository](https://github.com/DomainCraft/DomainCraft): Go core, official bridges, `spec/domain.schema.json`, compliance suite.
+- [domain.yaml specification](https://github.com/DomainCraft/DomainCraft/blob/main/spec%20yaml.md): authoritative model specification.
+- [Agent plugins](https://github.com/DomainCraft/domaincraft-agent-plugins): Claude Code marketplace and `npx skills add` package for the DomainCraft skills.
+
+## Optional
+
+- [Blog](https://fellmonkey.github.io/domaincraft-site/blog/): engineering notes on the compiler, bridges and determinism.
+- [Changelog](https://fellmonkey.github.io/domaincraft-site/changelog/): releases of the core and bridges.

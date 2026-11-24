@@ -47,8 +47,13 @@ Fully described in the language spec and validated by the core, but no bridge im
 
 ## Distribution & DX
 
-- **`domaincraft init`** — interactive scenario picker (shop / saas / crm / blog) that writes a starter `domain.yaml` and runs `generate`, removing the write-YAML-first entry barrier.
-- **Agent skills** — package `domaincraft-skills` for agent marketplaces and `npx skills add`; `llms.txt` on the website so agents pull docs in sync with the core version.
+Shipped:
+
+- **`domaincraft init`** — scenario picker (shop / saas / crm / blog) that writes a starter `domain.yaml` and runs `generate`. See the [CLI reference](../../reference/cli/).
+- **Agent plugins** — Claude Code marketplace and `npx skills add` package, plus `/llms.txt` and `/docs/context7.json` on the site.
+
+Planned:
+
 - **Reference application** — a complete, deployment-ready SaaS starter built on DomainCraft.
 - **Showcase & newsletter** — promotion through social proof and community.
 

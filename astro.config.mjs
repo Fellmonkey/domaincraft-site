@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://domaincraft.github.io',
+  site: 'https://fellmonkey.github.io',
   base: '/domaincraft-site/',
   integrations: [
     react(),

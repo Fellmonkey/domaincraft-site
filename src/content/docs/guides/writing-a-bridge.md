@@ -32,14 +32,15 @@ migrations:
 
 * `layer` — your position in the axis; if the same `layer` appears twice in one chain the build fails, so a miswired stack is caught early. A `layer` mismatch on `--replace` is a warning, not an error.
 * `extends` — a linear chain (local path, registry ID or `owner/repo`). A sibling checkout next to the adapter is checked first, so monorepo development works before publishing.
-* `registry_url` / `registry_packages` and `migrations:` — merged base-first; the first `enabled` `migrations:` top-down wins (so `rest` without migrations still runs `efcore`'s `dotnet ef` commands).
+* `registry_url` / `registry_packages` — merged base-first, adapter wins on key conflicts. The adapter's `registry_url` wins; any source with one is a fallback.
+* `migrations:` — the first `enabled` config top-down wins (so `rest` without migrations still runs `efcore`'s `dotnet ef` commands).
 
 ## Replacement
 
 New persistence or transport ships as **one repo** — see **[Axes and layers](../../concepts/three-axes)** for the full model:
 
 ```bash
-domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
+domaincraft generate --bridge csharp-rest --replace persistence=../my-dapper
 ```
 
 `--replace left=right` (`generate` only, repeatable): `left` is a `layer` or a `bridgeId`, `right` is any bridge ref.
@@ -48,9 +49,10 @@ domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
 
 Base `templates`/`helpers`/`type_mappings.yaml` render first, adapter wins — full details in **[Axes and layers](../../concepts/three-axes)**. Example:
 
-```yamlname: react-rest
- layer: framework
- extends: ts-client
+```yaml
+name: react-rest
+layer: framework
+extends: ts-client
 ```
 
 ## Templates
@@ -96,6 +98,6 @@ Powers `languageType`, `isValueType`, `deleteBehaviorName`, `literalValue`, `lit
 ## Constraints
 
 * `{{-` / `-}}` whitespace trimming.
-* Every `map` affecting output must be `sort.Strings` — deterministic output is a hard rule.
+* Iterate maps via `slices.Sorted(maps.Keys(...))` or `slices.Sort` — deterministic output is a hard rule.
 * Filter feature fields with `.IsFeatureField`.
 * For JSX/TSX, `delimiters: ["<<", ">>"]` and no inline `style={{ }}`.

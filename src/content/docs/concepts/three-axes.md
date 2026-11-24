@@ -1,12 +1,12 @@
 ---
 title: Axes and layers
-description: One domain, many targets — how axes, layers and one-flag replacement keep DomainCraft from exploding into thousands of repositories.
+description: One domain, many targets — how axes, layers and one-flag replacement compose bridges in one repository without combinatorial forks.
 section: concepts
 order: 4
-updated: "2026-08-23"
+updated: "2026-08-24"
 ---
 
-DomainCraft compiles **one** `domain.yaml` into every layer of your product. Without a rule for composition that would mean `N×M` repositories for `N` databases × `M` transports. The rule is **axes and layers**.
+DomainCraft compiles **one** `domain.yaml` into every layer of your product. Without a rule for composition that would mean a combinatorial explosion of template packs for `N` databases × `M` transports. The rule is **axes and layers**: each bridge is one layer in one axis, and every bridge lives in the same repository, composable with flags.
 
 ## Axes — independent dimensions
 
@@ -51,7 +51,7 @@ extends: ts-client
 
 `extends` is a linear chain. The core renders `base → adapter` into one output directory — `templates`, `helpers` and `type_mappings.yaml` are merged base-first, the adapter wins on conflict.
 
-> **Why the thin `core` matters most.** The `core` (thin, language core) holds the only code every stack in that language needs — enum wire values (`snake_case`), entity shapes, `QuerySchema`, permission matrix, `TableName`/`ColumnName`. It is **certified once per language** by the `per-language TCK` (`type-contract` + `runtime`, see [Certification](../../guides/certification/)). Every `persistence`/`transport`/`framework` on top reuses it. Fix a wire bug once in `core`, and every `N×M` combination inherits the fix — without re-certifying each adapter. That is why `core` is thin and `domain`/`client` are the first role layers.
+> **Why the thin `core` matters most.** The `core` (thin, language core) holds the only code every stack in that language needs — enum wire values (`snake_case`), entity shapes, `QuerySchema`, permission matrix, `TableName`/`ColumnName`. It is **certified once per language** by the `per-language TCK` (`type-contract` + `runtime`, see [Certification](../../guides/certification/)). Every `persistence`/`transport`/`framework` on top reuses it. Fix a wire bug once in `core`, and every layer combination inherits the fix — without re-certifying each adapter. That is why `core` is thin and `domain`/`client` are the first role layers.
 
 ## Replacement — one flag, no fork
 
@@ -60,37 +60,46 @@ extends: ts-client
 domaincraft generate --bridge csharp-rest
 
 # replace one layer — by layer name or by bridge ID:
-domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
+domaincraft generate --bridge csharp-rest --replace persistence=../my-dapper
 domaincraft generate --bridge csharp-rest --replace csharp-efcore=../my-dapper
 
 # combine layers:
 # core + domain + dapper + rest
-domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper
+domaincraft generate --bridge csharp-rest --replace persistence=../my-dapper
 # core + domain + efcore + grpc
-domaincraft generate --bridge csharp-rest --replace transport=csharp-grpc
+domaincraft generate --bridge csharp-rest --replace transport=../my-grpc
 # core + domain + dapper + grpc
-domaincraft generate --bridge csharp-rest --replace persistence=csharp-dapper --replace transport=csharp-grpc
+domaincraft generate --bridge csharp-rest --replace persistence=../my-dapper --replace transport=../my-grpc
 ```
 
 `--replace` rewrites one edge of the chain. If the replacement itself has an `extends` (e.g. `dapper extends csharp-core`), that tail is spliced in automatically. A duplicate `layer` or a cycle is an error; a `layer` mismatch is a warning. The order of flags is the order of application, and the render stays deterministic.
 
-## Why this scales to thousands
+## Why this composes cleanly
 
-The backend is where `N×M` actually hurts:
+Layers are separate, individually versioned units even though they live in one
+repository (`bridges/<family>/<layer>`). A new persistence or transport is one
+more bridge — not a fork of templates, not a new repository.
 
 ```
-N persistence × M transport = N+M repositories, not N×M
-
 1 core (thin) + 1 domain + 10 persistence (EF Core, Dapper, Marten, Mongo, …)
               + 10 transport  (REST, gRPC, Minimal API, GraphQL, …)
-              = 22 repos for 100 combinations
-
-1 core + 1 domain + 30 × 30 = 900 combinations → 62 repos, not 900
+              = 22 bridges in one repo for 100 combinations
 ```
 
-* **One layer = one repo.** `csharp-dapper` or `csharp-grpc` ships alone — not as a fork of 71 templates. You add a stack in days, not weeks.
+* **One layer = one bridge.** `csharp-dapper` or `csharp-grpc` ships as a node in `bridges/` — not as a fork of 71 templates. You add a stack in days, not weeks.
 * **A combination is a flag.** Users compose layers at generate time instead of waiting for you to publish every combinatorial repo.
 * **One contract, many targets.** Types, validation, `path:op:value` queries, enum wire values, errors and permissions are compiled from the same IR into every target — so layers cannot drift.
+
+### Why each layer stays an independent unit inside the monorepo
+
+A recurring instinct is to flatten a language's layers into one blob. We keep layers as separate, independently versioned units (`bridges/<family>/<layer>`) even though they now live in a single repository.
+
+* **Official bridges are bundled, not cloned.** `--bridge csharp-rest` resolves to the local `bridges/csharp/transport/rest` copy (or the embedded binary copy) directly — no clone. Community bridges keep the one-repo-per-layer clone model.
+* **Per-layer versions are kept.** Each bridge declares its own `version`; `contract_version` gates compatibility when present, and `domaincraft.lock.json` records the exact bridge combination a project used. None of the bundled bridges declares `contract_version` yet — the core assumes contract v1 and warns. A fix to `csharp-core` does not bump `csharp-rest`.
+* **`--replace` stays a clean edge.** The registry maps each ID to its `bridges/<path>`; `--replace persistence=../my-dapper` swaps one node of the chain exactly as before.
+* **Contributions target the whole repository** (a fork of DomainCraft), but each bridge is an isolated subtree: a PR touches at most one bridge, and that bridge's contract test runs in CI.
+
+The layout you develop in is the layout that ships — one repository, with layers separated by directory and by version.
 
 The frontend uses the same primitive (`core → framework`) with only a handful of adapters — the backend makes the scaling concrete.
 
@@ -113,7 +122,7 @@ The frontend uses the same primitive (`core → framework`) with only a handful 
 | `ts-client` | `client` | `schemas` / `client` / `api` (Zod, fetch, CRUD) | `extends: ts-core` |
 | `react-rest` | `framework` | `hooks` / `auth` / scaffold | `extends: ts-client` |
 
-The monolith `csharp-restful` (71 templates) is archived and kept for compatibility. New projects should use `csharp-rest` — on `examples/domain.yaml` and `kitchen-sink.yaml` the output is byte-identical (142 and 187 files, verified).
+The monolith `csharp-restful` (71 templates) is archived and kept for compatibility. New projects should use `csharp-rest`. The decomposition was compared manually on `examples/domain.yaml` and `kitchen-sink.yaml` (142 and 187 files); there is no committed golden test for that comparison yet.
 
 ## Business logic stays in the backend
 

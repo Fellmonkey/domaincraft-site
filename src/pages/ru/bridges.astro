@@ -59,7 +59,7 @@ const description =
 <Layout lang="ru" title={title} description={description} messages={messages} alternatePath="/bridges" alternateLabel="English">
   <PageHero
     title="Мосты"
-    lede="Каждый мост — это один слой в одной оси: тонкое сертифицированное ядро плюс ролевые слои поверх. `extends` собирает цепочку, `--replace` меняет слой — без форков и N×M репозиториев."
+    lede="Каждый мост — это один слой в одной оси: тонкое сертифицированное ядро плюс ролевые слои поверх. `extends` собирает цепочку, `--replace` меняет слой — без форков; каждый слой — мост в едином репозитории."
   />
 
   <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -96,7 +96,7 @@ const description =
 domaincraft generate --domain domain.yaml --bridge csharp-rest
 
 # По локальному пути
-domaincraft generate --domain domain.yaml --bridge ../domaincraft-bridge-csharp-rest
+domaincraft generate --domain domain.yaml --bridge csharp-rest
 
 # Поменять один слой (Dapper-персистенция вместо EF Core)
 domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper

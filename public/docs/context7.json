@@ -1,0 +1,13 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "DomainCraft",
+  "description": "Domain-driven compiler: one domain.yaml compiles into backend APIs, typed TypeScript clients, React glue, admin panels and Appwrite schemas through pluggable bridges.",
+  "rules": [
+    "Canonical documentation: https://fellmonkey.github.io/domaincraft-site/docs/ — use it for the current domain.yaml contract and CLI.",
+    "Run `domaincraft validate` on domain.yaml before `domaincraft generate`; validation must pass first.",
+    "Do not edit generated files. Put business logic in scaffold-once (overwrite: false) custom files.",
+    "Bridges compose in layers with `extends` and `--replace layer=bridgeRef`; official bridges are embedded in the binary.",
+    "Table, column, enum wire and index names come from the core IR; never re-derive them in templates with snakecase.",
+    "Screens are built against the generated typed client. admin-alpine is the only generated UI."
+  ]
+}

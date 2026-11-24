@@ -17,7 +17,7 @@ While real screens are built by agents or humans against the typed client (prese
 domaincraft generate --domain domain.yaml --bridge csharp-rest --admin
 
 # or point --admin at a specific bridge (id, path or owner/repo)
-domaincraft generate --domain domain.yaml --bridge csharp-rest --admin ../domaincraft-bridge-admin
+domaincraft generate --domain domain.yaml --bridge csharp-rest --admin admin-alpine
 ```
 
 ## What gets generated

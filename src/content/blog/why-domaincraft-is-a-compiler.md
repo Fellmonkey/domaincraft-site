@@ -22,7 +22,7 @@ A template engine doesn't see the model as a structure: for it, these are text f
 
 IR appeared in DomainCraft not as an innovation but out of necessity: you can't render templates correctly without a structure to render from. For a long time we saw it narrowly: "we have an IR, so adding another backend language is easy." In our heads there was only one dimension — the language itself.
 
-The real shift came when we realized: **variability isn't one-dimensional.** Transport (REST, gRPC, minimal API) and persistence (EF Core, Dapper, Marten) are two independent axes. The same IR can be rendered not just into another language, but into another layer on top of the same language — and the layers can be combined arbitrarily. That's what grew into the axes-and-layers design from the previous post, where N persistence backends × M transports = N+M repositories, not N×M: [From Monolith to Axes and Layers](https://domaincraft.github.io/domaincraft-site/blog/bridges-axes-layers/).
+The real shift came when we realized: **variability isn't one-dimensional.** Transport (REST, gRPC, minimal API) and persistence (EF Core, Dapper, Marten) are two independent axes. The same IR can be rendered not just into another language, but into another layer on top of the same language — and the layers can be combined arbitrarily. That's what grew into the axes-and-layers design from the previous post, where N persistence backends × M transports = N+M repositories, not N×M: [From Monolith to Axes and Layers](https://fellmonkey.github.io/domaincraft-site/blog/bridges-axes-layers/).
 
 The IR is exactly what makes that economy possible: a new layer isn't "another copy of the whole world" — it's a small bridge that consumes the same ready contract.
 

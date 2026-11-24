@@ -20,7 +20,7 @@ go install github.com/DomainCraft/DomainCraft/cmd/domaincraft@latest
 
 ## 2. Create a project
 
-By hand or in the visual editor ([Studio](https://domaincraft.github.io/domaincraft-studio/)):
+By hand or in the visual editor ([Studio](https://fellmonkey.github.io/domaincraft-studio/)):
 
 ```yaml
 project:
@@ -72,7 +72,7 @@ cd generated && dotnet run --project src/WebApi
 Want a different database without copying 71 templates? Swap one layer:
 
 ```bash
-domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=csharp-dapper
+domaincraft generate --domain domain.yaml --bridge csharp-rest --replace persistence=../my-dapper
 ```
 
 The same model also builds a typed frontend:

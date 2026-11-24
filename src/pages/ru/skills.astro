@@ -14,7 +14,37 @@ const skills = [
   {
     name: 'domaincraft-csharp',
     description:
-      'Работа с кодом, сгенерированным мостом csharp-rest — ASP.NET Core REST API (EF Core + PostgreSQL + JWT). Бизнес-логика в сгенерированных сервисах, работа с *.g.cs и кастомными partial. Всегда загружается вместе с domaincraft-core.'
+      'Работа с кодом моста csharp-rest — ASP.NET Core REST API (EF Core + PostgreSQL + JWT). Бизнес-логика в кастомных partial, никогда в *.g.cs. Всегда загружается вместе с domaincraft-core.'
+  },
+  {
+    name: 'domaincraft-ts',
+    description:
+      'Фреймворк-независимый TypeScript-слой данных: типы чтения, Zod-схемы, типизированный query DSL, JWT-клиент, ошибки и матрица прав.'
+  },
+  {
+    name: 'domaincraft-react',
+    description:
+      'React-слой над ts-core: хуки TanStack Query с оптимистичными обновлениями и рецепты экранов поверх типизированного клиента.'
+  },
+  {
+    name: 'validate-first',
+    description:
+      'Перед каждой генерацией — domaincraft validate. Исправлять ровно описанную ошибку, по одной правке на прогон.'
+  },
+  {
+    name: 'hook-authoring',
+    description:
+      'Где живёт бизнес-логика: кастомные файлы overwrite:false и C#-хуки Generation Gap, которые переживают регенерацию.'
+  },
+  {
+    name: 'safe-rename',
+    description:
+      'Переименования сущностей и полей через old_name + --prune: кастомные файлы и колонки БД сохраняют данные.'
+  },
+  {
+    name: 'dc-init',
+    description:
+      'Команда /dc-init: старт сценария shop, saas, crm или blog через domaincraft init, затем validate и generate.'
   }
 ];
 
@@ -41,9 +71,16 @@ const description =
       }
     </div>
 
-    <p class="mt-10 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
-      Скиллы подгружаются вашим агентом по требованию. Чтобы установить их, следуйте руководству по скиллам для
-      вашего ассистента — Cursor, Claude Code или Copilot.
-    </p>
+    <div class="mt-10 rounded-xl border border-border bg-card p-5">
+      <h2 class="font-semibold">Установка</h2>
+      <p class="mt-2 text-sm text-muted-foreground">Claude Code:</p>
+      <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/40 p-4 font-mono text-xs"><code>claude plugin marketplace add DomainCraft/domaincraft-agent-plugins
+claude plugin install domaincraft@domaincraft</code></pre>
+      <p class="mt-4 text-sm text-muted-foreground">Cursor, Codex, Gemini, OpenCode и 75+ других агентов:</p>
+      <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/40 p-4 font-mono text-xs"><code>npx skills add DomainCraft/domaincraft-agent-plugins</code></pre>
+      <p class="mt-4 text-sm text-muted-foreground">
+        Скиллы подгружаются по требованию. Скиллы плагина вызываются как <code>/domaincraft:&lt;skill&gt;</code>.
+      </p>
+    </div>
   </div>
 </Layout>

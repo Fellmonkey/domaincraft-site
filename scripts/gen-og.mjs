@@ -70,7 +70,7 @@ function svg(title, date) {
   <rect width="1200" height="630" fill="url(#glow)"/>
   <rect width="1200" height="6" fill="#f97316"/>
   <text x="80" y="112" font-family="JetBrains Mono Variable, Consolas, monospace" font-size="34" font-weight="600" fill="#f97316" letter-spacing="2">domaincraft</text>
-  <text x="1120" y="112" font-family="JetBrains Mono Variable, Consolas, monospace" font-size="34" font-weight="600" fill="#52525b" letter-spacing="2" text-anchor="end">domaincraft.github.io</text>
+  <text x="1120" y="112" font-family="JetBrains Mono Variable, Consolas, monospace" font-size="34" font-weight="600" fill="#52525b" letter-spacing="2" text-anchor="end">fellmonkey.github.io</text>
   ${titleEls}
   <line x1="80" y1="520" x2="1120" y2="520" stroke="#27272a" stroke-width="2"/>
   <text x="80" y="566" font-family="Geist Variable, Arial, sans-serif" font-size="26" fill="#a1a1aa">${escapeXml(date)}</text>
